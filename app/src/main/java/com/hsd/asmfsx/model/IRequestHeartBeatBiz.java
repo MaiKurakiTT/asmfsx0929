@@ -2,7 +2,6 @@ package com.hsd.asmfsx.model;
 
 import com.hsd.asmfsx.bean.UserInformationBean;
 
-import java.io.IOException;
 import java.util.List;
 
 /**
