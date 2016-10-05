@@ -2,12 +2,14 @@ package com.hsd.asmfsx;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.hsd.asmfsx.adapter.HeartBeatListAdapter;
 import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.contract.RequestHeartBeatContract;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
@@ -31,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         textView = (TextView) findViewById(R.id.textview);
         progressBar = (ProgressBar) findViewById(R.id.progressbar);
         recyclerView = (RecyclerView) findViewById(R.id.recycle);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,6 +57,8 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     @Override
     public void showData(List<UserInformationBean> userInformation) {
         textView.setText(userInformation.get(0).getUser_icon());
+        HeartBeatListAdapter adapter = new HeartBeatListAdapter(this, userInformation);
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
