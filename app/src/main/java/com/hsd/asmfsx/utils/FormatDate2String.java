@@ -1,0 +1,1 @@
+package com.hsd.asmfsx.utils;import java.text.SimpleDateFormat;import java.util.Date;public class FormatDate2String {	public static String FormatDate2String(Date birthday){		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");		return format.format(birthday);	}}
