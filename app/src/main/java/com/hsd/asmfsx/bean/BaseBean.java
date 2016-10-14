@@ -2,15 +2,15 @@ package com.hsd.asmfsx.bean;
 
 public class BaseBean {
 
-	protected Integer resultCode; // 结果码
+	public Integer resultCode; // 结果码
 
-	protected String describe; // 描述
+	public String describe; // 描述
 
-	protected String body; // 主体(可放置数据)
+	public String body; // 主体(可放置数据)
 
-	protected String timeStamp; // 时间戳
+	public String timeStamp; // 时间戳
 
-	protected String UUID;
+	public String UUID;
 
 	// -------------------------------------
 	public Integer getResultCode() {

@@ -1,9 +1,11 @@
 package com.hsd.asmfsx;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -12,8 +14,11 @@ import android.widget.Toast;
 
 import com.hsd.asmfsx.adapter.HeartBeatListAdapter;
 import com.hsd.asmfsx.bean.UserInformationBean;
+import com.hsd.asmfsx.chat.RegisterAndLoginActivity;
 import com.hsd.asmfsx.contract.RequestHeartBeatContract;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
+import com.hyphenate.EMCallBack;
+import com.hyphenate.chat.EMClient;
 
 import java.util.List;
 
@@ -48,7 +53,9 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                presenter.getData();
+                startActivity(new Intent(MainActivity.this, TestRetrofit.class));
+//                startActivity(new Intent(MainActivity.this, RegisterAndLoginActivity.class));
+//                presenter.getData();
             }
         });
     }
@@ -72,5 +79,31 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     @Override
     public void showFailed() {
         Toast.makeText(this, "failed", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EMClient.getInstance().logout(true, new EMCallBack() {
+
+            @Override
+            public void onSuccess() {
+                // TODO Auto-generated method stub
+                Log.d(TAG, "成功退出登录");
+
+            }
+
+            @Override
+            public void onProgress(int progress, String status) {
+                // TODO Auto-generated method stub
+
+            }
+
+            @Override
+            public void onError(int code, String message) {
+                // TODO Auto-generated method stub
+                Log.d(TAG, "失败退出登录");
+            }
+        });
     }
 }
