@@ -1,4 +1,4 @@
-package com.hsd.asmfsx.utils;
+package com.hsd.asmfsx.global;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -8,19 +8,14 @@ import com.google.gson.GsonBuilder;
  */
 
 public class GetGson {
-    public Gson tempGson;
+    static Gson gson;
 
     public static Gson getGson(){
-        Gson gson = new GetGson().get();
         if (gson == null){
             gson = new GsonBuilder()
                     .setDateFormat("yyyy-MM-dd HH:mm:ss")
                     .create();
         }
         return gson;
-    }
-
-    public Gson get(){
-        return tempGson;
     }
 }

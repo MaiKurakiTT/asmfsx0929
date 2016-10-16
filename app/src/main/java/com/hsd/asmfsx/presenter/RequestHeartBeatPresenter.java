@@ -58,4 +58,9 @@ public class RequestHeartBeatPresenter implements RequestHeartBeatContract.Prese
         });
 
     }
+
+
+    public void start() {
+
+    }
 }

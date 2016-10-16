@@ -4,21 +4,14 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.global.GlobalParameter;
-import com.hsd.asmfsx.utils.GetGson;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.StringCallback;
+import com.hsd.asmfsx.global.GetGson;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;

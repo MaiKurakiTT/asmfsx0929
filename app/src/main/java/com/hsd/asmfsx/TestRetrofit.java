@@ -10,27 +10,20 @@ import com.alibaba.fastjson.TypeReference;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
 import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.SortBean;
-import com.hsd.asmfsx.bean.SortResultBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.global.GlobalParameter;
 import com.hsd.asmfsx.model.HBService;
 import com.hsd.asmfsx.model.IRequestHeartBeatBiz;
 import com.hsd.asmfsx.model.RequestHeartBeatBiz;
 import com.hsd.asmfsx.model.TestGet;
-import com.hsd.asmfsx.utils.GetGson;
+import com.hsd.asmfsx.global.GetGson;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
-import java.lang.reflect.TypeVariable;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

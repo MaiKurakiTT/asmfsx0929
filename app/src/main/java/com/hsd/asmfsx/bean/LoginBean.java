@@ -1,0 +1,1 @@
+package com.hsd.asmfsx.bean;public class LoginBean extends UserBean {	// 直接继承UserBean}

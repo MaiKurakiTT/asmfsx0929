@@ -5,4 +5,5 @@ package com.hsd.asmfsx.base;
  */
 
 public interface BasePresenter {
+    void start();
 }
