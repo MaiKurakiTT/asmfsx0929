@@ -38,7 +38,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.IV
 
     @Override
     public void showData(LoginBean loginBean) {
-        Log.d(TAG, loginBean.getUser_phone());
+        Log.d(TAG, loginBean.getUser_uuid());
     }
 
     @Override

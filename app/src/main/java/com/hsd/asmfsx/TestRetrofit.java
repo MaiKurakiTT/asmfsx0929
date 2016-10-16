@@ -13,10 +13,11 @@ import com.google.gson.reflect.TypeToken;
 import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.SortBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
+import com.hsd.asmfsx.global.GetRetrofit;
 import com.hsd.asmfsx.global.GlobalParameter;
-import com.hsd.asmfsx.model.HBService;
 import com.hsd.asmfsx.model.IRequestHeartBeatBiz;
 import com.hsd.asmfsx.model.RequestHeartBeatBiz;
+import com.hsd.asmfsx.model.RetrofitService;
 import com.hsd.asmfsx.model.TestGet;
 import com.hsd.asmfsx.global.GetGson;
 
@@ -93,14 +94,11 @@ public class TestRetrofit extends AppCompatActivity {
     }
 
     private void request() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .baseUrl(GlobalParameter.ip)
-                .build();
-        HBService hbService = retrofit.create(HBService.class);
+        Retrofit retrofit = GetRetrofit.getRetrofit();
+        RetrofitService service = retrofit.create(RetrofitService.class);
         BaseBean baseBean = new BaseBean();
         baseBean.setUUID("84f4b998-17df-4997-8fc2-828f89aec37d");
-        Call<BaseBean> call = hbService.post(baseBean);
+        Call<BaseBean> call = service.postHB(baseBean);
         call.enqueue(new Callback<BaseBean>() {
             @Override
             public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {

@@ -15,9 +15,7 @@ public interface RequestHeartBeatContract {
         void getData();
     }
     interface View extends BaseView{
-        void showLoading();
-        void hideLoading();
+        String getUuid();
         void showData(List<UserInformationBean> userInformation);
-        void showFailed();
     }
 }

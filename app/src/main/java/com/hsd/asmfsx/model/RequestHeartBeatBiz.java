@@ -4,11 +4,14 @@ import android.util.Log;
 
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.google.gson.reflect.TypeToken;
 import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
+import com.hsd.asmfsx.global.GetRetrofit;
 import com.hsd.asmfsx.global.GlobalParameter;
 import com.hsd.asmfsx.global.GetGson;
 
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
@@ -28,14 +31,11 @@ public class RequestHeartBeatBiz implements IRequestHeartBeatBiz {
     public String TAG = "RequestHeartBeatBiz";
     @Override
     public void requestData(String uuid, final IRequestHeartBeatBiz.OnRequestListener requestListener){
-        Retrofit retrofit = new Retrofit.Builder()
-                                        .baseUrl(GlobalParameter.ip)
-                                        .addConverterFactory(GsonConverterFactory.create(GetGson.getGson()))
-                                        .build();
-        HBService hbService = retrofit.create(HBService.class);
+        Retrofit retrofit = GetRetrofit.getRetrofit();
+        RetrofitService service = retrofit.create(RetrofitService.class);
         BaseBean baseBean = new BaseBean();
         baseBean.setUUID(uuid);
-        retrofit2.Call<BaseBean> call = hbService.post(baseBean);
+        retrofit2.Call<BaseBean> call = service.postHB(baseBean);
         call.enqueue(new Callback<BaseBean>() {
             @Override
             public void onResponse(retrofit2.Call<BaseBean> call, Response<BaseBean> response) {
@@ -48,9 +48,12 @@ public class RequestHeartBeatBiz implements IRequestHeartBeatBiz {
                      * 其中String是类型，1 为心动的人， 2 为被谁心动
                      * 这里需要使用fastJson来解析，使用Gson的话有时间格式化的问题
                      */
-                    Map<String, List<UserInformationBean>> stringListMap = JSONObject
+                    /*Map<String, List<UserInformationBean>> stringListMap = JSONObject
                             .parseObject(s, new TypeReference<Map<String, List<UserInformationBean>>>() {
-                            });
+                            });*/
+                    Type type = new TypeToken<Map<String, List<UserInformationBean>>>(){}.getType();
+                    Map<String, List<UserInformationBean>> stringListMap = GetGson.getGson()
+                            .fromJson(s, type);
                     //Map中  1为心动的人，2为被谁心动
                     List<UserInformationBean> userInformationBeen = stringListMap.get("1");
                     if (userInformationBeen != null) {

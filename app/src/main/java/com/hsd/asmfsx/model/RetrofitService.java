@@ -1,5 +1,6 @@
 package com.hsd.asmfsx.model;
 
+import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.LoginBean;
 
 import retrofit2.Call;
@@ -10,7 +11,13 @@ import retrofit2.http.POST;
  * Created by apple on 2016/10/16.
  */
 
-public interface LoginService {
+public interface RetrofitService {
+
     @POST("/Server/MainServer?method=login")
-    Call<LoginBean> post(@Body LoginBean loginBean);
+    Call<LoginBean> postLogin(@Body LoginBean loginBean);
+
+    @POST("/Server/MainServer?method=getHeartBeat2")
+    Call<BaseBean> postHB(@Body BaseBean baseBean);
+
+
 }

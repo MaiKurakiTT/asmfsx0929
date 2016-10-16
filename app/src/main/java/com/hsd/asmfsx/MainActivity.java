@@ -72,6 +72,11 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     }
 
     @Override
+    public String getUuid() {
+        return "84f4b998-17df-4997-8fc2-828f89aec37d";
+    }
+
+    @Override
     public void showData(List<UserInformationBean> userInformation) {
         HeartBeatListAdapter adapter = new HeartBeatListAdapter(this, userInformation);
         recycle.setAdapter(adapter);

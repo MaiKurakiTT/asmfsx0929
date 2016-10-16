@@ -16,7 +16,7 @@ import java.util.List;
  */
 
 public class RequestHeartBeatPresenter implements RequestHeartBeatContract.Presenter{
-    public String TAG = "RequestHeartBeatPresenter";
+    public String TAG = "RequestHBPresenter";
     private IRequestHeartBeatBiz requestBiz;
     private RequestHeartBeatContract.View view;
     private Handler mHandler;
@@ -29,7 +29,7 @@ public class RequestHeartBeatPresenter implements RequestHeartBeatContract.Prese
     @Override
     public void getData() {
         view.showLoading();
-        requestBiz.requestData("", new IRequestHeartBeatBiz.OnRequestListener() {
+        requestBiz.requestData(view.getUuid(), new IRequestHeartBeatBiz.OnRequestListener() {
             @Override
             public void success(final List<UserInformationBean> userInformation) {
                 mHandler.post(new Runnable() {
