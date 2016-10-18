@@ -8,6 +8,7 @@ import android.util.Log;
 import com.hsd.asmfsx.db.DbCore;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
+import com.orhanobut.logger.Logger;
 
 import java.util.Iterator;
 import java.util.List;
@@ -20,6 +21,7 @@ public class MyApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+        Logger.init("MyLog");
         //初始化数据库
         DbCore.init(this);
         DbCore.enableQueryBuilderLog(); //开启调试 log

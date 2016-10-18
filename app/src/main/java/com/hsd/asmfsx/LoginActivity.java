@@ -11,6 +11,7 @@ import com.hsd.asmfsx.db.DbBean;
 import com.hsd.asmfsx.db.DbBeanHelper;
 import com.hsd.asmfsx.db.DbUtil;
 import com.hsd.asmfsx.presenter.LoginPresenter;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,12 +50,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.IV
         driverHelper = DbUtil.getDriverHelper();
         int size = driverHelper.queryAll().size();
         if (size == 0){
-            Log.d(TAG, "数据库为空");
+            Logger.d("数据库为空");
             DbBean tempBean = new DbBean();
             DbBean dbBean = insertInfo(tempBean, loginBean);
             driverHelper.save(dbBean);
         }else {
-            Log.d(TAG, "数据库不为空");
+            Logger.d("数据库不为空");
             DbBean tempBean = driverHelper.queryAll().get(0);
             DbBean dbBean = insertInfo(tempBean, loginBean);
             dbBean.setDbId(Long.valueOf(1));
