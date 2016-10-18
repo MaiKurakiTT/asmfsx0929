@@ -5,8 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -111,9 +109,9 @@ public class TestRetrofit extends AppCompatActivity {
                     Gson gson1  =  new GsonBuilder().setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ").create();
                     Type typenew  = new TypeToken<Map<String, List<UserInformationBean>>>(){}.getType();
 //                    Map<String, List<UserInformationBean>> stringListMap = gson.fromJson(s, typenew);
-                    Map<String, List<UserInformationBean>> stringListMap = JSONObject
-                            .parseObject(s, new TypeReference<Map<String, List<UserInformationBean>>>() {});
-                    Log.d(TAG, "ssss:" + stringListMap.get("1").get(0).getUser_icon());
+//                    Map<String, List<UserInformationBean>> stringListMap = JSONObject
+//                            .parseObject(s, new TypeReference<Map<String, List<UserInformationBean>>>() {});
+//                    Log.d(TAG, "ssss:" + stringListMap.get("1").get(0).getUser_icon());
                 }
             }
 

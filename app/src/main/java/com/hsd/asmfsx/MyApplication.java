@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import com.hsd.asmfsx.db.DbCore;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 
@@ -19,6 +20,9 @@ public class MyApplication extends Application{
     @Override
     public void onCreate() {
         super.onCreate();
+        //初始化数据库
+        DbCore.init(this);
+        DbCore.enableQueryBuilderLog(); //开启调试 log
 
         EMOptions options = new EMOptions();
 // 默认添加好友时，是不需要验证的，改成需要验证

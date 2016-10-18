@@ -2,13 +2,10 @@ package com.hsd.asmfsx.model;
 
 import android.util.Log;
 
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.google.gson.reflect.TypeToken;
 import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.global.GetRetrofit;
-import com.hsd.asmfsx.global.GlobalParameter;
 import com.hsd.asmfsx.global.GetGson;
 
 import java.lang.reflect.Type;
@@ -48,9 +45,7 @@ public class RequestHeartBeatBiz implements IRequestHeartBeatBiz {
                      * 其中String是类型，1 为心动的人， 2 为被谁心动
                      * 这里需要使用fastJson来解析，使用Gson的话有时间格式化的问题
                      */
-                    /*Map<String, List<UserInformationBean>> stringListMap = JSONObject
-                            .parseObject(s, new TypeReference<Map<String, List<UserInformationBean>>>() {
-                            });*/
+
                     Type type = new TypeToken<Map<String, List<UserInformationBean>>>(){}.getType();
                     Map<String, List<UserInformationBean>> stringListMap = GetGson.getGson()
                             .fromJson(s, type);
@@ -78,7 +73,9 @@ public class RequestHeartBeatBiz implements IRequestHeartBeatBiz {
     }
 
 
-
+/*Map<String, List<UserInformationBean>> stringListMap = JSONObject
+                            .parseObject(s, new TypeReference<Map<String, List<UserInformationBean>>>() {
+                            });*/
     /*BaseBean baseBean = new BaseBean();
         baseBean.setUUID("84f4b998-17df-4997-8fc2-828f89aec37d");
         final Gson gson = new Gson();

@@ -1,7 +1,10 @@
 package com.hsd.asmfsx.bean;
 
-import java.util.Date;
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.ToOne;
 
+import java.util.Date;
 public class UserInformationBean extends BaseBean {
 
 	// 属性
@@ -25,8 +28,8 @@ public class UserInformationBean extends BaseBean {
 	private String user_school;
 	private String user_state;
 	private String user_registerDate;
-	
-	 private UserBean user;
+
+ 	private UserBean user;
 
 	// ios使用的年龄
 	private Integer user_age_IOS;

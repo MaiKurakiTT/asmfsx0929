@@ -1,7 +1,10 @@
 package com.hsd.asmfsx.bean;
 
-public class UserBean extends BaseBean {
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.ToOne;
 
+public class UserBean extends BaseBean {
 	private Integer user_ID;
 	private String user_phone;
 	private String user_password;

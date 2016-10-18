@@ -1,5 +1,6 @@
 package com.hsd.asmfsx.bean;
 
+import org.greenrobot.greendao.annotation.Entity;
 public class BaseBean {
 
 	public Integer resultCode; // 结果码
