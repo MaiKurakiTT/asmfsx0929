@@ -12,6 +12,7 @@ import retrofit2.Retrofit;
 
 /**
  * Created by apple on 2016/10/20.
+ * 实名认证业务逻辑
  */
 
 public class CertificationBiz implements CertificationContract.ICertificationBiz{
