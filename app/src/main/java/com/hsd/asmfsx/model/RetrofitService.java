@@ -1,6 +1,7 @@
 package com.hsd.asmfsx.model;
 
 import com.hsd.asmfsx.bean.BaseBean;
+import com.hsd.asmfsx.bean.CertificationBean;
 import com.hsd.asmfsx.bean.LoginBean;
 
 import retrofit2.Call;
@@ -28,5 +29,11 @@ public interface RetrofitService {
     @POST("/Server/MainServer?method=getHeartBeat2")
     Call<BaseBean> postHB(@Body BaseBean baseBean);
 
-
+    /**
+     * 实名认证
+     * @param certificationBiz  需要教务系统学号、密码、学校名
+     * @return  返回CertificationBean
+     */
+    @POST("/Server/MainServer?method=check")
+    Call<CertificationBean> postCertification(@Body CertificationBean certificationBean);
 }
