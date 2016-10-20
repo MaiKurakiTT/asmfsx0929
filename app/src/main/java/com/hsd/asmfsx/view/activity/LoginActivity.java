@@ -1,10 +1,11 @@
-package com.hsd.asmfsx;
+package com.hsd.asmfsx.view.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.bean.LoginBean;
 import com.hsd.asmfsx.contract.LoginContract;
 import com.hsd.asmfsx.db.DbBean;
@@ -20,7 +21,7 @@ import java.util.List;
  * Created by apple on 2016/10/16.
  */
 
-public class LoginActivity extends AppCompatActivity implements LoginContract.IView{
+public class LoginActivity extends AppCompatActivity implements LoginContract.View{
     private String TAG = "LoginActivity";
     private LoginPresenter loginPresenter;
     private DbBeanHelper driverHelper;

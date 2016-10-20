@@ -1,4 +1,4 @@
-package com.hsd.asmfsx;
+package com.hsd.asmfsx.view.activity;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,12 +8,12 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.SortBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
+import com.hsd.asmfsx.contract.RequestHeartBeatContract;
 import com.hsd.asmfsx.global.GetRetrofit;
-import com.hsd.asmfsx.global.GlobalParameter;
-import com.hsd.asmfsx.model.IRequestHeartBeatBiz;
 import com.hsd.asmfsx.model.RequestHeartBeatBiz;
 import com.hsd.asmfsx.model.RetrofitService;
 import com.hsd.asmfsx.model.TestGet;
@@ -54,7 +54,7 @@ public class TestRetrofit extends AppCompatActivity {
 
     private void re() {
         RequestHeartBeatBiz requestHeartBeatBiz = new RequestHeartBeatBiz();
-        requestHeartBeatBiz.requestData("84f4b998-17df-4997-8fc2-828f89aec37d", new IRequestHeartBeatBiz.OnRequestListener() {
+        requestHeartBeatBiz.requestData("84f4b998-17df-4997-8fc2-828f89aec37d", new RequestHeartBeatContract.IRequestHeartBeatBiz.OnRequestListener() {
             @Override
             public void success(List<UserInformationBean> userInformation) {
 

@@ -18,4 +18,11 @@ public interface RequestHeartBeatContract {
         String getUuid();
         void showData(List<UserInformationBean> userInformation);
     }
+    interface IRequestHeartBeatBiz {
+        interface OnRequestListener{
+            void success(List<UserInformationBean> userInformation);
+            void failed();
+        }
+        void requestData(String uuid, IRequestHeartBeatBiz.OnRequestListener requestListener);
+    }
 }

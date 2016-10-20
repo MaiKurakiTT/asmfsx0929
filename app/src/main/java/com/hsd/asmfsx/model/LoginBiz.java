@@ -7,6 +7,7 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.hsd.asmfsx.bean.LoginBean;
+import com.hsd.asmfsx.contract.LoginContract;
 import com.hsd.asmfsx.global.GetGson;
 import com.hsd.asmfsx.global.GetRetrofit;
 import com.hsd.asmfsx.global.GlobalParameter;
@@ -24,13 +25,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by apple on 2016/10/16.
  */
 
-public class LoginBiz implements ILoginBiz{
+public class LoginBiz implements LoginContract.ILoginBiz{
     private String userName = "";
     private String passWord = "";
     private String uuid = "";
 
     @Override
-    public void login(String userName, String passWord, String uuid, OnLoginListener loginListener) {
+    public void login(String userName, String passWord, String uuid, LoginContract.ILoginBiz.OnLoginListener loginListener) {
         this.userName = userName;
         this.passWord = passWord;
         this.uuid = uuid;
@@ -44,7 +45,7 @@ public class LoginBiz implements ILoginBiz{
 
     }
 
-    private void loginByUuid(String uuid, final OnLoginListener loginListener) {
+    private void loginByUuid(String uuid, final LoginContract.ILoginBiz.OnLoginListener loginListener) {
         Retrofit retrofit = GetRetrofit.getRetrofit();
         RetrofitService service = retrofit.create(RetrofitService.class);
         LoginBean loginBean = new LoginBean();
@@ -64,7 +65,7 @@ public class LoginBiz implements ILoginBiz{
         });
     }
 
-    private void loginByUserName(String userName, String passWord, final OnLoginListener loginListener) {
+    private void loginByUserName(String userName, String passWord, final LoginContract.ILoginBiz.OnLoginListener loginListener) {
         Retrofit retrofit = new Retrofit.Builder()
                                 .addConverterFactory(GsonConverterFactory.create(GetGson.getGson()))
                                 .baseUrl(GlobalParameter.ip)
@@ -87,6 +88,10 @@ public class LoginBiz implements ILoginBiz{
             }
         });
     }
+
+
+
+
 }
 /**
  *817574400000

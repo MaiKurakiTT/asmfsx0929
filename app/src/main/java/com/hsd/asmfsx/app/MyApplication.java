@@ -1,4 +1,4 @@
-package com.hsd.asmfsx;
+package com.hsd.asmfsx.app;
 
 import android.app.ActivityManager;
 import android.app.Application;

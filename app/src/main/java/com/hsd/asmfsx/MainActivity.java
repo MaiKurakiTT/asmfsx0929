@@ -14,9 +14,9 @@ import android.widget.Toast;
 
 import com.hsd.asmfsx.adapter.HeartBeatListAdapter;
 import com.hsd.asmfsx.bean.UserInformationBean;
-import com.hsd.asmfsx.chat.RegisterAndLoginActivity;
 import com.hsd.asmfsx.contract.RequestHeartBeatContract;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
+import com.hsd.asmfsx.view.activity.LoginActivity;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 

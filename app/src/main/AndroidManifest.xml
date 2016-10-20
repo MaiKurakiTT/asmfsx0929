@@ -19,7 +19,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <application
-        android:name=".MyApplication"
+        android:name=".app.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -35,8 +35,8 @@
         <activity android:name=".chat.RegisterAndLoginActivity"/>
         <activity android:name=".chat.ChatWithActivity"/>
         <activity android:name=".chat.ChatActivity"/>
-        <activity android:name=".TestRetrofit"/>
-        <activity android:name=".LoginActivity"/>
+        <activity android:name=".view.activity.TestRetrofit"/>
+        <activity android:name=".view.activity.LoginActivity"/>
         <!-- 设置环信应用的AppKey -->
         <meta-data android:name="EASEMOB_APPKEY"  android:value="zacharysun#firsttestim" />
         <!-- 声明SDK所需的service SDK核心功能-->

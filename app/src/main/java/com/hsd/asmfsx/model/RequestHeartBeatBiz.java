@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.gson.reflect.TypeToken;
 import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
+import com.hsd.asmfsx.contract.RequestHeartBeatContract;
 import com.hsd.asmfsx.global.GetRetrofit;
 import com.hsd.asmfsx.global.GetGson;
 
@@ -24,10 +25,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
  private String uuid = "84f4b998-17df-4997-8fc2-828f89aec37d";
  */
 
-public class RequestHeartBeatBiz implements IRequestHeartBeatBiz {
+public class RequestHeartBeatBiz implements RequestHeartBeatContract.IRequestHeartBeatBiz {
     public String TAG = "RequestHeartBeatBiz";
     @Override
-    public void requestData(String uuid, final IRequestHeartBeatBiz.OnRequestListener requestListener){
+    public void requestData(String uuid, final RequestHeartBeatContract.IRequestHeartBeatBiz.OnRequestListener requestListener){
         Retrofit retrofit = GetRetrofit.getRetrofit();
         RetrofitService service = retrofit.create(RetrofitService.class);
         BaseBean baseBean = new BaseBean();

@@ -1,11 +1,8 @@
 package com.hsd.asmfsx.presenter;
 
-import android.os.Handler;
-
 import com.hsd.asmfsx.bean.LoginBean;
 import com.hsd.asmfsx.contract.LoginContract;
 import com.hsd.asmfsx.global.GetHandler;
-import com.hsd.asmfsx.model.ILoginBiz;
 import com.hsd.asmfsx.model.LoginBiz;
 
 /**
@@ -13,9 +10,9 @@ import com.hsd.asmfsx.model.LoginBiz;
  */
 
 public class LoginPresenter implements LoginContract.Presenter{
-    private LoginContract.IView view;
+    private LoginContract.View view;
     private LoginBiz loginBiz;
-    public LoginPresenter(LoginContract.IView view) {
+    public LoginPresenter(LoginContract.View view) {
         this.view = view;
         this.loginBiz = new LoginBiz();
     }
@@ -23,7 +20,7 @@ public class LoginPresenter implements LoginContract.Presenter{
     @Override
     public void start() {
         view.showLoading();
-        loginBiz.login(view.getUserName(), view.getPassWord(), "",  new ILoginBiz.OnLoginListener() {
+        loginBiz.login(view.getUserName(), view.getPassWord(), "",  new LoginContract.ILoginBiz.OnLoginListener() {
             @Override
             public void success(final LoginBean loginBean) {
                 GetHandler.getHandler().post(new Runnable() {

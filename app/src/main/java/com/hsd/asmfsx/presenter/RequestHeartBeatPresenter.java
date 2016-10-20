@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.contract.RequestHeartBeatContract;
-import com.hsd.asmfsx.model.IRequestHeartBeatBiz;
 import com.hsd.asmfsx.model.RequestHeartBeatBiz;
 
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.List;
 
 public class RequestHeartBeatPresenter implements RequestHeartBeatContract.Presenter{
     public String TAG = "RequestHBPresenter";
-    private IRequestHeartBeatBiz requestBiz;
+    private RequestHeartBeatContract.IRequestHeartBeatBiz requestBiz;
     private RequestHeartBeatContract.View view;
     private Handler mHandler;
     public RequestHeartBeatPresenter(RequestHeartBeatContract.View view) {
@@ -29,7 +28,7 @@ public class RequestHeartBeatPresenter implements RequestHeartBeatContract.Prese
     @Override
     public void getData() {
         view.showLoading();
-        requestBiz.requestData(view.getUuid(), new IRequestHeartBeatBiz.OnRequestListener() {
+        requestBiz.requestData(view.getUuid(), new RequestHeartBeatContract.IRequestHeartBeatBiz.OnRequestListener() {
             @Override
             public void success(final List<UserInformationBean> userInformation) {
                 mHandler.post(new Runnable() {

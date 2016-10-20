@@ -12,10 +12,18 @@ public interface LoginContract {
     interface Presenter extends BasePresenter{
 
     }
-    interface IView extends BaseView{
+    interface View extends BaseView{
         String getUserName();
         String getPassWord();
         void showData(LoginBean loginBean);
         void clearData();
+    }
+    interface ILoginBiz{
+        interface OnLoginListener{
+            void success(LoginBean loginBean);
+            void failed();
+        }
+        void login(String userName, String passWord, String uuid,
+                   ILoginBiz.OnLoginListener loginListener);
     }
 }
