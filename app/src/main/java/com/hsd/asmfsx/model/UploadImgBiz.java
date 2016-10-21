@@ -21,11 +21,14 @@ import retrofit2.Response;
 public class UploadImgBiz implements IUploadImgBiz{
     @Override
     public void doUpload(String fileUri, OnUploadImgListener uploadImgListener) {
-        File file = new File(Environment.getExternalStorageDirectory(), "img.jpg");
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpg"), file);
-        MultipartBody.Part img = MultipartBody.Part.createFormData("img", "img.jpg", requestBody);
+        File file = new File(Environment.getExternalStorageDirectory(), "icon.jpg");
+        RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Builder builder = new MultipartBody.Builder().addPart(body);
+//        RequestBody requestBody = RequestBody.create(MediaType.parse("text/html"), file);
+        MultipartBody.Part part = MultipartBody.Part.create(body);
+//        MultipartBody.Part img = MultipartBody.Part.createFormData("img", "icon.jpg", requestBody);
         RetrofitService service = GetRetrofit.getRetrofit().create(RetrofitService.class);
-        Call<BaseBean> call = service.uploadImg(img);
+        Call<BaseBean> call = service.uploadImg(part);
         call.enqueue(new Callback<BaseBean>() {
             @Override
             public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {

@@ -2,6 +2,7 @@ package com.hsd.asmfsx;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,7 +16,9 @@ import android.widget.Toast;
 import com.hsd.asmfsx.adapter.HeartBeatListAdapter;
 import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.contract.RequestHeartBeatContract;
+import com.hsd.asmfsx.global.GlobalParameter;
 import com.hsd.asmfsx.model.IUploadImgBiz;
+import com.hsd.asmfsx.model.TestUpload;
 import com.hsd.asmfsx.model.UploadImgBiz;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
 import com.hsd.asmfsx.view.activity.CertificationActivity;
@@ -24,6 +27,8 @@ import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,6 +50,17 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    testup();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
         ButterKnife.bind(this);
         presenter = new RequestHeartBeatPresenter(this);
         button = (Button) findViewById(R.id.button);
@@ -76,6 +92,12 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
 //                presenter.getData();
             }
         });
+    }
+
+    private void testup() throws IOException {
+        TestUpload testUpload = new TestUpload();
+        File file = new File(Environment.getExternalStorageDirectory(), "icon.jpg");
+        testUpload.uploadForm(file, GlobalParameter.ip + "Server/UploadServer");
     }
 
     @Override
