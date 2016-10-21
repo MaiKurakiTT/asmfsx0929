@@ -31,6 +31,7 @@ public class UploadImgBiz implements IUploadImgBiz{
             public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
                 BaseBean body = response.body();
                 String describe = body.getDescribe();
+
             }
 
             @Override
