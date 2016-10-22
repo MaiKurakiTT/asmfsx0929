@@ -3,44 +3,61 @@ package com.hsd.asmfsx.model;
 import android.os.Environment;
 
 import com.hsd.asmfsx.bean.BaseBean;
-import com.hsd.asmfsx.global.GetRetrofit;
+import com.hsd.asmfsx.global.GetGson;
+import com.hsd.asmfsx.global.GlobalParameter;
+import com.orhanobut.logger.Logger;
 
+import java.io.BufferedReader;
 import java.io.File;
-
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
- * Created by apple on 2016/10/20.
+ * Created by 紫荆 on 2016/10/21.
  */
 
-public class UploadImgBiz implements IUploadImgBiz{
-    @Override
-    public void doUpload(String fileUri, OnUploadImgListener uploadImgListener) {
-        File file = new File(Environment.getExternalStorageDirectory(), "icon.jpg");
-        RequestBody body = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Builder builder = new MultipartBody.Builder().addPart(body);
-//        RequestBody requestBody = RequestBody.create(MediaType.parse("text/html"), file);
-        MultipartBody.Part part = MultipartBody.Part.create(body);
-//        MultipartBody.Part img = MultipartBody.Part.createFormData("img", "icon.jpg", requestBody);
-        RetrofitService service = GetRetrofit.getRetrofit().create(RetrofitService.class);
-        Call<BaseBean> call = service.uploadImg(part);
-        call.enqueue(new Callback<BaseBean>() {
-            @Override
-            public void onResponse(Call<BaseBean> call, Response<BaseBean> response) {
-                BaseBean body = response.body();
-                String describe = body.getDescribe();
-
-            }
-
-            @Override
-            public void onFailure(Call<BaseBean> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+public class UploadImgBiz {
+    private String ip = GlobalParameter.ip + "Server/UploadServer";
+    public static UploadImgBiz uploadImgBiz;
+    public static UploadImgBiz getInstance(){
+        if (uploadImgBiz == null){
+            uploadImgBiz = new UploadImgBiz();
+        }
+        return uploadImgBiz;
+    }
+    public interface OnUploadListener{
+        void success(BaseBean baseBean);
+        void failed();
+    }
+    public void uploadImg(String fileUri, UploadImgBiz.OnUploadListener uploadListener)
+            throws IOException {
+        File uploadFile = new File(Environment.getExternalStorageDirectory(), fileUri);
+        URL url = new URL(ip);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setDoOutput(true);
+        OutputStream out = conn.getOutputStream();
+        InputStream in = new FileInputStream(uploadFile);
+        byte[] buf = new byte[1024];
+        int len;
+        while ((len = in.read(buf)) != -1)
+            out.write(buf, 0, len);
+        in.close();
+        out.close();
+        if (conn.getResponseCode() == 200) {
+            InputStream inputStream = conn.getInputStream();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            String s = bufferedReader.readLine();
+            BaseBean baseBean = GetGson.getGson().fromJson(s, BaseBean.class);
+            uploadListener.success(baseBean);
+        }else {
+            Logger.d("上传时ResponseCode不为200");
+            uploadListener.failed();
+        }
     }
 }

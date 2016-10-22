@@ -1,8 +1,6 @@
 package com.hsd.asmfsx;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,20 +12,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hsd.asmfsx.adapter.HeartBeatListAdapter;
+import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.contract.RequestHeartBeatContract;
 import com.hsd.asmfsx.global.GlobalParameter;
 import com.hsd.asmfsx.model.IUploadImgBiz;
-import com.hsd.asmfsx.model.TestUpload;
 import com.hsd.asmfsx.model.UploadImgBiz;
+import com.hsd.asmfsx.model.UploadImgByRetrofitBiz;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
-import com.hsd.asmfsx.view.activity.CertificationActivity;
-import com.hsd.asmfsx.view.activity.LoginActivity;
-import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.orhanobut.logger.Logger;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -50,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        new Thread(new Runnable() {
+        /*new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -59,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
                     e.printStackTrace();
                 }
             }
-        }).start();
+        }).start();*/
 
         ButterKnife.bind(this);
         presenter = new RequestHeartBeatPresenter(this);
@@ -73,10 +69,9 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new UploadImgBiz().doUpload("", new IUploadImgBiz.OnUploadImgListener() {
+                new UploadImgByRetrofitBiz().doUpload("", new IUploadImgBiz.OnUploadImgListener() {
                     @Override
                     public void success() {
-
                     }
 
                     @Override
@@ -95,9 +90,21 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     }
 
     private void testup() throws IOException {
-        TestUpload testUpload = new TestUpload();
-        File file = new File(Environment.getExternalStorageDirectory(), "icon.jpg");
-        testUpload.uploadForm(file, GlobalParameter.ip + "Server/UploadServer");
+        UploadImgBiz.getInstance().uploadImg("androidschoolbus.jpg", new UploadImgBiz.OnUploadListener() {
+            @Override
+            public void success(BaseBean baseBean) {
+                if (baseBean.getResultCode() == 1){
+                    Logger.d("上传成功，" + baseBean.getBody());
+                }else {
+                    Logger.d("" + baseBean.getDescribe());
+                }
+            }
+
+            @Override
+            public void failed() {
+
+            }
+        });
     }
 
     @Override
