@@ -5,6 +5,7 @@ import com.hsd.asmfsx.bean.CertificationBean;
 import com.hsd.asmfsx.bean.LoginBean;
 import com.hsd.asmfsx.bean.RegisterBean;
 import com.hsd.asmfsx.bean.UserBean;
+import com.hsd.asmfsx.bean.UserInformationBean;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
@@ -51,7 +52,20 @@ public interface RetrofitService {
     @POST("/Server/MainServer?method=register")
     Call<RegisterBean> postRegister(@Body RegisterBean registerBean);
 
+    /**
+     * 上传图片，暂时不用
+     * @param img
+     * @return
+     */
     @Multipart
     @POST("/Server/UploadServer")
     Call<BaseBean> uploadImg(@Part MultipartBody.Part img);
+
+    /**
+     * 在注册后设置用户信息的请求
+     * @param userInformationBean
+     * @return
+     */
+    @POST("/Server/MainServer?method=updateUserInformation")
+    Call<UserInformationBean> postSetUserInfo(@Body UserInformationBean userInformationBean);
 }

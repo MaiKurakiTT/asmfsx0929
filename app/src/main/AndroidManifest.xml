@@ -39,6 +39,7 @@
         <activity android:name=".view.activity.LoginActivity"/>
         <activity android:name=".view.activity.CertificationActivity"/>
         <activity android:name=".view.activity.RegisterActivity"/>
+        <activity android:name=".view.activity.SetAfterRegisterActivity"/>
         <!-- 设置环信应用的AppKey -->
         <meta-data android:name="EASEMOB_APPKEY"  android:value="zacharysun#firsttestim" />
         <!-- 声明SDK所需的service SDK核心功能-->

@@ -1,5 +1,6 @@
 package com.hsd.asmfsx;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +21,8 @@ import com.hsd.asmfsx.model.IUploadImgBiz;
 import com.hsd.asmfsx.model.UploadImgBiz;
 import com.hsd.asmfsx.model.UploadImgByRetrofitBiz;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
+import com.hsd.asmfsx.view.activity.RegisterActivity;
+import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
 import com.orhanobut.logger.Logger;
@@ -69,16 +72,8 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new UploadImgByRetrofitBiz().doUpload("", new IUploadImgBiz.OnUploadImgListener() {
-                    @Override
-                    public void success() {
-                    }
 
-                    @Override
-                    public void failed() {
-
-                    }
-                });
+                startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
 //                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
 //                startActivity(new Intent(MainActivity.this, CertificationActivity.class));
 //                startActivity(new Intent(MainActivity.this, LoginActivity.class));
