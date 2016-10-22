@@ -13,17 +13,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hsd.asmfsx.adapter.HeartBeatListAdapter;
+import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.contract.RequestHeartBeatContract;
+import com.hsd.asmfsx.global.GlobalParameter;
 import com.hsd.asmfsx.model.IUploadImgBiz;
 import com.hsd.asmfsx.model.UploadImgBiz;
+import com.hsd.asmfsx.model.UploadImgByRetrofitBiz;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
-import com.hsd.asmfsx.view.activity.CertificationActivity;
+import com.hsd.asmfsx.view.activity.FindFriendsActivity;
 import com.hsd.asmfsx.view.activity.LoginActivity;
 import com.hsd.asmfsx.view.activity.RegisterActivity;
+import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
+import com.orhanobut.logger.Logger;
 
+import java.io.IOException;
 import java.util.List;
 
 import butterknife.BindView;
@@ -45,6 +51,17 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        /*new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    testup();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();*/
+
         ButterKnife.bind(this);
         presenter = new RequestHeartBeatPresenter(this);
         button = (Button) findViewById(R.id.button);
@@ -57,23 +74,33 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new UploadImgBiz().doUpload("", new IUploadImgBiz.OnUploadImgListener() {
-                    @Override
-                    public void success() {
 
-                    }
-
-                    @Override
-                    public void failed() {
-
-                    }
-                });
+                startActivity(new Intent(MainActivity.this, FindFriendsActivity.class));
+//                startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
 //                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
 //                startActivity(new Intent(MainActivity.this, CertificationActivity.class));
 //                startActivity(new Intent(MainActivity.this, LoginActivity.class));
 //                startActivity(new Intent(MainActivity.this, TestRetrofit.class));
 //                startActivity(new Intent(MainActivity.this, RegisterAndLoginActivity.class));
 //                presenter.getData();
+            }
+        });
+    }
+
+    private void testup() throws IOException {
+        UploadImgBiz.getInstance().uploadImg("androidschoolbus.jpg", new UploadImgBiz.OnUploadListener() {
+            @Override
+            public void success(BaseBean baseBean) {
+                if (baseBean.getResultCode() == 1){
+                    Logger.d("上传成功，" + baseBean.getBody());
+                }else {
+                    Logger.d("" + baseBean.getDescribe());
+                }
+            }
+
+            @Override
+            public void failed() {
+
             }
         });
     }
