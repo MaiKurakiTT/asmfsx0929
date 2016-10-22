@@ -22,7 +22,7 @@ public class UploadImgBiz implements IUploadImgBiz{
     @Override
     public void doUpload(String fileUri, OnUploadImgListener uploadImgListener) {
         File file = new File(Environment.getExternalStorageDirectory(), "img.jpg");
-        RequestBody requestBody = RequestBody.create(MediaType.parse("image/jpg"), file);
+        RequestBody requestBody = RequestBody.create(MediaType.parse("text/html"), file);
         MultipartBody.Part img = MultipartBody.Part.createFormData("img", "img.jpg", requestBody);
         RetrofitService service = GetRetrofit.getRetrofit().create(RetrofitService.class);
         Call<BaseBean> call = service.uploadImg(img);
