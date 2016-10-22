@@ -21,6 +21,7 @@ import com.hsd.asmfsx.model.IUploadImgBiz;
 import com.hsd.asmfsx.model.UploadImgBiz;
 import com.hsd.asmfsx.model.UploadImgByRetrofitBiz;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
+import com.hsd.asmfsx.view.activity.FindFriendsActivity;
 import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
 import com.hyphenate.EMCallBack;
@@ -73,7 +74,8 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
             @Override
             public void onClick(View v) {
 
-                startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
+                startActivity(new Intent(MainActivity.this, FindFriendsActivity.class));
+//                startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
 //                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
 //                startActivity(new Intent(MainActivity.this, CertificationActivity.class));
 //                startActivity(new Intent(MainActivity.this, LoginActivity.class));
