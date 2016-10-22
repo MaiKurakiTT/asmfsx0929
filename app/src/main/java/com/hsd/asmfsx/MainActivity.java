@@ -75,11 +75,11 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
             @Override
             public void onClick(View v) {
 
-                startActivity(new Intent(MainActivity.this, FindFriendsActivity.class));
+//                startActivity(new Intent(MainActivity.this, FindFriendsActivity.class));
 //                startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
 //                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
 //                startActivity(new Intent(MainActivity.this, CertificationActivity.class));
-//                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
 //                startActivity(new Intent(MainActivity.this, TestRetrofit.class));
 //                startActivity(new Intent(MainActivity.this, RegisterAndLoginActivity.class));
 //                presenter.getData();

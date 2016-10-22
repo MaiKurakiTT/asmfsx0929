@@ -1,9 +1,15 @@
 package com.hsd.asmfsx.view.activity;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.bean.LoginBean;
@@ -12,37 +18,76 @@ import com.hsd.asmfsx.db.DbBean;
 import com.hsd.asmfsx.db.DbBeanHelper;
 import com.hsd.asmfsx.db.DbUtil;
 import com.hsd.asmfsx.presenter.LoginPresenter;
+import com.hsd.asmfsx.utils.ShowToast;
 import com.orhanobut.logger.Logger;
 
-import java.util.ArrayList;
-import java.util.List;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by apple on 2016/10/16.
  */
 
-public class LoginActivity extends AppCompatActivity implements LoginContract.View{
+public class LoginActivity extends AppCompatActivity implements LoginContract.View {
+    @BindView(R.id.usernametext)
+    TextInputEditText usernametext;
+    @BindView(R.id.usernameinput)
+    TextInputLayout usernameinput;
+    @BindView(R.id.passwordtext)
+    TextInputEditText passwordtext;
+    @BindView(R.id.passwordinput)
+    TextInputLayout passwordinput;
+    @BindView(R.id.login_but)
+    AppCompatButton loginBut;
+    @BindView(R.id.register_link)
+    TextView registerLink;
     private String TAG = "LoginActivity";
     private LoginPresenter loginPresenter;
     private DbBeanHelper driverHelper;
+    private String username;
+    private String password;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login_layout);
-        loginPresenter = new LoginPresenter(this);
-        loginPresenter.start();
+        ButterKnife.bind(this);
+        initView();
+        initData();
 
+    }
+
+    private void initView() {
+        progressDialog = new ProgressDialog(LoginActivity.this);
+        progressDialog.setMessage("正在登录...");
+        progressDialog.setCanceledOnTouchOutside(false);
+    }
+
+    private void initData() {
+        loginPresenter = new LoginPresenter(this);
+        loginBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                username = usernameinput.getEditText().getText().toString();
+                password = passwordinput.getEditText().getText().toString();
+                if (username.equals("")|| password.equals("")){
+                    ShowToast.show(LoginActivity.this, "手机号或密码为空");
+                }else {
+                    loginPresenter.start();
+                }
+            }
+        });
     }
 
     @Override
     public String getUserName() {
-        return "18738577578";
+        return username;
     }
 
     @Override
     public String getPassWord() {
-        return "123";
+        return password;
     }
 
     @Override
@@ -50,12 +95,12 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         Log.d(TAG, loginBean.getUser_uuid());
         driverHelper = DbUtil.getDriverHelper();
         int size = driverHelper.queryAll().size();
-        if (size == 0){
+        if (size == 0) {
             Logger.d("数据库为空");
             DbBean tempBean = new DbBean();
             DbBean dbBean = insertInfo(tempBean, loginBean);
             driverHelper.save(dbBean);
-        }else {
+        } else {
             Logger.d("数据库不为空");
             DbBean tempBean = driverHelper.queryAll().get(0);
             DbBean dbBean = insertInfo(tempBean, loginBean);
@@ -64,7 +109,8 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             driverHelper.update(dbBean);
         }
     }
-    public DbBean insertInfo(DbBean dbBean, LoginBean loginBean){
+
+    public DbBean insertInfo(DbBean dbBean, LoginBean loginBean) {
         dbBean.setUser_ID(loginBean.getUser_ID());
         dbBean.setUser_phone(loginBean.getUser_phone());
         dbBean.setUser_uuid(loginBean.getUser_uuid());
@@ -92,16 +138,17 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void showLoading() {
-
+        progressDialog.show();
     }
 
     @Override
     public void hideLoading() {
-
+        progressDialog.hide();
     }
 
     @Override
     public void showFailed() {
-        Log.d(TAG, "failed");
+        Logger.d("failed");
+        ShowToast.show(LoginActivity.this, "手机号或密码错误");
     }
 }

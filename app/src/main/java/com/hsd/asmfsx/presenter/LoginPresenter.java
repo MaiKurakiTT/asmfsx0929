@@ -28,6 +28,7 @@ public class LoginPresenter implements LoginContract.Presenter{
                     public void run() {
                         view.clearData();
                         view.showData(loginBean);
+                        view.hideLoading();
                     }
                 });
             }
@@ -39,6 +40,7 @@ public class LoginPresenter implements LoginContract.Presenter{
                     public void run() {
                         view.clearData();
                         view.showFailed();
+                        view.hideLoading();
                     }
                 });
             }
