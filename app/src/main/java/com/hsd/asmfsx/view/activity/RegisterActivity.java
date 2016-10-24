@@ -25,7 +25,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register_layout);
         registerPresenter = new RegisterPresenter(this);
-        registerPresenter.start();
+//        registerPresenter.start();
     }
 
     @Override

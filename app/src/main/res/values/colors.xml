@@ -11,4 +11,6 @@
     <color name="window_background_dark">#403f4d</color>
     <color name="white">#ffffff</color>
     <color name="black">#000000</color>
+
+    <color name="spinner_base_color">#ffffff</color>
 </resources>

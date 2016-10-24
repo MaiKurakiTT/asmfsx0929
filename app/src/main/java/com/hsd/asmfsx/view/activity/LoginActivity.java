@@ -3,10 +3,12 @@ package com.hsd.asmfsx.view.activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -18,6 +20,7 @@ import com.hsd.asmfsx.db.DbBean;
 import com.hsd.asmfsx.db.DbBeanHelper;
 import com.hsd.asmfsx.db.DbUtil;
 import com.hsd.asmfsx.presenter.LoginPresenter;
+import com.hsd.asmfsx.utils.NetworkUtils;
 import com.hsd.asmfsx.utils.ShowToast;
 import com.orhanobut.logger.Logger;
 
@@ -69,15 +72,23 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         loginBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                username = usernameinput.getEditText().getText().toString();
-                password = passwordinput.getEditText().getText().toString();
-                if (username.equals("")|| password.equals("")){
-                    ShowToast.show(LoginActivity.this, "手机号或密码为空");
-                }else {
-                    loginPresenter.start();
-                }
+                doLogin();
             }
         });
+    }
+
+    private void doLogin() {
+        if (NetworkUtils.isNetworkAvailable(LoginActivity.this)){
+            username = usernameinput.getEditText().getText().toString();
+            password = passwordinput.getEditText().getText().toString();
+            if (TextUtils.isEmpty(username)|| TextUtils.isEmpty(password)){
+                ShowToast.show(LoginActivity.this, "手机号或密码为空");
+            }else {
+                loginPresenter.start();
+            }
+        }else {
+            ShowToast.show(LoginActivity.this, "网络好像出问题了，请检查你的网络状况~");
+        }
     }
 
     @Override
@@ -92,22 +103,27 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void showData(LoginBean loginBean) {
-        Log.d(TAG, loginBean.getUser_uuid());
-        driverHelper = DbUtil.getDriverHelper();
-        int size = driverHelper.queryAll().size();
-        if (size == 0) {
-            Logger.d("数据库为空");
-            DbBean tempBean = new DbBean();
-            DbBean dbBean = insertInfo(tempBean, loginBean);
-            driverHelper.save(dbBean);
-        } else {
-            Logger.d("数据库不为空");
-            DbBean tempBean = driverHelper.queryAll().get(0);
-            DbBean dbBean = insertInfo(tempBean, loginBean);
-            dbBean.setDbId(Long.valueOf(1));
-            dbBean.setUser_nickname("update");
-            driverHelper.update(dbBean);
+        if (loginBean.getResultCode() == 1){
+            Log.d(TAG, loginBean.getUser_uuid());
+            driverHelper = DbUtil.getDriverHelper();
+            int size = driverHelper.queryAll().size();
+            if (size == 0) {
+                Logger.d("数据库为空");
+                DbBean tempBean = new DbBean();
+                DbBean dbBean = insertInfo(tempBean, loginBean);
+                driverHelper.save(dbBean);
+            } else {
+                Logger.d("数据库不为空");
+                DbBean tempBean = driverHelper.queryAll().get(0);
+                DbBean dbBean = insertInfo(tempBean, loginBean);
+                dbBean.setDbId(Long.valueOf(1));
+                dbBean.setUser_nickname("update");
+                driverHelper.update(dbBean);
+            }
+        }else {
+            ShowToast.show(LoginActivity.this, "" + loginBean.getDescribe());
         }
+
     }
 
     public DbBean insertInfo(DbBean dbBean, LoginBean loginBean) {
@@ -149,6 +165,11 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     @Override
     public void showFailed() {
         Logger.d("failed");
-        ShowToast.show(LoginActivity.this, "手机号或密码错误");
+        Snackbar.make(loginBut, "登录失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doLogin();
+            }
+        });
     }
 }

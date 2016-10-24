@@ -46,6 +46,14 @@ public interface RetrofitService {
     Call<CertificationBean> postCertification(@Body CertificationBean certificationBean);
 
     /**
+     * checkSchool
+     * @param certificationBiz  需要学校名存入CertificationBean
+     * @return  返回CertificationBean
+     */
+    @POST("/Server/MainServer?method=getModel")
+    Call<CertificationBean> postCheckSchool(@Body CertificationBean certificationBean);
+
+    /**
      * 注册
      * @param registerBean  需要学号、手机号、密码存入RegisterBean
      * @return  返回RegisterBean

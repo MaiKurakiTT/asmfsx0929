@@ -21,6 +21,7 @@ import com.hsd.asmfsx.model.IUploadImgBiz;
 import com.hsd.asmfsx.model.UploadImgBiz;
 import com.hsd.asmfsx.model.UploadImgByRetrofitBiz;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
+import com.hsd.asmfsx.view.activity.CertificationActivity;
 import com.hsd.asmfsx.view.activity.FindFriendsActivity;
 import com.hsd.asmfsx.view.activity.LoginActivity;
 import com.hsd.asmfsx.view.activity.RegisterActivity;
@@ -78,8 +79,8 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
 //                startActivity(new Intent(MainActivity.this, FindFriendsActivity.class));
 //                startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
 //                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
-//                startActivity(new Intent(MainActivity.this, CertificationActivity.class));
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                startActivity(new Intent(MainActivity.this, CertificationActivity.class));
+//                startActivity(new Intent(MainActivity.this, LoginActivity.class));
 //                startActivity(new Intent(MainActivity.this, TestRetrofit.class));
 //                startActivity(new Intent(MainActivity.this, RegisterAndLoginActivity.class));
 //                presenter.getData();
