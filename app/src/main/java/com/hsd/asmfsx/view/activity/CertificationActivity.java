@@ -1,6 +1,7 @@
 package com.hsd.asmfsx.view.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -53,6 +54,10 @@ public class CertificationActivity extends AppCompatActivity implements Certific
     private ProgressDialog progressDialog;
     //该学校是否需要验证码,true为需要
     private Boolean HASCODE = false;
+    private String schoolName;
+    private String stuId;
+    private String stuPsw;
+    private String verCode;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,10 +110,10 @@ public class CertificationActivity extends AppCompatActivity implements Certific
 
     private void doCertification() {
         if (NetworkUtils.isNetworkAvailable(this)){
-            String schoolName = schoolSpinner.getText().toString();
-            String stuId = stuidinput.getEditText().getText().toString();
-            String stuPsw = stupswinput.getEditText().getText().toString();
-            String verCode = vercodeinput.getEditText().getText().toString();
+            schoolName = schoolSpinner.getText().toString();
+            stuId = stuidinput.getEditText().getText().toString();
+            stuPsw = stupswinput.getEditText().getText().toString();
+            verCode = vercodeinput.getEditText().getText().toString();
             if (HASCODE == true){
                 if (TextUtils.isEmpty(stuId) || TextUtils.isEmpty(stuPsw) || TextUtils.isEmpty(verCode)){
                     ShowToast.show(CertificationActivity.this, "信息填写有误！");
@@ -156,6 +161,11 @@ public class CertificationActivity extends AppCompatActivity implements Certific
             /**
              * 认证成功，跳转注册
              */
+            Intent intent = new Intent(this, RegisterActivity.class);
+            intent.putExtra("stuId", stuId);
+            intent.putExtra("schoolName", schoolName);
+            startActivity(intent);
+            finish();
         } else {
             ShowToast.show(CertificationActivity.this, "" + certificationBean.getDescribe());
         }
@@ -201,7 +211,7 @@ public class CertificationActivity extends AppCompatActivity implements Certific
 
     @Override
     public void hideLoading() {
-        progressDialog.hide();
+        progressDialog.dismiss();
     }
 
     @Override
@@ -213,5 +223,10 @@ public class CertificationActivity extends AppCompatActivity implements Certific
                 doCertification();
             }
         }).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

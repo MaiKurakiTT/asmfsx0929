@@ -37,6 +37,7 @@ public class RegisterBiz implements RegisterContract.IRegisterBiz{
             public void onFailure(Call<RegisterBean> call, Throwable t) {
                 Logger.d("请求注册抛异常：" + t.toString());
                 t.printStackTrace();
+                registerListener.failed();
             }
         });
     }

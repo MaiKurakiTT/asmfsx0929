@@ -1,6 +1,7 @@
 package com.hsd.asmfsx.view.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -65,6 +66,13 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         progressDialog = new ProgressDialog(LoginActivity.this);
         progressDialog.setMessage("正在登录...");
         progressDialog.setCanceledOnTouchOutside(false);
+        registerLink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, CertificationActivity.class));
+                finish();
+            }
+        });
     }
 
     private void initData() {
@@ -159,7 +167,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void hideLoading() {
-        progressDialog.hide();
+        progressDialog.dismiss();
     }
 
     @Override
