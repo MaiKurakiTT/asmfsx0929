@@ -50,4 +50,5 @@ dependencies {
     compile 'com.orhanobut:logger:1.15'
     compile 'com.jaredrummler:material-spinner:1.1.0'
     compile 'cn.carbswang.android:NumberPickerView:1.1.0'
+    compile 'cn.qqtheme.framework:WheelPicker:latest.release'
 }
