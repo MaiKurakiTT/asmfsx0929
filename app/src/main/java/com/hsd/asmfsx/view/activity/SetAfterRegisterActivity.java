@@ -8,7 +8,11 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ImageView;
+import android.support.v7.widget.AppCompatButton;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.hsd.asmfsx.R;
@@ -17,9 +21,12 @@ import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.contract.SetAfterRegisterContract;
 import com.hsd.asmfsx.global.GetGson;
 import com.hsd.asmfsx.presenter.SetAfterRegisterPresenter;
+import com.hsd.asmfsx.utils.PickViewUtils;
 import com.hsd.asmfsx.utils.ShowToast;
 import com.orhanobut.logger.Logger;
 import com.soundcloud.android.crop.Crop;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.InputStream;
@@ -31,10 +38,12 @@ import cn.qqtheme.framework.entity.City;
 import cn.qqtheme.framework.entity.County;
 import cn.qqtheme.framework.entity.Province;
 import cn.qqtheme.framework.picker.AddressPicker;
+import cn.qqtheme.framework.picker.DatePicker;
 import cn.qqtheme.framework.picker.NumberPicker;
 import cn.qqtheme.framework.picker.OptionPicker;
 import cn.qqtheme.framework.picker.TimePicker;
 import cn.qqtheme.framework.util.ConvertUtils;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by 紫荆 on 2016/10/22.
@@ -42,21 +51,133 @@ import cn.qqtheme.framework.util.ConvertUtils;
 
 public class SetAfterRegisterActivity extends AppCompatActivity implements SetAfterRegisterContract.View {
 
-    @BindView(R.id.tempimg)
-    ImageView tempimg;
+    @BindView(R.id.headimg)
+    CircleImageView headimg;
+    @BindView(R.id.match_phonetext)
+    TextView matchPhonetext;
+    @BindView(R.id.phonetext)
+    TextView phonetext;
+    @BindView(R.id.phoneparent)
+    RelativeLayout phoneparent;
+    @BindView(R.id.nametext)
+    EditText nametext;
+    @BindView(R.id.nameparent)
+    RelativeLayout nameparent;
+    @BindView(R.id.match_sextext)
+    TextView matchSextext;
+    @BindView(R.id.sextext)
+    TextView sextext;
+    @BindView(R.id.sexparent)
+    RelativeLayout sexparent;
+    @BindView(R.id.match_birthdaytext)
+    TextView matchBirthdaytext;
+    @BindView(R.id.birthdaytext)
+    TextView birthdaytext;
+    @BindView(R.id.birthdayparent)
+    RelativeLayout birthdayparent;
+    @BindView(R.id.match_heighttext)
+    TextView matchHeighttext;
+    @BindView(R.id.heighttext)
+    TextView heighttext;
+    @BindView(R.id.heightparent)
+    RelativeLayout heightparent;
+    @BindView(R.id.match_hometext)
+    TextView matchHometext;
+    @BindView(R.id.hometext)
+    TextView hometext;
+    @BindView(R.id.homeparent)
+    RelativeLayout homeparent;
+    @BindView(R.id.match_schooltext)
+    TextView matchSchooltext;
+    @BindView(R.id.schooltext)
+    TextView schooltext;
+    @BindView(R.id.schoolparent)
+    RelativeLayout schoolparent;
+    @BindView(R.id.match_statustext)
+    TextView matchStatustext;
+    @BindView(R.id.statustext)
+    TextView statustext;
+    @BindView(R.id.statusparent)
+    RelativeLayout statusparent;
+    @BindView(R.id.okbut)
+    AppCompatButton okbut;
     private SetAfterRegisterPresenter setAfterRegisterPresenter;
     //拍照裁剪图片前后图片URI
     private Uri snocrop = Uri.parse("file:///sdcard/snocrop");
     private Uri scropped = Uri.parse("file:///sdcard/scropped");
+    private String[] sexItems = {"男", "女"};
+    private String[] schoolItems = {"河南师范大学"};
+    private String[] statusItems = {"单身", "热恋ing", "分手了"};
+    private AlertDialog.Builder headBuilder;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.setafterregister_layout);
         ButterKnife.bind(this);
+        initData();
+        initView();
+        setData2View();
         setAfterRegisterPresenter = new SetAfterRegisterPresenter(this);
-//        setAfterRegisterPresenter.start();
-        setHead();
 
+    }
+
+    private void initData() {
+
+    }
+
+    private void initView() {
+        headimg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setHead();
+            }
+        });
+    }
+
+    private void setData2View() {
+        //设置性别
+        sexparent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new PickViewUtils(SetAfterRegisterActivity.this, sextext).pickOther(sexItems);
+            }
+        });
+        //设置生日
+        birthdayparent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new PickViewUtils(SetAfterRegisterActivity.this, birthdaytext).pickDate();
+            }
+        });
+        //设置身高
+        heightparent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new PickViewUtils(SetAfterRegisterActivity.this, heighttext).pickHeight();
+            }
+        });
+        //设置地区
+        homeparent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new PickViewUtils(SetAfterRegisterActivity.this, hometext).pickProvince();
+            }
+        });
+        //设置学校
+        schoolparent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new PickViewUtils(SetAfterRegisterActivity.this, schooltext).pickOther(schoolItems);
+            }
+        });
+        //设置恋爱状态
+        statusparent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new PickViewUtils(SetAfterRegisterActivity.this, statustext).pickOther(statusItems);
+            }
+        });
     }
 
     /**
@@ -70,7 +191,7 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
              * data.getData()获取到图片URI
              */
             beginCrop(data.getData());
-        }else if (requestCode == Crop.REQUEST_CROP) {
+        } else if (requestCode == Crop.REQUEST_CROP) {
             //调用Crop.start后来到这
             handleCrop(resultCode, data);
         }
@@ -87,36 +208,13 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    /**
-     * 通过相册选择图片裁剪 step 3
-     * 调用Crop.pickImage后选择的图片调用Crop来裁剪
-     * @param source  通过相册选择的图片URI
-     */
-    private void beginCrop(Uri source) {
-        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
-        Crop.of(source, destination).asSquare().start(this);
-    }
 
-    /**
-     *  裁剪完成
-     * @param resultCode 通过此参数判断是否完成裁剪
-     * @param result
-     */
-    private void handleCrop(int resultCode, Intent result) {
-        if (resultCode == RESULT_OK) {
-            //如果裁剪正常，resultCode == RESULT_OK则到这里裁剪完成
-            tempimg.setImageURI(Crop.getOutput(result));
-        } else if (resultCode == Crop.RESULT_ERROR) {
-            Logger.d(""+Crop.getError(result).getMessage());
-            ShowToast.show(SetAfterRegisterActivity.this, Crop.getError(result).getMessage());
-        }
-    }
     /**
      * 设置头像
      */
     private void setHead() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setItems(new String[]{"选择图片", "拍照"}, new DialogInterface.OnClickListener() {
+        headBuilder = new AlertDialog.Builder(this);
+        headBuilder.setItems(new String[]{"选择图片", "拍照"}, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
@@ -135,75 +233,9 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
                 }
             }
         });
-        builder.show();
+        headBuilder.show();
     }
 
-    private void pickOther() {
-        OptionPicker picker = new OptionPicker(this, new String[]{
-                "第一项", "第二项", "这是一个很长很长很长很长很长很很长很长的项"});
-        picker.setOffset(2);
-        picker.setSelectedIndex(1);
-        picker.setOnOptionPickListener(new OptionPicker.OnOptionPickListener() {
-            @Override
-            public void onOptionPicked(int position, String option) {
-
-            }
-        });
-        picker.show();
-    }
-
-    private void pickHeight() {
-        NumberPicker picker = new NumberPicker(this);
-        picker.setOffset(2);//偏移量
-        picker.setRange(145, 200, 1);//数字范围
-        picker.setSelectedItem(172);
-        picker.setLabel("厘米");
-        picker.setOnOptionPickListener(new OptionPicker.OnOptionPickListener() {
-            @Override
-            public void onOptionPicked(int position, String option) {
-
-            }
-        });
-        picker.show();
-    }
-
-    private void pickDate() {
-        TimePicker picker = new TimePicker(this, TimePicker.HOUR_24);
-        picker.setRangeStart(0, 0);//
-        picker.setRangeEnd(23, 59);//
-        picker.setTopLineVisible(false);
-        picker.setOnTimePickListener(new TimePicker.OnTimePickListener() {
-            @Override
-            public void onTimePicked(String hour, String minute) {
-
-            }
-        });
-        picker.show();
-    }
-
-    private void pickProvince() {
-        try {
-            ArrayList<Province> data = new ArrayList<Province>();
-            InputStream inputStream = this.getResources().getAssets().open("city.json");
-            String json = ConvertUtils.toString(inputStream);
-            ArrayList<Province> list = GetGson.getGson().fromJson(json, new TypeToken<ArrayList<Province>>() {
-            }.getType());
-            data.addAll(list);
-            AddressPicker picker = new AddressPicker(this, data);
-            picker.setOnAddressPickListener(new AddressPicker.OnAddressPickListener() {
-                @Override
-                public void onAddressPicked(Province province, City city, County county) {
-                    ShowToast.show(SetAfterRegisterActivity.this, province.getAreaName() + city.getAreaName() + county.getAreaName());
-                }
-            });
-//            picker.setHideProvince(true);//加上此句举将只显示地级及县级
-            //picker.setHideCounty(true);//加上此句举将只显示省级及地级
-            //picker.setColumnWeight(2/8.0, 3/8.0, 3/8.0);//省级、地级和县级的比例为2:3:3
-            picker.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public UserInformationBean getUserInformationBean() {
@@ -233,5 +265,32 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
     @Override
     public void showFailed() {
 
+    }
+
+    /**
+     * 通过相册选择图片裁剪 step 3
+     * 调用Crop.pickImage后选择的图片调用Crop来裁剪
+     *
+     * @param source 通过相册选择的图片URI
+     */
+    private void beginCrop(Uri source) {
+        Uri destination = Uri.fromFile(new File(getCacheDir(), "cropped"));
+        Crop.of(source, destination).asSquare().start(this);
+    }
+
+    /**
+     * 裁剪完成
+     *
+     * @param resultCode 通过此参数判断是否完成裁剪
+     * @param result
+     */
+    private void handleCrop(int resultCode, Intent result) {
+        if (resultCode == RESULT_OK) {
+            //如果裁剪正常，resultCode == RESULT_OK则到这里裁剪完成
+            headimg.setImageURI(Crop.getOutput(result));
+        } else if (resultCode == Crop.RESULT_ERROR) {
+            Logger.d("" + Crop.getError(result).getMessage());
+            ShowToast.show(SetAfterRegisterActivity.this, Crop.getError(result).getMessage());
+        }
     }
 }
