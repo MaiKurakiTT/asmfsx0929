@@ -24,16 +24,20 @@ import java.net.URL;
 public class UploadImgBiz {
     private String ip = GlobalParameter.ip + "Server/UploadServer";
     public static UploadImgBiz uploadImgBiz;
-    public static UploadImgBiz getInstance(){
-        if (uploadImgBiz == null){
+
+    public static UploadImgBiz getInstance() {
+        if (uploadImgBiz == null) {
             uploadImgBiz = new UploadImgBiz();
         }
         return uploadImgBiz;
     }
-    public interface OnUploadListener{
+
+    public interface OnUploadListener {
         void success(BaseBean baseBean);
+
         void failed();
     }
+
     public void uploadImg(String fileUri, UploadImgBiz.OnUploadListener uploadListener)
             throws IOException {
         File uploadFile = new File(Environment.getExternalStorageDirectory(), fileUri);
@@ -55,9 +59,45 @@ public class UploadImgBiz {
             String s = bufferedReader.readLine();
             BaseBean baseBean = GetGson.getGson().fromJson(s, BaseBean.class);
             uploadListener.success(baseBean);
-        }else {
+        } else {
             Logger.d("上传时ResponseCode不为200");
             uploadListener.failed();
         }
+    }
+
+    public void uploadImg(final File file, final UploadImgBiz.OnUploadListener uploadListener) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(ip);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setDoOutput(true);
+                    OutputStream out = conn.getOutputStream();
+                    InputStream in = new FileInputStream(file);
+                    byte[] buf = new byte[1024];
+                    int len;
+                    while ((len = in.read(buf)) != -1)
+                        out.write(buf, 0, len);
+                    in.close();
+                    out.close();
+                    if (conn.getResponseCode() == 200) {
+                        InputStream inputStream = conn.getInputStream();
+                        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+                        String s = bufferedReader.readLine();
+                        BaseBean baseBean = GetGson.getGson().fromJson(s, BaseBean.class);
+                        uploadListener.success(baseBean);
+                    } else {
+                        Logger.d("上传时ResponseCode不为200");
+                        uploadListener.failed();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Logger.d("上传图片业务抛异常了: " + e.toString());
+                }
+            }
+        }).start();
+
     }
 }

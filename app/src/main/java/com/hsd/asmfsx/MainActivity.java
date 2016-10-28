@@ -16,13 +16,9 @@ import com.hsd.asmfsx.adapter.HeartBeatListAdapter;
 import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.contract.RequestHeartBeatContract;
-import com.hsd.asmfsx.global.GlobalParameter;
-import com.hsd.asmfsx.model.IUploadImgBiz;
 import com.hsd.asmfsx.model.UploadImgBiz;
-import com.hsd.asmfsx.model.UploadImgByRetrofitBiz;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
 import com.hsd.asmfsx.view.activity.CertificationActivity;
-import com.hsd.asmfsx.view.activity.FindFriendsActivity;
 import com.hsd.asmfsx.view.activity.LoginActivity;
 import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
@@ -46,6 +42,12 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     TextView textview;
     @BindView(R.id.recycle)
     RecyclerView recycle;
+    @BindView(R.id.log)
+    Button log;
+    @BindView(R.id.cer)
+    Button cer;
+    @BindView(R.id.set)
+    Button set;
     private RequestHeartBeatPresenter presenter;
 
     @Override
@@ -71,19 +73,35 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         recycle = (RecyclerView) findViewById(R.id.recycle);
 
         recycle.setLayoutManager(new LinearLayoutManager(this));
-
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
 //                startActivity(new Intent(MainActivity.this, FindFriendsActivity.class));
-                startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
-//                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+//                startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
+                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
 //                startActivity(new Intent(MainActivity.this, CertificationActivity.class));
 //                startActivity(new Intent(MainActivity.this, LoginActivity.class));
 //                startActivity(new Intent(MainActivity.this, TestRetrofit.class));
 //                startActivity(new Intent(MainActivity.this, RegisterAndLoginActivity.class));
 //                presenter.getData();
+            }
+        });
+        log.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            }
+        });
+        cer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, CertificationActivity.class));
+            }
+        });
+        set.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
             }
         });
     }
@@ -92,9 +110,9 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         UploadImgBiz.getInstance().uploadImg("androidschoolbus.jpg", new UploadImgBiz.OnUploadListener() {
             @Override
             public void success(BaseBean baseBean) {
-                if (baseBean.getResultCode() == 1){
+                if (baseBean.getResultCode() == 1) {
                     Logger.d("上传成功，" + baseBean.getBody());
-                }else {
+                } else {
                     Logger.d("" + baseBean.getDescribe());
                 }
             }

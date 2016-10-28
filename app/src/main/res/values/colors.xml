@@ -15,7 +15,7 @@
     <color name="spinner_base_color">#ffffff</color>
 
     <color name="it_whitetextcolor">#ffffff</color>
-    <color name="it_matchwhite_textcolor">#66000000</color>
+    <color name="it_matchwhite_textcolor">#ffffff</color>
 
     <color name="view_fill">#66000000</color>
     <color name="view_notfill">#33000000</color>

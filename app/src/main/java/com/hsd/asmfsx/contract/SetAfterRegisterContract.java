@@ -5,6 +5,8 @@ import com.hsd.asmfsx.base.BaseView;
 import com.hsd.asmfsx.bean.UserBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
 
+import java.io.File;
+
 /**
  * Created by apple on 2016/10/20.
  */
@@ -15,6 +17,7 @@ public interface SetAfterRegisterContract {
     }
     interface View extends BaseView{
         UserInformationBean getUserInformationBean();
+        File getImgFile();
         void showData(UserInformationBean userInformationBean);
     }
     interface ISetAfterRegisterBiz{
@@ -22,6 +25,6 @@ public interface SetAfterRegisterContract {
             void success(UserInformationBean userInformationBean);
             void failed();
         }
-        void doSetInfo(UserInformationBean userInformationBean, OnSetAfterRegisterListener setAfterRegisterListener);
+        void doSetInfo(File imgFile, UserInformationBean userInformationBean, OnSetAfterRegisterListener setAfterRegisterListener);
     }
 }

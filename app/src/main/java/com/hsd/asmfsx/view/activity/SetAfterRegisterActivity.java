@@ -1,48 +1,50 @@
 package com.hsd.asmfsx.view.activity;
 
+import android.Manifest;
+import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.reflect.TypeToken;
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.UserBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.contract.SetAfterRegisterContract;
-import com.hsd.asmfsx.global.GetGson;
+import com.hsd.asmfsx.model.UploadImgBiz;
 import com.hsd.asmfsx.presenter.SetAfterRegisterPresenter;
+import com.hsd.asmfsx.utils.DateFormatUtils;
 import com.hsd.asmfsx.utils.PickViewUtils;
 import com.hsd.asmfsx.utils.ShowToast;
+import com.hsd.asmfsx.utils.Uri2PathUtils;
 import com.orhanobut.logger.Logger;
 import com.soundcloud.android.crop.Crop;
 
-import org.w3c.dom.Text;
-
 import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.qqtheme.framework.entity.City;
-import cn.qqtheme.framework.entity.County;
-import cn.qqtheme.framework.entity.Province;
-import cn.qqtheme.framework.picker.AddressPicker;
-import cn.qqtheme.framework.picker.DatePicker;
-import cn.qqtheme.framework.picker.NumberPicker;
-import cn.qqtheme.framework.picker.OptionPicker;
-import cn.qqtheme.framework.picker.TimePicker;
-import cn.qqtheme.framework.util.ConvertUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -109,6 +111,21 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
     private String[] schoolItems = {"河南师范大学"};
     private String[] statusItems = {"单身", "热恋ing", "分手了"};
     private AlertDialog.Builder headBuilder;
+    private String phone;
+    private String name;
+    private String sex;
+    private String birthdayString;
+    private String heightString;
+    private Date birthday;
+    private Integer height;
+    private String home;
+    private String school;
+    private String statusString;
+    private UserInformationBean userInformationBean;
+
+    private String cropSuccessPath;
+    private File imgFile;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -122,11 +139,31 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
 
     }
 
+    private void getData() {
+        phone = phonetext.getText().toString();
+        name = nametext.getText().toString();
+        sex = sextext.getText().toString();
+        birthdayString = birthdaytext.getText().toString();
+        if (!TextUtils.isEmpty(birthdayString)) {
+            birthday = DateFormatUtils.FormatString2Date(birthdayString);
+        }
+        heightString = heighttext.getText().toString().replace("cm", "");
+        if (!TextUtils.isEmpty(heightString)) {
+            height = Integer.valueOf(heightString);
+        }
+        home = hometext.getText().toString();
+        school = schooltext.getText().toString();
+        statusString = statustext.getText().toString();
+    }
+
     private void initData() {
 
     }
 
     private void initView() {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("正在加载...");
+        progressDialog.setCanceledOnTouchOutside(false);
         headimg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -178,6 +215,22 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
                 new PickViewUtils(SetAfterRegisterActivity.this, statustext).pickOther(statusItems);
             }
         });
+
+        okbut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getData();
+                if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(name) || TextUtils.isEmpty(sex)
+                        || TextUtils.isEmpty(birthdayString) || TextUtils.isEmpty(heightString) || TextUtils.isEmpty(home) ||
+                        TextUtils.isEmpty(school) || TextUtils.isEmpty(statusString)) {
+                    ShowToast.show(SetAfterRegisterActivity.this, "请先完善信息");
+                }else if(TextUtils.isEmpty(cropSuccessPath)){
+                    ShowToast.show(SetAfterRegisterActivity.this, "要设置头像哦~");
+                }else {
+                    setAfterRegisterPresenter.start();
+                }
+            }
+        });
     }
 
     /**
@@ -185,7 +238,7 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
      */
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Crop.REQUEST_PICK && resultCode == RESULT_OK) {
-            /**
+           /* *
              * 通过相册选择图片裁剪 step 2
              * 当调用相册选择一张图片后，将图片信息通过data传过来
              * data.getData()获取到图片URI
@@ -208,7 +261,6 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-
     /**
      * 设置头像
      */
@@ -219,16 +271,38 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
             public void onClick(DialogInterface dialog, int which) {
                 switch (which) {
                     case 0:
-                        /**
-                         * 通过相册选择图片裁剪 step 1
-                         * 调用相册选择图片
-                         */
+                        /*通过相册选择图片裁剪 step 1
+                        调用相册选择图片*/
                         Crop.pickImage(SetAfterRegisterActivity.this);
                         break;
                     case 1:
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, snocrop);
-                        startActivityForResult(intent, 1);// 采用ForResult打开
+                        if (ContextCompat.checkSelfPermission(SetAfterRegisterActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
+                                ) {
+                            ActivityCompat.requestPermissions(SetAfterRegisterActivity.this, new String[]{Manifest.permission.CAMERA}, 1);
+                            if (ActivityCompat.shouldShowRequestPermissionRationale(SetAfterRegisterActivity.this, Manifest.permission.CAMERA)
+                                    ) {
+                                new AlertDialog.Builder(SetAfterRegisterActivity.this)
+                                        .setMessage("申请相机权限")
+                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                //申请相机权限
+                                                ActivityCompat.requestPermissions(SetAfterRegisterActivity.this,
+                                                        new String[]{Manifest.permission.CAMERA}, 1);
+                                            }
+                                        })
+                                        .show();
+                            } else {
+                                //申请相机权限
+                                ActivityCompat.requestPermissions(SetAfterRegisterActivity.this,
+                                        new String[]{Manifest.permission.CAMERA}, 1);
+                            }
+                        } else {
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, snocrop);
+                            startActivityForResult(intent, 1);// 采用ForResult打开
+                        }
+
                         break;
                 }
             }
@@ -236,35 +310,74 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
         headBuilder.show();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, snocrop);
+                    startActivityForResult(intent, 1);// 采用ForResult打开
+                } else {
+                    ShowToast.show(SetAfterRegisterActivity.this, "缺少相机权限");
+                }
+                break;
+        }
+    }
 
     @Override
     public UserInformationBean getUserInformationBean() {
-        UserInformationBean userInformationBean = new UserInformationBean();
-        UserBean userBean = new UserBean();
-        userBean.setUUID("84f4b998-17df-4997-8fc2-828f89aec37d");
-        userInformationBean.setUser(userBean);
-        userInformationBean.setUser_nickname("2016年10月22日");
+        userInformationBean = new UserInformationBean();
+        userInformationBean.setUser_phone(phone);
+        userInformationBean.setUser_nickname(name);
+        userInformationBean.setUser_sex(sex);
+        userInformationBean.setUser_birthday(birthday);
+        userInformationBean.setUser_height(height);
+        userInformationBean.setUser_locality(home);
+        userInformationBean.setUser_school(school);
+        userInformationBean.setUser_state(statusString);
+        userInformationBean.setUUID("84f4b998-17df-4997-8fc2-828f89aec37d");
         return userInformationBean;
     }
 
     @Override
-    public void showData(UserInformationBean userInformationBean) {
+    public File getImgFile() {
+        return imgFile;
+    }
 
+    @Override
+    public void showData(UserInformationBean userInformationBean) {
+        if (userInformationBean.getResultCode() == 1){
+            Snackbar.make(okbut, "信息设置成功", Snackbar.LENGTH_LONG).show();
+        }else {
+            Snackbar.make(okbut, "信息设置失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    setAfterRegisterPresenter.start();
+                }
+            }).show();
+        }
     }
 
     @Override
     public void showLoading() {
-
+        progressDialog.show();
     }
 
     @Override
     public void hideLoading() {
-
+        progressDialog.dismiss();
     }
 
     @Override
     public void showFailed() {
-
+        Snackbar.make(okbut, "信息设置失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAfterRegisterPresenter.start();
+            }
+        }).show();
     }
 
     /**
@@ -287,7 +400,12 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
     private void handleCrop(int resultCode, Intent result) {
         if (resultCode == RESULT_OK) {
             //如果裁剪正常，resultCode == RESULT_OK则到这里裁剪完成
-            headimg.setImageURI(Crop.getOutput(result));
+            headimg.setImageResource(R.mipmap.ic_head);
+            Uri uri = Crop.getOutput(result);
+            cropSuccessPath = uri.getPath();
+            headimg.setImageURI(uri);
+            Logger.d("" + cropSuccessPath);
+            imgFile = new File(cropSuccessPath);
         } else if (resultCode == Crop.RESULT_ERROR) {
             Logger.d("" + Crop.getError(result).getMessage());
             ShowToast.show(SetAfterRegisterActivity.this, Crop.getError(result).getMessage());

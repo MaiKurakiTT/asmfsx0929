@@ -1,9 +1,13 @@
 package com.hsd.asmfsx.presenter;
 
+import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.contract.SetAfterRegisterContract;
 import com.hsd.asmfsx.global.GetHandler;
 import com.hsd.asmfsx.model.SetAfterRegisterBiz;
+import com.hsd.asmfsx.model.UploadImgBiz;
+
+import java.io.IOException;
 
 /**
  * Created by 紫荆 on 2016/10/22.
@@ -19,9 +23,9 @@ public class SetAfterRegisterPresenter implements SetAfterRegisterContract.Prese
     }
 
     @Override
-    public void start() {
+    public void start(){
         view.showLoading();
-        setAfterRegisterBiz.doSetInfo(view.getUserInformationBean(), new SetAfterRegisterContract.ISetAfterRegisterBiz.OnSetAfterRegisterListener() {
+        setAfterRegisterBiz.doSetInfo(view.getImgFile(), view.getUserInformationBean(), new SetAfterRegisterContract.ISetAfterRegisterBiz.OnSetAfterRegisterListener() {
             @Override
             public void success(final UserInformationBean userInformationBean) {
                 GetHandler.getHandler().post(new Runnable() {
