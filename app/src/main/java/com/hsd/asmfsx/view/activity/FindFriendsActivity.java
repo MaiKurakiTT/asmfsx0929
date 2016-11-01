@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -110,7 +111,12 @@ public class FindFriendsActivity extends AppCompatActivity implements FindFriend
 
     @Override
     public void showFailedForLoadMore() {
-
+        Snackbar.make(changebut, "加载失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findFriendsPresenter.loadMoreData();
+            }
+        }).show();
     }
 
     @Override
@@ -125,7 +131,12 @@ public class FindFriendsActivity extends AppCompatActivity implements FindFriend
 
     @Override
     public void showFailed() {
-
+        Snackbar.make(changebut, "加载失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findFriendsPresenter.start();
+            }
+        }).show();
     }
 
     public static float dpToPixels(int dp, Context context) {
