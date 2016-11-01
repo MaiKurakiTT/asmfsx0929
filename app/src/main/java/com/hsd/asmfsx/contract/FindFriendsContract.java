@@ -10,11 +10,13 @@ import com.hsd.asmfsx.bean.FindFriendsBean;
 
 public interface FindFriendsContract {
     interface Presenter extends BasePresenter{
-
+        void loadMoreData();
     }
     interface  View extends BaseView{
         FindFriendsBean getFindFriendsBean();
         void showData(FindFriendsBean findFriendsBean);
+        void showMoreData(FindFriendsBean findFriendsBean);
+        void showFailedForLoadMore();
     }
     interface IFindFriendsBiz{
         interface OnFindFriendsListener{

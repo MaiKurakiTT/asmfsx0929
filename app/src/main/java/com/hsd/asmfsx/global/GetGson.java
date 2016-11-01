@@ -20,7 +20,7 @@ public class GetGson {
     public static Gson getGson(){
         if (gson == null){
             GsonBuilder builder = new GsonBuilder();
-            // Register an adapter to manage the date types as long values
+            // Register an findfriendsitem_layout to manage the date types as long values
             builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
                 public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
                     return new Date(json.getAsJsonPrimitive().getAsLong());
