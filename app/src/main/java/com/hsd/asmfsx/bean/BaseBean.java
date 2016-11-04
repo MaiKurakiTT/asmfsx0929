@@ -1,7 +1,10 @@
 package com.hsd.asmfsx.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
-public class BaseBean {
+
+import java.io.Serializable;
+
+public class BaseBean implements Serializable{
 
 	public Integer resultCode; // 结果码
 

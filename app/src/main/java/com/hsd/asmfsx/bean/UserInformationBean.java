@@ -1,11 +1,9 @@
 package com.hsd.asmfsx.bean;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.ToOne;
 
+import java.io.Serializable;
 import java.util.Date;
-public class UserInformationBean extends BaseBean {
+public class UserInformationBean extends BaseBean implements Serializable{
 
 	// 属性
 	private Integer userInformation_ID;

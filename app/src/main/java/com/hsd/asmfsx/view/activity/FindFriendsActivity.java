@@ -20,6 +20,7 @@ import com.hsd.asmfsx.cardviewpager.ShadowTransformer;
 import com.hsd.asmfsx.contract.FindFriendsContract;
 import com.hsd.asmfsx.global.GetGson;
 import com.hsd.asmfsx.presenter.FindFriendsPresenter;
+import com.hsd.asmfsx.utils.ShowToast;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
@@ -66,6 +67,7 @@ public class FindFriendsActivity extends AppCompatActivity implements FindFriend
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("正在加载...");
         progressDialog.setCanceledOnTouchOutside(false);
+
     }
 
     @Override
@@ -93,7 +95,9 @@ public class FindFriendsActivity extends AppCompatActivity implements FindFriend
         viewpager.setAdapter(cardPagerAdapter);
         viewpager.setPageTransformer(false, shadowTransformer);
         viewpager.setOffscreenPageLimit(3);
+
     }
+
 
     @Override
     public void showMoreData(FindFriendsBean findFriendsBean) {
@@ -107,6 +111,7 @@ public class FindFriendsActivity extends AppCompatActivity implements FindFriend
         viewpager.setAdapter(cardPagerAdapter);
         viewpager.setPageTransformer(false, shadowTransformer);
         viewpager.setOffscreenPageLimit(3);
+
     }
 
     @Override

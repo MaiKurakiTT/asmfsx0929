@@ -10,11 +10,12 @@
         android:layout_height="400dp"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        android:paddingBottom="30dp"
+        android:paddingBottom="50dp"
         android:paddingEnd="60dp"
         android:paddingLeft="60dp"
         android:paddingRight="60dp"
-        android:paddingStart="60dp"/>
+        android:paddingStart="60dp"
+        android:clickable="false"/>
 
     <Button
         android:id="@+id/changebut"
