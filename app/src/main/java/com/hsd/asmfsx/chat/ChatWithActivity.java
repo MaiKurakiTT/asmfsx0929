@@ -14,7 +14,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by apple on 16/10/6.
+ * Created by apple on 2016/11/5.
  */
 
 public class ChatWithActivity extends AppCompatActivity {
@@ -22,18 +22,20 @@ public class ChatWithActivity extends AppCompatActivity {
     EditText withname;
     @BindView(R.id.startchat)
     Button startchat;
+    private String name;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_with);
         ButterKnife.bind(this);
+
         startchat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String withName = withname.getText().toString();
+                name = withname.getText().toString().trim();
                 Intent intent = new Intent(ChatWithActivity.this, ChatActivity.class);
-                intent.putExtra("withName", withName);
+                intent.putExtra("name", name);
                 startActivity(intent);
             }
         });

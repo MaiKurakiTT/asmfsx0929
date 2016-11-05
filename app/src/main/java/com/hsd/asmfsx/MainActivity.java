@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -15,16 +14,14 @@ import android.widget.Toast;
 import com.hsd.asmfsx.adapter.HeartBeatListAdapter;
 import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
+import com.hsd.asmfsx.chat.RegAndLogin;
 import com.hsd.asmfsx.contract.RequestHeartBeatContract;
 import com.hsd.asmfsx.model.UploadImgBiz;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
 import com.hsd.asmfsx.view.activity.CertificationActivity;
 import com.hsd.asmfsx.view.activity.FindFriendsActivity;
 import com.hsd.asmfsx.view.activity.LoginActivity;
-import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
-import com.hyphenate.EMCallBack;
-import com.hyphenate.chat.EMClient;
 import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
@@ -55,16 +52,6 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        /*new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    testup();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();*/
 
         ButterKnife.bind(this);
         presenter = new RequestHeartBeatPresenter(this);
@@ -77,13 +64,13 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, FindFriendsActivity.class));
+                startActivity(new Intent(MainActivity.this, RegAndLogin.class));
+//                startActivity(new Intent(MainActivity.this, FindFriendsActivity.class));
 //                startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
 //                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
 //                startActivity(new Intent(MainActivity.this, CertificationActivity.class));
 //                startActivity(new Intent(MainActivity.this, LoginActivity.class));
 //                startActivity(new Intent(MainActivity.this, TestRetrofit.class));
-//                startActivity(new Intent(MainActivity.this, RegisterAndLoginActivity.class));
 //                presenter.getData();
             }
         });
@@ -154,26 +141,5 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EMClient.getInstance().logout(true, new EMCallBack() {
-
-            @Override
-            public void onSuccess() {
-                // TODO Auto-generated method stub
-                Log.d(TAG, "成功退出登录");
-
-            }
-
-            @Override
-            public void onProgress(int progress, String status) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public void onError(int code, String message) {
-                // TODO Auto-generated method stub
-                Log.d(TAG, "失败退出登录");
-            }
-        });
     }
 }
