@@ -2,6 +2,7 @@ package com.hsd.asmfsx;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,14 +15,23 @@ import android.widget.Toast;
 import com.hsd.asmfsx.adapter.HeartBeatListAdapter;
 import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
+import com.hsd.asmfsx.chat.ChatActivity;
 import com.hsd.asmfsx.chat.RegAndLogin;
 import com.hsd.asmfsx.contract.RequestHeartBeatContract;
 import com.hsd.asmfsx.model.UploadImgBiz;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
+import com.hsd.asmfsx.utils.ShowToast;
 import com.hsd.asmfsx.view.activity.CertificationActivity;
 import com.hsd.asmfsx.view.activity.FindFriendsActivity;
 import com.hsd.asmfsx.view.activity.LoginActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
+import com.hyphenate.EMMessageListener;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.chat.EMMessage;
+import com.hyphenate.easeui.controller.EaseUI;
+import com.hyphenate.easeui.domain.EaseUser;
+import com.hyphenate.easeui.model.EaseNotifier;
+import com.hyphenate.util.EMLog;
 import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
@@ -30,7 +40,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements RequestHeartBeatContract.View {
+public class MainActivity extends AppCompatActivity implements RequestHeartBeatContract.View, EMMessageListener{
     public String TAG = "MainActivity";
     @BindView(R.id.button)
     Button button;
@@ -47,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     @BindView(R.id.set)
     Button set;
     private RequestHeartBeatPresenter presenter;
+    private EaseUI easeUI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +65,36 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+        EMClient.getInstance().chatManager().addMessageListener(this);
+        easeUI = EaseUI.getInstance();
+        easeUI.getNotifier().setNotificationInfoProvider(new EaseNotifier.EaseNotificationInfoProvider() {
+            @Override
+            public String getDisplayedText(EMMessage message) {
+                return "来信息啦getDisplayedText";
+            }
+
+            @Override
+            public String getLatestText(EMMessage message, int fromUsersNum, int messageNum) {
+                return "getLatestText";
+            }
+
+            @Override
+            public String getTitle(EMMessage message) {
+                return "信息title";
+            }
+
+            @Override
+            public int getSmallIcon(EMMessage message) {
+                return 0;
+            }
+
+            @Override
+            public Intent getLaunchIntent(EMMessage message) {
+                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                intent.putExtra("name", message.getFrom());
+                return intent;
+            }
+        });
         presenter = new RequestHeartBeatPresenter(this);
         button = (Button) findViewById(R.id.button);
         textview = (TextView) findViewById(R.id.textview);
@@ -141,5 +182,54 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+    @Override
+    public void onMessageReceived(List<EMMessage> list) {
+        for (EMMessage message : list) {
+            EMLog.d("Helper", "onMessageReceived id : " + message.getMsgId());
+            Logger.d("消息来了: " + message.getBody().toString());
+            //应用在后台，不需要刷新UI,通知栏提示新消息
+            if(!easeUI.hasForegroundActivies()){
+                easeUI.getNotifier().onNewMsg(message);
+            }
+            final EMMessage temp = message;
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ShowToast.show(MainActivity.this, temp.getFrom() + "说：" + temp.getBody());
+                    Snackbar.make(button, "信息", Snackbar.LENGTH_LONG).setAction("看看", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                            intent.putExtra("name", temp.getFrom());
+                            startActivity(intent);
+                        }
+                    }).show();
+                }
+            });
+//            easeUI.getNotifier().onNewMsg(message);
+        }
+    }
+
+    @Override
+    public void onCmdMessageReceived(List<EMMessage> list) {
+
+    }
+
+    @Override
+    public void onMessageReadAckReceived(List<EMMessage> list) {
+
+    }
+
+    @Override
+    public void onMessageDeliveryAckReceived(List<EMMessage> list) {
+
+    }
+
+    @Override
+    public void onMessageChanged(EMMessage emMessage, Object o) {
+
     }
 }
