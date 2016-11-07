@@ -271,7 +271,7 @@ public class EaseNotifier {
 
             if (isForeground) {
                 notificationManager.notify(foregroundNotifyID, notification);
-                notificationManager.cancel(foregroundNotifyID);
+//                notificationManager.cancel(foregroundNotifyID);
             } else {
                 notificationManager.notify(notifyID, notification);
             }

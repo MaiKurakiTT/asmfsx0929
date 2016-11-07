@@ -2,7 +2,6 @@ package com.hsd.asmfsx.app;
 
 import android.app.Application;
 
-import com.hsd.asmfsx.Helper;
 import com.hsd.asmfsx.db.DbCore;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
@@ -27,7 +26,6 @@ public class MyApplication extends Application{
         DbCore.init(this);
         DbCore.enableQueryBuilderLog(); //开启调试 log
         EaseUI.getInstance().init(this, new EMOptions());
-//        Helper.getInstance().init();
         EMClient.getInstance().setDebugMode(true);
     }
 

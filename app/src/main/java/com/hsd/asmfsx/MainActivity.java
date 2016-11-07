@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,8 +23,8 @@ import com.hsd.asmfsx.model.UploadImgBiz;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
 import com.hsd.asmfsx.utils.ShowToast;
 import com.hsd.asmfsx.view.activity.CertificationActivity;
-import com.hsd.asmfsx.view.activity.FindFriendsActivity;
 import com.hsd.asmfsx.view.activity.LoginActivity;
+import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
@@ -31,6 +32,7 @@ import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.controller.EaseUI;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseNotifier;
+import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 import com.orhanobut.logger.Logger;
 
@@ -40,7 +42,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity implements RequestHeartBeatContract.View, EMMessageListener{
+import static com.hyphenate.easeui.utils.EaseUserUtils.getUserInfo;
+
+public class MainActivity extends AppCompatActivity implements RequestHeartBeatContract.View, EMMessageListener {
     public String TAG = "MainActivity";
     @BindView(R.id.button)
     Button button;
@@ -56,6 +60,10 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     Button cer;
     @BindView(R.id.set)
     Button set;
+    @BindView(R.id.chat)
+    Button chat;
+    @BindView(R.id.tab_parent)
+    FrameLayout tabParent;
     private RequestHeartBeatPresenter presenter;
     private EaseUI easeUI;
 
@@ -70,17 +78,27 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         easeUI.getNotifier().setNotificationInfoProvider(new EaseNotifier.EaseNotificationInfoProvider() {
             @Override
             public String getDisplayedText(EMMessage message) {
-                return "来信息啦getDisplayedText";
+                // 设置状态栏的消息提示，可以根据message的类型做相应提示
+                String ticker = EaseCommonUtils.getMessageDigest(message, MainActivity.this);
+                if(message.getType() == EMMessage.Type.TXT){
+                    ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
+                }
+                EaseUser user = getUserInfo(message.getFrom());
+                if(user != null){
+                    return getUserInfo(message.getFrom()).getNick() + ": " + ticker;
+                }else{
+                    return message.getFrom() + ": " + ticker;
+                }
             }
 
             @Override
             public String getLatestText(EMMessage message, int fromUsersNum, int messageNum) {
-                return "getLatestText";
+                return message.getFrom() + "发来消息";
             }
 
             @Override
             public String getTitle(EMMessage message) {
-                return "信息title";
+                return null;
             }
 
             @Override
@@ -105,10 +123,9 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, RegAndLogin.class));
 //                startActivity(new Intent(MainActivity.this, FindFriendsActivity.class));
 //                startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
-//                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
 //                startActivity(new Intent(MainActivity.this, CertificationActivity.class));
 //                startActivity(new Intent(MainActivity.this, LoginActivity.class));
 //                startActivity(new Intent(MainActivity.this, TestRetrofit.class));
@@ -131,6 +148,12 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
+            }
+        });
+        chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, RegAndLogin.class));
             }
         });
     }
@@ -190,26 +213,9 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
             EMLog.d("Helper", "onMessageReceived id : " + message.getMsgId());
             Logger.d("消息来了: " + message.getBody().toString());
             //应用在后台，不需要刷新UI,通知栏提示新消息
-            if(!easeUI.hasForegroundActivies()){
+            if (!easeUI.hasForegroundActivies()) {
                 easeUI.getNotifier().onNewMsg(message);
             }
-            final EMMessage temp = message;
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ShowToast.show(MainActivity.this, temp.getFrom() + "说：" + temp.getBody());
-                    Snackbar.make(button, "信息", Snackbar.LENGTH_LONG).setAction("看看", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-
-                            Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-                            intent.putExtra("name", temp.getFrom());
-                            startActivity(intent);
-                        }
-                    }).show();
-                }
-            });
-//            easeUI.getNotifier().onNewMsg(message);
         }
     }
 

@@ -32,8 +32,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".TestBroadcast"/>
-        <activity android:name=".chat.ChatActivity"/>
+        <activity android:name=".chat.ChatActivity"
+                    android:launchMode="singleTask"/>
         <activity android:name=".chat.ChatWithActivity"/>
         <activity android:name=".chat.RegAndLogin"/>
         <activity android:name=".view.activity.TestRetrofit"/>

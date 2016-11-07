@@ -50,13 +50,12 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         // 点击notification bar进入聊天页面，保证只有一个聊天页面
-        /*String username = intent.getStringExtra("name");
+        String username = intent.getStringExtra("name");
         if (toName.equals(username))
             super.onNewIntent(intent);
         else {
             finish();
             startActivity(intent);
-        }*/
-        super.onNewIntent(intent);
+        }
     }
 }
