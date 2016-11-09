@@ -2,14 +2,17 @@ package com.hsd.asmfsx;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,11 +24,13 @@ import com.hsd.asmfsx.chat.RegAndLogin;
 import com.hsd.asmfsx.contract.RequestHeartBeatContract;
 import com.hsd.asmfsx.model.UploadImgBiz;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
-import com.hsd.asmfsx.utils.ShowToast;
 import com.hsd.asmfsx.view.activity.CertificationActivity;
 import com.hsd.asmfsx.view.activity.LoginActivity;
 import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
+import com.hsd.asmfsx.view.fragment.FriendsFragment;
+import com.hsd.asmfsx.view.fragment.HomeFragment;
+import com.hsd.asmfsx.view.fragment.SeeFragment;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
@@ -37,6 +42,7 @@ import com.hyphenate.util.EMLog;
 import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -62,10 +68,22 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     Button set;
     @BindView(R.id.chat)
     Button chat;
-    @BindView(R.id.tab_parent)
-    FrameLayout tabParent;
+    @BindView(R.id.radio_group)
+    RadioGroup radioGroup;
+    @BindView(R.id.firstrb)
+    RadioButton firstrb;
+    @BindView(R.id.secondrb)
+    RadioButton secondrb;
+    @BindView(R.id.thirdrb)
+    RadioButton thirdrb;
     private RequestHeartBeatPresenter presenter;
     private EaseUI easeUI;
+
+    private String[] tabTitles = {"首页", "发现", "好友"};
+    private Class[] classTabs = {HomeFragment.class, SeeFragment.class, FriendsFragment.class};
+    private int position = 0;
+    private List<Fragment> fragmentList = new ArrayList<>();
+    private FragmentManager mFragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,46 +91,9 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
-        EMClient.getInstance().chatManager().addMessageListener(this);
-        easeUI = EaseUI.getInstance();
-        easeUI.getNotifier().setNotificationInfoProvider(new EaseNotifier.EaseNotificationInfoProvider() {
-            @Override
-            public String getDisplayedText(EMMessage message) {
-                // 设置状态栏的消息提示，可以根据message的类型做相应提示
-                String ticker = EaseCommonUtils.getMessageDigest(message, MainActivity.this);
-                if(message.getType() == EMMessage.Type.TXT){
-                    ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
-                }
-                EaseUser user = getUserInfo(message.getFrom());
-                if(user != null){
-                    return getUserInfo(message.getFrom()).getNick() + ": " + ticker;
-                }else{
-                    return message.getFrom() + ": " + ticker;
-                }
-            }
+        initView();
+        easeUIInit();
 
-            @Override
-            public String getLatestText(EMMessage message, int fromUsersNum, int messageNum) {
-                return message.getFrom() + "发来消息";
-            }
-
-            @Override
-            public String getTitle(EMMessage message) {
-                return null;
-            }
-
-            @Override
-            public int getSmallIcon(EMMessage message) {
-                return 0;
-            }
-
-            @Override
-            public Intent getLaunchIntent(EMMessage message) {
-                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-                intent.putExtra("name", message.getFrom());
-                return intent;
-            }
-        });
         presenter = new RequestHeartBeatPresenter(this);
         button = (Button) findViewById(R.id.button);
         textview = (TextView) findViewById(R.id.textview);
@@ -154,6 +135,115 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, RegAndLogin.class));
+            }
+        });
+    }
+
+    private void initView() {
+        initFragment();
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                RadioButton radioButton = (RadioButton) group.findViewById(checkedId);
+                if (!radioButton.isChecked()) {
+                    return;
+                }
+                switch (checkedId) {
+                    case R.id.firstrb:
+                        position = 0;
+                        break;
+                    case R.id.secondrb:
+                        position = 1;
+                        break;
+                    case R.id.thirdrb:
+                        position = 2;
+                        break;
+                }
+                showFragment(fragmentList.get(position));
+                Logger.d("显示" + position);
+            }
+        });
+    }
+
+    /**
+     * 初始化fragment
+     */
+    private void initFragment() {
+        fragmentList.add(new HomeFragment());
+        fragmentList.add(new SeeFragment());
+        fragmentList.add(new FriendsFragment());
+        mFragmentManager = getSupportFragmentManager();
+        for (int i = 0; i < fragmentList.size(); i++) {
+            mFragmentManager.beginTransaction().add(R.id.fragment_parent, fragmentList.get(i)).commit();
+        }
+        firstrb.setChecked(true);
+        showFragment(fragmentList.get(0));
+    }
+
+    /**
+     * 显示某个fragment
+     * @param fragment
+     */
+    private void showFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
+        hideFragment(fragmentTransaction);
+        fragmentTransaction.show(fragment);
+        fragmentTransaction.commit();
+    }
+
+    /**
+     * 隐藏所有fragment
+     * @param fragmentTransaction
+     */
+    private void hideFragment(FragmentTransaction fragmentTransaction) {
+        for (int i = 0; i < fragmentList.size(); i++) {
+            fragmentTransaction.hide(fragmentList.get(i));
+        }
+    }
+
+
+    /**
+     * 进行EaseUI和环信的一些设置
+     */
+    private void easeUIInit() {
+        EMClient.getInstance().chatManager().addMessageListener(this);
+        easeUI = EaseUI.getInstance();
+        easeUI.getNotifier().setNotificationInfoProvider(new EaseNotifier.EaseNotificationInfoProvider() {
+            @Override
+            public String getDisplayedText(EMMessage message) {
+                // 设置状态栏的消息提示，可以根据message的类型做相应提示
+                String ticker = EaseCommonUtils.getMessageDigest(message, MainActivity.this);
+                if (message.getType() == EMMessage.Type.TXT) {
+                    ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
+                }
+                EaseUser user = getUserInfo(message.getFrom());
+                if (user != null) {
+                    return getUserInfo(message.getFrom()).getNick() + ": " + ticker;
+                } else {
+                    return message.getFrom() + ": " + ticker;
+                }
+            }
+
+            @Override
+            public String getLatestText(EMMessage message, int fromUsersNum, int messageNum) {
+                return message.getFrom() + "发来消息";
+            }
+
+            @Override
+            public String getTitle(EMMessage message) {
+                return null;
+            }
+
+            @Override
+            public int getSmallIcon(EMMessage message) {
+                return 0;
+            }
+
+            @Override
+            public Intent getLaunchIntent(EMMessage message) {
+                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                intent.putExtra("name", message.getFrom());
+                return intent;
             }
         });
     }
@@ -207,6 +297,11 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         super.onDestroy();
     }
 
+    /**
+     * 实现EMMessageListener接口，保证全局都能收到消息
+     *
+     * @param list
+     */
     @Override
     public void onMessageReceived(List<EMMessage> list) {
         for (EMMessage message : list) {
