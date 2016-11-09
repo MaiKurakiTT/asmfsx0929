@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -76,6 +77,8 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     RadioButton secondrb;
     @BindView(R.id.thirdrb)
     RadioButton thirdrb;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     private RequestHeartBeatPresenter presenter;
     private EaseUI easeUI;
 
@@ -140,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     }
 
     private void initView() {
+        setSupportActionBar(toolbar);
         initFragment();
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -182,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
 
     /**
      * 显示某个fragment
+     *
      * @param fragment
      */
     private void showFragment(Fragment fragment) {
@@ -193,6 +198,7 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
 
     /**
      * 隐藏所有fragment
+     *
      * @param fragmentTransaction
      */
     private void hideFragment(FragmentTransaction fragmentTransaction) {
