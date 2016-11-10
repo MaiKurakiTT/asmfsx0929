@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/head_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:src="@mipmap/androidschoolbus"/>
+
+        <TextView
+            android:id="@+id/put_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@id/head_image"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="1dp"
+            android:layout_toRightOf="@id/head_image"
+            android:text="昵称"
+            android:textSize="17sp" />
+
+        <TextView
+            android:id="@+id/friendcircle_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/put_name"
+            android:layout_below="@id/put_name"
+            android:layout_marginTop="5dp"
+            android:lineSpacingExtra="3dp"
+            android:maxWidth="250dp"
+            android:text="撒打开就过了圣诞节给is的收到啦刚看见了的快速索拉卡的国际撒个sdfgsg撒大哥说回复的任务"
+            android:textSize="16sp"
+            android:textColor="@color/black" />
+    </RelativeLayout>
+
+        <com.jaeger.ninegridimageview.NineGridImageView
+            android:id="@+id/ninegrid_img"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="70dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            app:imgGap="4dp"
+            app:showStyle="fill"
+            app:singleImgSize="120dp"/>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:layout_marginTop="10dp" >
+
+        <TextView
+            android:id="@+id/put_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="45秒前"
+            android:textColor="#88000000"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/comment_img"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="120dp"
+            android:src="@mipmap/ic_comment" />
+
+        <TextView
+            android:id="@+id/comment_counts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="100dp"
+            android:text="16"
+            android:textColor="#88000000"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/good_img"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="50dp"
+            android:src="@mipmap/ic_good" />
+
+        <TextView
+            android:id="@+id/good_counts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
+            android:text="23"
+            android:textColor="#88000000"
+            android:textSize="14sp" />
+    </RelativeLayout>
+</LinearLayout>
