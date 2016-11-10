@@ -2,16 +2,19 @@ package com.hsd.asmfsx;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
+import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -48,6 +51,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.hyphenate.easeui.utils.EaseUserUtils.getUserInfo;
 
@@ -55,10 +59,6 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     public String TAG = "MainActivity";
     @BindView(R.id.button)
     Button button;
-    @BindView(R.id.progressbar)
-    ProgressBar progressbar;
-    @BindView(R.id.textview)
-    TextView textview;
     @BindView(R.id.recycle)
     RecyclerView recycle;
     @BindView(R.id.log)
@@ -79,6 +79,18 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     RadioButton thirdrb;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.toolbar_centertext)
+    TextView toolbarCentertext;
+    @BindView(R.id.toolbar_righttext)
+    TextView toolbarRighttext;
+    @BindView(R.id.fragment_parent)
+    FrameLayout fragmentParent;
+    @BindView(R.id.head)
+    CircleImageView head;
+    @BindView(R.id.navigation_view)
+    NavigationView navigationView;
+    @BindView(R.id.drawer_view)
+    DrawerLayout drawerView;
     private RequestHeartBeatPresenter presenter;
     private EaseUI easeUI;
 
@@ -99,8 +111,6 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
 
         presenter = new RequestHeartBeatPresenter(this);
         button = (Button) findViewById(R.id.button);
-        textview = (TextView) findViewById(R.id.textview);
-        progressbar = (ProgressBar) findViewById(R.id.progressbar);
         recycle = (RecyclerView) findViewById(R.id.recycle);
 
         recycle.setLayoutManager(new LinearLayoutManager(this));
@@ -143,8 +153,19 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     }
 
     private void initView() {
-        setSupportActionBar(toolbar);
+        initToolbar();
         initFragment();
+        initListener();
+
+    }
+
+    private void initListener() {
+        head.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerView.openDrawer(GravityCompat.START);
+            }
+        });
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -155,18 +176,32 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
                 switch (checkedId) {
                     case R.id.firstrb:
                         position = 0;
+                        toolbarRighttext.setVisibility(View.VISIBLE);
+                        toolbarCentertext.setText("首页");
+                        toolbarRighttext.setText("更多");
                         break;
                     case R.id.secondrb:
                         position = 1;
+                        toolbarRighttext.setVisibility(View.GONE);
+                        toolbarCentertext.setText("发现");
                         break;
                     case R.id.thirdrb:
                         position = 2;
+                        toolbarRighttext.setVisibility(View.GONE);
+                        toolbarCentertext.setText("好友");
                         break;
                 }
                 showFragment(fragmentList.get(position));
                 Logger.d("显示" + position);
             }
         });
+    }
+
+    private void initToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+        toolbarCentertext.setText("首页");
+        toolbarRighttext.setText("更多");
     }
 
     /**
@@ -274,12 +309,12 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
 
     @Override
     public void showLoading() {
-        progressbar.setVisibility(View.VISIBLE);
+
     }
 
     @Override
     public void hideLoading() {
-        progressbar.setVisibility(View.GONE);
+
     }
 
     @Override
