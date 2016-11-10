@@ -44,6 +44,7 @@
         <activity android:name=".view.activity.FindFriendsActivity"/>
         <activity android:name="com.soundcloud.android.crop.CropImageActivity" />
         <activity android:name=".view.activity.UserInfoActivity"/>
+        <activity android:name=".view.activity.FriendCircleActivity"/>
         <!-- 设置环信应用的AppKey -->
         <meta-data android:name="EASEMOB_APPKEY"  android:value="zacharysun#firsttestim" />
         <!-- 声明SDK所需的service SDK核心功能-->

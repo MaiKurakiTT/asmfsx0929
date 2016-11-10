@@ -29,6 +29,7 @@ import com.hsd.asmfsx.contract.RequestHeartBeatContract;
 import com.hsd.asmfsx.model.UploadImgBiz;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
 import com.hsd.asmfsx.view.activity.CertificationActivity;
+import com.hsd.asmfsx.view.activity.FriendCircleActivity;
 import com.hsd.asmfsx.view.activity.LoginActivity;
 import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
@@ -119,7 +120,8 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
             public void onClick(View v) {
 //                startActivity(new Intent(MainActivity.this, FindFriendsActivity.class));
 //                startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
-                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+//                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+                startActivity(new Intent(MainActivity.this, FriendCircleActivity.class));
 //                startActivity(new Intent(MainActivity.this, CertificationActivity.class));
 //                startActivity(new Intent(MainActivity.this, LoginActivity.class));
 //                startActivity(new Intent(MainActivity.this, TestRetrofit.class));

@@ -3,6 +3,7 @@ package com.hsd.asmfsx.model;
 import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.CertificationBean;
 import com.hsd.asmfsx.bean.FindFriendsBean;
+import com.hsd.asmfsx.bean.FriendCircleBean;
 import com.hsd.asmfsx.bean.LoginBean;
 import com.hsd.asmfsx.bean.RegisterBean;
 import com.hsd.asmfsx.bean.UserBean;
@@ -85,4 +86,7 @@ public interface RetrofitService {
      */
     @POST("/Server/MainServer?method=findFriend")
     Call<FindFriendsBean> postFindFriends(@Body FindFriendsBean findFriendsBean);
+
+    @POST("/Server/MainServer?method=getFriendCircle")
+    Call<BaseBean> postFriendCircle(@Body FriendCircleBean friendCircleBean);
 }
