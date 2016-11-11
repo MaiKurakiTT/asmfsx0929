@@ -1,13 +1,14 @@
 package com.hsd.asmfsx.view.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.gson.reflect.TypeToken;
 import com.hsd.asmfsx.R;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by apple on 2016/11/10.
@@ -31,6 +33,14 @@ import butterknife.ButterKnife;
 public class FriendCircleActivity extends AppCompatActivity implements FriendCircleContract.View {
     @BindView(R.id.recycle_view)
     RecyclerView recycleView;
+    @BindView(R.id.head)
+    CircleImageView head;
+    @BindView(R.id.toolbar_centertext)
+    TextView toolbarCentertext;
+    @BindView(R.id.toolbar_righttext)
+    TextView toolbarRighttext;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     private FriendCirclePresenter friendCirclePresenter;
     private List<FriendCircleBean> friendCircleList;
     private FriendCircleAdapter friendCircleAdapter;
@@ -42,6 +52,26 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
         ButterKnife.bind(this);
         friendCirclePresenter = new FriendCirclePresenter(this);
         friendCirclePresenter.start();
+        initView();
+    }
+
+    private void initView() {
+        initToolbar();
+    }
+
+    private void initToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        head.setVisibility(View.GONE);
+        toolbarCentertext.setText("微圈");
+        toolbarRighttext.setText("发布");
+        toolbarRighttext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     private void initRecycleLoadMore(final FriendCircleAdapter adapter) {
@@ -80,7 +110,7 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
             friendCircleList = GetGson.getGson().fromJson(body, new TypeToken<List<FriendCircleBean>>() {
             }.getType());
             Logger.d("请求到" + friendCircleList.size() + "条数据");
-            if (friendCircleList.size() > 0){
+            if (friendCircleList.size() > 0) {
                 recycleView.setLayoutManager(new LinearLayoutManager(this));
                 friendCircleAdapter = new FriendCircleAdapter(this, friendCircleList);
                 recycleView.setAdapter(friendCircleAdapter);
@@ -96,7 +126,7 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
             List<FriendCircleBean> moreDataList = GetGson.getGson().fromJson(body, new TypeToken<List<FriendCircleBean>>() {
             }.getType());
             Logger.d("请求到" + moreDataList.size() + "条数据");
-            if (moreDataList.size() > 0){
+            if (moreDataList.size() > 0) {
                 friendCircleList.addAll(moreDataList);
                 if (friendCircleAdapter != null) {
                     friendCircleAdapter.notifyDataSetChanged();
@@ -128,5 +158,15 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
     @Override
     public void showFailed() {
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

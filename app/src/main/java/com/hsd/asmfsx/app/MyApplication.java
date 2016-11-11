@@ -27,6 +27,8 @@ public class MyApplication extends Application{
         DbCore.enableQueryBuilderLog(); //开启调试 log
         EaseUI.getInstance().init(this, new EMOptions());
         EMClient.getInstance().setDebugMode(true);
+
+
     }
 
 

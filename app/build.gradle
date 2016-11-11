@@ -54,4 +54,5 @@ dependencies {
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
     compile project(':easeui')
     compile 'com.jaeger.ninegridimageview:library:1.0.2'
+    compile 'cn.finalteam:galleryfinal:1.4.8.7'
 }

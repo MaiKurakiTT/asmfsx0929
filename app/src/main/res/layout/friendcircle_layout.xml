@@ -3,9 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/normal_background">
-<android.support.v7.widget.RecyclerView
-    android:id="@+id/recycle_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="10dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar_layout" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycle_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp" />
+    </LinearLayout>
+
 </android.support.v4.widget.SwipeRefreshLayout>
