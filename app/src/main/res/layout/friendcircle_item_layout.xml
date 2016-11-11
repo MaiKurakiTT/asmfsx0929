@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="5dp"
+    android:layout_margin="@dimen/elevation_card_margin">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
@@ -55,7 +60,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="70dp"
-        android:layout_marginTop="10dp" >
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
 
         <TextView
             android:id="@+id/put_time"
@@ -73,6 +79,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="120dp"
+            android:clickable="true"
             android:src="@mipmap/ic_comment" />
 
         <TextView
@@ -93,6 +100,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="50dp"
+            android:clickable="true"
             android:src="@mipmap/ic_good" />
 
         <TextView
@@ -106,4 +114,5 @@
             android:textColor="#88000000"
             android:textSize="14sp" />
     </RelativeLayout>
-</LinearLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

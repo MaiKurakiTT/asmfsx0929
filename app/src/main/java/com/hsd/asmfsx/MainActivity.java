@@ -2,6 +2,8 @@ package com.hsd.asmfsx;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -31,7 +34,6 @@ import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
 import com.hsd.asmfsx.view.activity.CertificationActivity;
 import com.hsd.asmfsx.view.activity.FriendCircleActivity;
 import com.hsd.asmfsx.view.activity.LoginActivity;
-import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
 import com.hsd.asmfsx.view.fragment.FriendsFragment;
 import com.hsd.asmfsx.view.fragment.HomeFragment;
@@ -70,14 +72,6 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     Button set;
     @BindView(R.id.chat)
     Button chat;
-    @BindView(R.id.radio_group)
-    RadioGroup radioGroup;
-    @BindView(R.id.firstrb)
-    RadioButton firstrb;
-    @BindView(R.id.secondrb)
-    RadioButton secondrb;
-    @BindView(R.id.thirdrb)
-    RadioButton thirdrb;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.toolbar_centertext)
@@ -92,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     NavigationView navigationView;
     @BindView(R.id.drawer_view)
     DrawerLayout drawerView;
+    @BindView(R.id.bottom_navigation)
+    BottomNavigationView bottomNavigation;
     private RequestHeartBeatPresenter presenter;
     private EaseUI easeUI;
 
@@ -168,26 +164,26 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
                 drawerView.openDrawer(GravityCompat.START);
             }
         });
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+
+        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                RadioButton radioButton = (RadioButton) group.findViewById(checkedId);
-                if (!radioButton.isChecked()) {
-                    return;
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                if (!item.isChecked()){
+                    return true;
                 }
-                switch (checkedId) {
-                    case R.id.firstrb:
+                switch (item.getItemId()){
+                    case R.id.menu_home:
                         position = 0;
                         toolbarRighttext.setVisibility(View.VISIBLE);
                         toolbarCentertext.setText("首页");
                         toolbarRighttext.setText("更多");
                         break;
-                    case R.id.secondrb:
+                    case R.id.menu_see:
                         position = 1;
                         toolbarRighttext.setVisibility(View.GONE);
                         toolbarCentertext.setText("发现");
                         break;
-                    case R.id.thirdrb:
+                    case R.id.menu_friends:
                         position = 2;
                         toolbarRighttext.setVisibility(View.GONE);
                         toolbarCentertext.setText("好友");
@@ -195,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
                 }
                 showFragment(fragmentList.get(position));
                 Logger.d("显示" + position);
+                return true;
             }
         });
     }
@@ -217,7 +214,6 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         for (int i = 0; i < fragmentList.size(); i++) {
             mFragmentManager.beginTransaction().add(R.id.fragment_parent, fragmentList.get(i)).commit();
         }
-        firstrb.setChecked(true);
         showFragment(fragmentList.get(0));
     }
 

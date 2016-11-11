@@ -3,6 +3,8 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
+    <dimen name="elevation_card_margin">0dp</dimen>
+
     <dimen name="normal_textsize">16dp</dimen>
     <dimen name="setafterregistermarginlift">150dp</dimen>
 </resources>

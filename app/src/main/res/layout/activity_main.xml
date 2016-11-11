@@ -49,31 +49,16 @@
                 android:layout_width="1dp"
                 android:layout_height="1dp"
                 android:visibility="gone"/>
+
         </LinearLayout>
 
-        <RadioGroup
-            android:id="@+id/radio_group"
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottom_navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:background="@color/white"
-            android:orientation="horizontal">
-            <RadioButton
-                android:id="@+id/firstrb"
-                style="@style/BottomTabStyle"
-                android:drawableTop="@drawable/btn_tab_home_selector"
-                android:text="首页"/>
-            <RadioButton
-                android:id="@+id/secondrb"
-                style="@style/BottomTabStyle"
-                android:drawableTop="@drawable/btn_tab_see_selector"
-                android:text="发现"/>
-            <RadioButton
-                android:id="@+id/thirdrb"
-                style="@style/BottomTabStyle"
-                android:drawableTop="@drawable/btn_tab_chat_selector"
-                android:text="好友"/>
-        </RadioGroup>
+            app:itemBackground="@color/white"
+            app:menu="@menu/bottom_navi_menu"
+            android:layout_alignParentBottom="true"/>
     </RelativeLayout>
 
     <android.support.design.widget.NavigationView

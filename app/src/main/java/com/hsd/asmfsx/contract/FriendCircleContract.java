@@ -11,10 +11,10 @@ import com.hsd.asmfsx.bean.FriendCircleBean;
 
 public interface FriendCircleContract {
     interface Presenter extends BasePresenter{
-
+        void loadMore();
     }
     interface View extends BaseView{
-        FriendCircleBean getFriendCircleBean();
+        String getUUID();
         void showData(BaseBean baseBean);
         void showMoreData(BaseBean baseBean);
         void showFailedForLoadMore();
