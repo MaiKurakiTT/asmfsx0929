@@ -3,14 +3,11 @@ package com.hsd.asmfsx.app;
 import android.app.Application;
 
 import com.hsd.asmfsx.db.DbCore;
-import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMMessage;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeui.controller.EaseUI;
 import com.orhanobut.logger.Logger;
 
-import java.util.List;
 
 
 /**
@@ -28,8 +25,8 @@ public class MyApplication extends Application{
         EaseUI.getInstance().init(this, new EMOptions());
         EMClient.getInstance().setDebugMode(true);
 
-
     }
+
 
 
 }

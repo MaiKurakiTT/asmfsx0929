@@ -7,7 +7,20 @@
         android:id="@+id/content_et"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-
+        android:layout_margin="5dp"
+        android:background="@color/white"
+        android:gravity="top"
         android:hint="说点什么~"
         android:textColorHint="@color/gray_normal"/>
+        <ImageView
+            android:id="@+id/addimg_first"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="5dp"
+            android:src="@mipmap/ic_addimg"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/addimg_recycleview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 </LinearLayout>

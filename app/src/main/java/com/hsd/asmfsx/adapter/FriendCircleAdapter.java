@@ -3,7 +3,7 @@ package com.hsd.asmfsx.adapter;
 import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +15,7 @@ import com.bumptech.glide.Glide;
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.bean.FriendCircleBean;
 import com.hsd.asmfsx.bean.PictureBean;
+import com.hsd.asmfsx.utils.DateFormatUtils;
 import com.hsd.asmfsx.utils.ShowToast;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
@@ -68,7 +69,13 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             myViewHolder.itemParent.setTag(position);
             Glide.with(context).load(friendCircleBean.getFriendsCircle_icon()).into(myViewHolder.headImage);
             myViewHolder.putName.setText(friendCircleBean.getFriendsCircle_nickname());
-            myViewHolder.friendcircleContent.setText(friendCircleBean.getFriendsCircle_content());
+            if (TextUtils.isEmpty(friendCircleBean.getFriendsCircle_content())) {
+                myViewHolder.friendcircleContent.setVisibility(View.GONE);
+            } else {
+                myViewHolder.friendcircleContent.setText(friendCircleBean.getFriendsCircle_content());
+            }
+            myViewHolder.putTime.setText("" + DateFormatUtils.formatDate2Before(friendCircleBean.getFriendsCircle_time()));
+
             //将点过赞的item的position加到List集合中，加载item之前先判断该item的position是否在集合中，防止复用时候错乱
             if (beClickGood.contains(((int) myViewHolder.itemParent.getTag()))) {
                 Logger.d("点过赞了" + position);
