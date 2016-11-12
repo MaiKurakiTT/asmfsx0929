@@ -1,7 +1,10 @@
 package com.hsd.asmfsx.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -41,6 +44,8 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
     TextView toolbarRighttext;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefresh;
     private FriendCirclePresenter friendCirclePresenter;
     private List<FriendCircleBean> friendCircleList;
     private FriendCircleAdapter friendCircleAdapter;
@@ -57,6 +62,16 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
 
     private void initView() {
         initToolbar();
+        initRefresh();
+    }
+
+    private void initRefresh() {
+        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                friendCirclePresenter.start();
+            }
+        });
     }
 
     private void initToolbar() {
@@ -69,11 +84,15 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
         toolbarRighttext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(new Intent(FriendCircleActivity.this, PutFriendCircleActivity.class));
             }
         });
     }
 
+    /**
+     * 给recycleView设置上拉加载
+     * @param adapter
+     */
     private void initRecycleLoadMore(final FriendCircleAdapter adapter) {
         recycleView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -142,27 +161,42 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
 
     @Override
     public void showFailedForLoadMore() {
-
+        Snackbar.make(toolbar, "加载失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                friendCirclePresenter.loadMore();
+            }
+        });
     }
 
     @Override
     public void showLoading() {
-
+        swipeRefresh.post(new Runnable() {
+            @Override
+            public void run() {
+                swipeRefresh.setRefreshing(true);
+            }
+        });
     }
 
     @Override
     public void hideLoading() {
-
+        swipeRefresh.setRefreshing(false);
     }
 
     @Override
     public void showFailed() {
-
+        Snackbar.make(toolbar, "加载失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                friendCirclePresenter.start();
+            }
+        });
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;

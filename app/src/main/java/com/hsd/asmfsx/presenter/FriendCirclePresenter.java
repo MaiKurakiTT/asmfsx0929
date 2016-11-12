@@ -45,7 +45,9 @@ public class FriendCirclePresenter implements FriendCircleContract.Presenter {
      * @param type 0为正常刷新数据，1为加载更多数据
      */
     private void requestData(FriendCircleBean friendCircleBean, final int type) {
-        view.showLoading();
+        if (type == 0){
+            view.showLoading();
+        }
         friendCircleBiz.friendCircle(friendCircleBean, new FriendCircleContract.IFriendCircleBiz.OnFriendCircleListener() {
             @Override
             public void success(final BaseBean baseBean) {

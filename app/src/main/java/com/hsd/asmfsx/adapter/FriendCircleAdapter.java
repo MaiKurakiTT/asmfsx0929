@@ -1,7 +1,9 @@
 package com.hsd.asmfsx.adapter;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import com.hsd.asmfsx.bean.PictureBean;
 import com.hsd.asmfsx.utils.ShowToast;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +39,7 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private Context context;
     private List<FriendCircleBean> friendCircleList;
+    private List<Integer> beClickGood = new ArrayList<>();
 
     public FriendCircleAdapter(Context context, List<FriendCircleBean> friendCircleList) {
         this.context = context;
@@ -56,19 +60,49 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         if (holder instanceof MyViewHolder) {
-            MyViewHolder myViewHolder = (MyViewHolder) holder;
+            final MyViewHolder myViewHolder = (MyViewHolder) holder;
             final FriendCircleBean friendCircleBean = friendCircleList.get(position);
+            //给每个item的父布局加上tag为当前position
+            myViewHolder.itemParent.setTag(position);
             Glide.with(context).load(friendCircleBean.getFriendsCircle_icon()).into(myViewHolder.headImage);
             myViewHolder.putName.setText(friendCircleBean.getFriendsCircle_nickname());
             myViewHolder.friendcircleContent.setText(friendCircleBean.getFriendsCircle_content());
+            //将点过赞的item的position加到List集合中，加载item之前先判断该item的position是否在集合中，防止复用时候错乱
+            if (beClickGood.contains(((int) myViewHolder.itemParent.getTag()))) {
+                Logger.d("点过赞了" + position);
+                myViewHolder.goodImg.setImageResource(R.mipmap.ic_good_press);
+            } else {
+                Logger.d("当前item没有点过赞" + position);
+                myViewHolder.goodImg.setImageResource(R.mipmap.ic_good);
+            }
             myViewHolder.goodImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //点赞过的item的position加入集合中
+                    beClickGood.add(position);
+                    Logger.d("给第" + position + "个item加了");
                     ShowToast.show(context, "点赞" + friendCircleBean.getFriendsCircle_nickname());
+                    myViewHolder.goodImg.setImageResource(R.mipmap.ic_good_press);
                 }
             });
+            List<String> comments = friendCircleBean.getComments();
+            //判断评论条数，如果是最后一条就不加换行符了
+            if (comments.size() > 0) {
+                String display = "";
+                for (int i = 0; i < comments.size(); i++) {
+                    String temp = comments.get(i);
+                    if (i == comments.size() - 1) {
+                        display = display + temp;
+                    } else {
+                        display = display + temp + '\n';
+                    }
+                }
+                myViewHolder.commentsText.setText(display);
+            } else {
+                myViewHolder.commentsText.setVisibility(View.GONE);
+            }
             if (friendCircleBean.getPictures().size() > 0) {
                 NineGridImageViewAdapter<String> nineGridImageViewAdapter = new NineGridImageViewAdapter<String>() {
                     @Override
@@ -100,7 +134,6 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
         }
     }
-
 
     @Override
     public int getItemCount() {
@@ -135,6 +168,10 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         TextView goodCounts;
         @BindView(R.id.friendcircle_content)
         TextView friendcircleContent;
+        @BindView(R.id.comments_text)
+        TextView commentsText;
+        @BindView(R.id.friendcircle_item_parent)
+        CardView itemParent;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -147,6 +184,7 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ProgressBar footerProgressbar;
         @BindView(R.id.footer_text)
         TextView footerText;
+
         public FooterViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

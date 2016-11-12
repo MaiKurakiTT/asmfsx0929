@@ -80,12 +80,12 @@
         "source": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ee_34.png"
     },
     {
-        "merged": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ee_31.png",
-        "source": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ee_31.png"
-    },
-    {
         "merged": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ease_chatfrom_bg_normal.9.png",
         "source": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ease_chatfrom_bg_normal.9.png"
+    },
+    {
+        "merged": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ee_31.png",
+        "source": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ee_31.png"
     },
     {
         "merged": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ease_record_animate_02.png",
@@ -232,12 +232,12 @@
         "source": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ee_25.png"
     },
     {
-        "merged": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ease_login_error_icon.png",
-        "source": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ease_login_error_icon.png"
-    },
-    {
         "merged": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ease_contact_list_selected.png",
         "source": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ease_contact_list_selected.png"
+    },
+    {
+        "merged": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ease_login_error_icon.png",
+        "source": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ease_login_error_icon.png"
     },
     {
         "merged": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ee_7.png",
@@ -400,12 +400,12 @@
         "source": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ee_13.png"
     },
     {
-        "merged": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ease_type_select_btn_pressed.png",
-        "source": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ease_type_select_btn_pressed.png"
-    },
-    {
         "merged": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ease_chat_face_normal.png",
         "source": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ease_chat_face_normal.png"
+    },
+    {
+        "merged": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ease_type_select_btn_pressed.png",
+        "source": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/bundles/debug/res/drawable-hdpi-v4/ease_type_select_btn_pressed.png"
     },
     {
         "merged": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/res/merged/androidTest/debug/drawable-hdpi-v4/ee_3.png",
