@@ -2,24 +2,18 @@ package com.hsd.asmfsx;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,8 +26,10 @@ import com.hsd.asmfsx.contract.RequestHeartBeatContract;
 import com.hsd.asmfsx.model.UploadImgBiz;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
 import com.hsd.asmfsx.view.activity.CertificationActivity;
+import com.hsd.asmfsx.view.activity.FindFriendsActivity;
 import com.hsd.asmfsx.view.activity.FriendCircleActivity;
 import com.hsd.asmfsx.view.activity.LoginActivity;
+import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
 import com.hsd.asmfsx.view.fragment.FriendsFragment;
 import com.hsd.asmfsx.view.fragment.HomeFragment;
@@ -62,8 +58,6 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     public String TAG = "MainActivity";
     @BindView(R.id.button)
     Button button;
-    @BindView(R.id.recycle)
-    RecyclerView recycle;
     @BindView(R.id.log)
     Button log;
     @BindView(R.id.cer)
@@ -78,16 +72,22 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     TextView toolbarCentertext;
     @BindView(R.id.toolbar_righttext)
     TextView toolbarRighttext;
-    @BindView(R.id.fragment_parent)
-    FrameLayout fragmentParent;
     @BindView(R.id.head)
     CircleImageView head;
-    @BindView(R.id.navigation_view)
-    NavigationView navigationView;
+    @BindView(R.id.navigation_view_left)
+    NavigationView navigationViewLeft;
     @BindView(R.id.drawer_view)
     DrawerLayout drawerView;
-    @BindView(R.id.bottom_navigation)
-    BottomNavigationView bottomNavigation;
+    @BindView(R.id.bottombutton)
+    Button bottombutton;
+    @BindView(R.id.navigation_view_right)
+    NavigationView navigationViewRight;
+    @BindView(R.id.friendsbut)
+    Button friendsbut;
+    @BindView(R.id.findfriendbut)
+    Button findfriendbut;
+    @BindView(R.id.friendcirclebut)
+    Button friendcirclebut;
     private RequestHeartBeatPresenter presenter;
     private EaseUI easeUI;
 
@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     private int position = 0;
     private List<Fragment> fragmentList = new ArrayList<>();
     private FragmentManager mFragmentManager;
+    private RecyclerView rightRecycle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,20 +109,22 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
 
         presenter = new RequestHeartBeatPresenter(this);
         button = (Button) findViewById(R.id.button);
-        recycle = (RecyclerView) findViewById(R.id.recycle);
 
-        recycle.setLayoutManager(new LinearLayoutManager(this));
+        View headerView = navigationViewRight.getHeaderView(0);
+        rightRecycle = (RecyclerView) headerView.findViewById(R.id.right_navi_recycle);
+        rightRecycle.setLayoutManager(new LinearLayoutManager(this));
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                startActivity(new Intent(MainActivity.this, FindFriendsActivity.class));
 //                startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
-//                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
-                startActivity(new Intent(MainActivity.this, FriendCircleActivity.class));
+                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
+//                startActivity(new Intent(MainActivity.this, FriendCircleActivity.class));
 //                startActivity(new Intent(MainActivity.this, CertificationActivity.class));
 //                startActivity(new Intent(MainActivity.this, LoginActivity.class));
 //                startActivity(new Intent(MainActivity.this, TestRetrofit.class));
-//                presenter.getData();
+
             }
         });
         log.setOnClickListener(new View.OnClickListener() {
@@ -148,13 +151,51 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
                 startActivity(new Intent(MainActivity.this, RegAndLogin.class));
             }
         });
+        friendsbut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.getData();
+            }
+        });
+        findfriendbut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, FindFriendsActivity.class));
+            }
+        });
+        friendcirclebut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, FriendCircleActivity.class));
+            }
+        });
     }
 
     private void initView() {
         initToolbar();
-        initFragment();
         initListener();
+        initBottomSheet();
 
+    }
+
+    private void initBottomSheet() {
+        View bottomSheet = findViewById(R.id.design_bottom_sheet);
+        final BottomSheetBehavior<View> sheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        bottombutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showBottomSheet(sheetBehavior);
+            }
+        });
+    }
+
+    private void showBottomSheet(BottomSheetBehavior<View> sheetBehavior) {
+        if (sheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
+            sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        } else {
+            sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        }
     }
 
     private void initListener() {
@@ -164,80 +205,20 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
                 drawerView.openDrawer(GravityCompat.START);
             }
         });
-
-        bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        toolbarRighttext.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (!item.isChecked()){
-                    return true;
-                }
-                switch (item.getItemId()){
-                    case R.id.menu_home:
-                        position = 0;
-                        toolbarRighttext.setVisibility(View.VISIBLE);
-                        toolbarCentertext.setText("首页");
-                        toolbarRighttext.setText("更多");
-                        break;
-                    case R.id.menu_see:
-                        position = 1;
-                        toolbarRighttext.setVisibility(View.GONE);
-                        toolbarCentertext.setText("发现");
-                        break;
-                    case R.id.menu_friends:
-                        position = 2;
-                        toolbarRighttext.setVisibility(View.GONE);
-                        toolbarCentertext.setText("好友");
-                        break;
-                }
-                showFragment(fragmentList.get(position));
-                Logger.d("显示" + position);
-                return true;
+            public void onClick(View view) {
+                drawerView.openDrawer(GravityCompat.END);
             }
         });
+
     }
 
     private void initToolbar() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
         toolbarCentertext.setText("首页");
-        toolbarRighttext.setText("更多");
-    }
-
-    /**
-     * 初始化fragment
-     */
-    private void initFragment() {
-        fragmentList.add(new HomeFragment());
-        fragmentList.add(new SeeFragment());
-        fragmentList.add(new FriendsFragment());
-        mFragmentManager = getSupportFragmentManager();
-        for (int i = 0; i < fragmentList.size(); i++) {
-            mFragmentManager.beginTransaction().add(R.id.fragment_parent, fragmentList.get(i)).commit();
-        }
-        showFragment(fragmentList.get(0));
-    }
-
-    /**
-     * 显示某个fragment
-     *
-     * @param fragment
-     */
-    private void showFragment(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
-        hideFragment(fragmentTransaction);
-        fragmentTransaction.show(fragment);
-        fragmentTransaction.commit();
-    }
-
-    /**
-     * 隐藏所有fragment
-     *
-     * @param fragmentTransaction
-     */
-    private void hideFragment(FragmentTransaction fragmentTransaction) {
-        for (int i = 0; i < fragmentList.size(); i++) {
-            fragmentTransaction.hide(fragmentList.get(i));
-        }
+        toolbarRighttext.setText("好友");
     }
 
 
@@ -323,7 +304,7 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     @Override
     public void showData(List<UserInformationBean> userInformation) {
         HeartBeatListAdapter adapter = new HeartBeatListAdapter(this, userInformation);
-        recycle.setAdapter(adapter);
+        rightRecycle.setAdapter(adapter);
     }
 
     @Override

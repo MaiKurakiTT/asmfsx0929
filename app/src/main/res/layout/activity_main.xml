@@ -6,6 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.hsd.asmfsx.MainActivity">
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -40,32 +43,74 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="聊天" />
-            <FrameLayout
-                android:id="@+id/fragment_parent"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"/>
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recycle"
-                android:layout_width="1dp"
-                android:layout_height="1dp"
-                android:visibility="gone"/>
+            <Button
+                android:id="@+id/bottombutton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="bottom"/>
 
         </LinearLayout>
-
-        <android.support.design.widget.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:itemBackground="@color/white"
-            app:menu="@menu/bottom_navi_menu"
-            android:layout_alignParentBottom="true"/>
+            android:orientation="vertical"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="60dp">
+            <Button
+                android:id="@+id/friendsbut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="好友"/>
+            <Button
+                android:id="@+id/findfriendbut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="找朋友"/>
+            <Button
+                android:id="@+id/friendcirclebut"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="朋友圈"/>
+        </LinearLayout>
+
     </RelativeLayout>
 
+
+
+        <RelativeLayout
+            android:id="@+id/design_bottom_sheet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorAccent"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            app:behavior_hideable="true"
+            app:behavior_peekHeight="300dp"
+            app:elevation="4dp"
+            app:layout_behavior="@string/bottom_sheet_behavior">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="Introducing Bottom Sheets"
+                android:textColor="#FFFFFF"/>
+
+        </RelativeLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
     <android.support.design.widget.NavigationView
-        android:id="@+id/navigation_view"
+        android:id="@+id/navigation_view_left"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/navi_head_layout"
         app:menu="@menu/navi_menu"/>
+    <android.support.design.widget.NavigationView
+        android:id="@+id/navigation_view_right"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        app:headerLayout="@layout/right_navigation_layout"/>
 </android.support.v4.widget.DrawerLayout>
