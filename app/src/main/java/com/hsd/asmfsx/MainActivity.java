@@ -91,11 +91,6 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     private RequestHeartBeatPresenter presenter;
     private EaseUI easeUI;
 
-    private String[] tabTitles = {"首页", "发现", "好友"};
-    private Class[] classTabs = {HomeFragment.class, SeeFragment.class, FriendsFragment.class};
-    private int position = 0;
-    private List<Fragment> fragmentList = new ArrayList<>();
-    private FragmentManager mFragmentManager;
     private RecyclerView rightRecycle;
 
     @Override

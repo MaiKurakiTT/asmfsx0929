@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.adapter.AddImgAdapter;
+import com.hsd.asmfsx.bean.PictureBean;
+import com.hsd.asmfsx.model.UploadMultiImgBiz;
 import com.tangxiaolv.telegramgallery.GalleryActivity;
 import com.tangxiaolv.telegramgallery.GalleryConfig;
 
@@ -68,7 +70,13 @@ public class PutFriendCircleActivity extends AppCompatActivity {
         toolbarRighttext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pickImg();
+                UploadMultiImgBiz uploadMultiImgBiz = new UploadMultiImgBiz();
+                uploadMultiImgBiz.doUpload(photos, new UploadMultiImgBiz.OnFinishListener() {
+                    @Override
+                    public void finished(List<PictureBean> pictures) {
+                        int size = pictures.size();
+                    }
+                });
             }
         });
         addimgFirst.setOnClickListener(new View.OnClickListener() {

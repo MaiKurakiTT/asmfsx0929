@@ -54,4 +54,5 @@ dependencies {
     compile project(':easeui')
     compile 'com.jaeger.ninegridimageview:library:1.0.2'
     compile 'com.library.tangxiaolv:telegramgallery:1.0.2'
+    compile 'de.greenrobot:eventbus:3.0.0-beta1'
 }
