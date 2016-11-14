@@ -40,7 +40,6 @@ dependencies {
     compile 'com.android.support:cardview-v7:25.0.0'
     compile 'com.jakewharton:butterknife:8.2.1'
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
@@ -55,4 +54,6 @@ dependencies {
     compile 'com.jaeger.ninegridimageview:library:1.0.2'
     compile 'com.library.tangxiaolv:telegramgallery:1.0.2'
     compile 'de.greenrobot:eventbus:3.0.0-beta1'
+    compile files('libs/glide-3.7.0.jar')
+    compile files('libs/hyphenatechat_3.2.0.jar')
 }

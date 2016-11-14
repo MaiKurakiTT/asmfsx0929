@@ -44,12 +44,12 @@
         "source": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/src/main/res/layout/ease_row_sent_message.xml"
     },
     {
-        "merged": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/res/merged/release/layout/ease_row_sent_video.xml",
-        "source": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/src/main/res/layout/ease_row_sent_video.xml"
-    },
-    {
         "merged": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/res/merged/release/layout/ease_row_received_bigexpression.xml",
         "source": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/src/main/res/layout/ease_row_received_bigexpression.xml"
+    },
+    {
+        "merged": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/res/merged/release/layout/ease_row_sent_video.xml",
+        "source": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/src/main/res/layout/ease_row_sent_video.xml"
     },
     {
         "merged": "/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/intermediates/res/merged/release/layout/ease_showvideo_activity.xml",
