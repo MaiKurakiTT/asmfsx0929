@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,11 +47,29 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private Context context;
     private List<FriendCircleBean> friendCircleList;
     private List<Integer> beClickGood = new ArrayList<>();
-    private Map map = new HashMap();
+    private List<Integer> beCommented = new ArrayList<>();
+    private Map isGoodMap = new HashMap();
+
+    private OnGoodClickListener goodClickListener;
+    private OnCommentClickListener commentClickListener;
 
     public FriendCircleAdapter(Context context, List<FriendCircleBean> friendCircleList) {
         this.context = context;
         this.friendCircleList = friendCircleList;
+    }
+
+    public void setOnGoodClickListener(OnGoodClickListener goodClickListener) {
+        this.goodClickListener = goodClickListener;
+    }
+    public void setOnCommentClickListener(OnCommentClickListener commentClickListener){
+        this.commentClickListener = commentClickListener;
+    }
+
+    public interface OnGoodClickListener {
+        void click(View view, int position);
+    }
+    public interface OnCommentClickListener{
+        void click(View view, int position);
     }
 
     @Override
@@ -81,8 +100,8 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    private void setData2View(final MyViewHolder myViewHolder, final int position, FriendCircleBean friendCircleBean) {
-
+    private void setData2View(final MyViewHolder myViewHolder, final int position, final FriendCircleBean friendCircleBean) {
+        Logger.d("是否赞过" + friendCircleBean.isLike());
         //显示头像
         Glide.with(context).load(friendCircleBean.getFriendsCircle_icon()).placeholder(R.mipmap.ic_inithead).into(myViewHolder.headImage);
         //显示发表人昵称
@@ -110,11 +129,29 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         myViewHolder.goodImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //点赞过的item的position加入集合中
-                beClickGood.add(position);
+                if (beClickGood.contains((myViewHolder.itemParent.getTag()))) {
+                    myViewHolder.goodImg.setImageResource(R.mipmap.ic_good);
+                } else {
+                    //点赞过的item的position加入集合中
+                    beClickGood.add(position);
+                    goodClickListener.click(view, position);
+                    myViewHolder.goodImg.setImageResource(R.mipmap.ic_good_press);
+                    //点赞后改变text
+                    if (friendCircleBean.getLikeCount() == null){
+                        myViewHolder.goodCounts.setText("1");
+                    }else {
+                        myViewHolder.goodCounts.setText("" + (friendCircleBean.getLikeCount() + 1));
+                    }
+
 //                    Logger.d("给第" + position + "个item加了");
-//                    ShowToast.show(context, "点赞" + friendCircleBean.getFriendsCircle_nickname());
-                myViewHolder.goodImg.setImageResource(R.mipmap.ic_good_press);
+//                    ShowToast.show(context, "点赞" + position);
+                }
+            }
+        });
+        myViewHolder.commentImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                commentClickListener.click(view, position);
             }
         });
         //设置点赞数量textView
@@ -232,10 +269,12 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ButterKnife.bind(this, itemView);
         }
     }
-    public void setStatus(int status){
+
+    public void setStatus(int status) {
         this.status = status;
     }
-    public int getStatus(){
+
+    public int getStatus() {
         return status;
     }
 }

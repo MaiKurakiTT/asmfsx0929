@@ -11,6 +11,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -84,6 +85,9 @@ public class PutFriendCircleActivity extends AppCompatActivity implements PutFri
     }
 
     private void initToolbar() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         head.setVisibility(View.GONE);
         toolbarCentertext.setText("发布");
         toolbarRighttext.setText("完成");
@@ -172,5 +176,15 @@ public class PutFriendCircleActivity extends AppCompatActivity implements PutFri
     @Override
     public void showFailed() {
         Snackbar.make(toolbar, "发布失败", Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

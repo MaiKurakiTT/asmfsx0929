@@ -31,6 +31,10 @@ public class UploadMultiImgBiz {
          */
         void finished(List<PictureBean> pictures, int failedCounts);
     }
+    private synchronized int addCounts(){
+        okImgCounts = okImgCounts + 1;
+        return okImgCounts;
+    }
 
     public void doUpload(final List<String> imgs, final OnFinishListener finishListener) {
         if (imgs.size() == 0){
@@ -47,7 +51,7 @@ public class UploadMultiImgBiz {
                 }
             };
             //使用线程池，固定只开三个线程
-            ExecutorService fixedThreadPool = Executors.newFixedThreadPool(3);
+            ExecutorService fixedThreadPool = Executors.newFixedThreadPool(1);
             for (int i = 0; i < imgs.size(); i++) {
                 final int pos = i;
                 fixedThreadPool.execute(new Runnable() {
@@ -65,8 +69,8 @@ public class UploadMultiImgBiz {
                                     pictureBean.setPicture_URL(baseBean.getBody());
                                     pictures.add(pictureBean);
                                 }
-                                okImgCounts = okImgCounts + 1;
-                                if (okImgCounts == imgs.size()) {
+                                int counts = addCounts();
+                                if (counts == imgs.size()) {
                                     Message msg = new Message();
                                     msg.what = 0;
                                     mHandler.sendMessage(msg);
@@ -76,8 +80,8 @@ public class UploadMultiImgBiz {
                             @Override
                             public void failed() {
                                 failedCounts = failedCounts + 1;
-                                okImgCounts = okImgCounts + 1;
-                                if (okImgCounts == imgs.size()) {
+                                int counts = addCounts();
+                                if (counts == imgs.size()) {
                                     Message msg = new Message();
                                     msg.what = 0;
                                     mHandler.sendMessage(msg);

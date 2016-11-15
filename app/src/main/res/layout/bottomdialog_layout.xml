@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:background="@color/normal_background"
+    android:padding="10dp">
+<EditText
+    android:id="@+id/comment_text"
+    android:layout_width="0dp"
+    android:layout_height="40dp"
+    android:layout_weight="5"
+    android:background="@drawable/comment_edit_bg"
+    android:hint="来个神回复..."/>
+    <Button
+        android:id="@+id/comment_but"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_weight="1"
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/but_radius"
+        android:textColor="@color/white"
+        android:text="发送"/>
+</LinearLayout>

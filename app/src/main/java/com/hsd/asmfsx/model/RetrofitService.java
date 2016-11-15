@@ -102,4 +102,18 @@ public interface RetrofitService {
      */
     @POST("/Server/MainServer?method=addFriendCircle")
     Call<BaseBean> postPutFriendCircle(@Body FriendCircleBean friendCircleBean);
+    /**
+     * 发表朋友圈的评论
+     * @param friendCircleBean
+     * @return
+     */
+    @POST("/Server/MainServer?method=addComment")
+    Call<BaseBean> postPutFriendCircleComment(@Body FriendCircleBean friendCircleBean);
+    /**
+     * 朋友圈点赞
+     * @param friendCircleBean
+     * @return
+     */
+    @POST("/Server/MainServer?method=addLike")
+    Call<BaseBean> postPutFriendCircleGood(@Body FriendCircleBean friendCircleBean);
 }
