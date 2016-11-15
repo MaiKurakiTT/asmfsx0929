@@ -87,6 +87,19 @@ public interface RetrofitService {
     @POST("/Server/MainServer?method=findFriend")
     Call<FindFriendsBean> postFindFriends(@Body FindFriendsBean findFriendsBean);
 
+    /**
+     * 请求朋友圈数据
+     * @param friendCircleBean
+     * @return
+     */
     @POST("/Server/MainServer?method=getFriendCircle")
     Call<BaseBean> postFriendCircle(@Body FriendCircleBean friendCircleBean);
+
+    /**
+     * 发表朋友圈
+     * @param friendCircleBean
+     * @return
+     */
+    @POST("/Server/MainServer?method=addFriendCircle")
+    Call<BaseBean> postPutFriendCircle(@Body FriendCircleBean friendCircleBean);
 }

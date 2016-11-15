@@ -1,13 +1,16 @@
 package com.hsd.asmfsx.view.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -15,8 +18,11 @@ import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.adapter.AddImgAdapter;
-import com.hsd.asmfsx.bean.PictureBean;
-import com.hsd.asmfsx.model.UploadMultiImgBiz;
+import com.hsd.asmfsx.bean.BaseBean;
+import com.hsd.asmfsx.bean.FriendCircleBean;
+import com.hsd.asmfsx.contract.PutFriendCircleContract;
+import com.hsd.asmfsx.presenter.PutFriendCirclePresenter;
+import com.hsd.asmfsx.utils.ShowToast;
 import com.tangxiaolv.telegramgallery.GalleryActivity;
 import com.tangxiaolv.telegramgallery.GalleryConfig;
 
@@ -31,7 +37,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by apple on 2016/11/11.
  */
 
-public class PutFriendCircleActivity extends AppCompatActivity {
+public class PutFriendCircleActivity extends AppCompatActivity implements PutFriendCircleContract.View {
     @BindView(R.id.head)
     CircleImageView head;
     @BindView(R.id.toolbar_centertext)
@@ -47,7 +53,10 @@ public class PutFriendCircleActivity extends AppCompatActivity {
     @BindView(R.id.addimg_first)
     ImageView addimgFirst;
     private AddImgAdapter addImgAdapter;
-    private List<String> photos;
+    private List<String> photos = new ArrayList<>();
+    private PutFriendCirclePresenter putFriendCirclePresenter;
+    private ProgressDialog progressDialog;
+    private String contentText;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,28 +64,35 @@ public class PutFriendCircleActivity extends AppCompatActivity {
         setContentView(R.layout.putfriendcircle_layout);
         ButterKnife.bind(this);
         addimgRecycle.setLayoutManager(new GridLayoutManager(this, 4));
+        initData();
         initView();
 
     }
 
+    private void initData() {
+        putFriendCirclePresenter = new PutFriendCirclePresenter(this);
+    }
+
     private void initView() {
         initToolbar();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("正在加载...");
+        progressDialog.setCanceledOnTouchOutside(false);
     }
 
     private void initToolbar() {
         head.setVisibility(View.GONE);
         toolbarCentertext.setText("发布");
-        toolbarRighttext.setText("图片");
+        toolbarRighttext.setText("完成");
         toolbarRighttext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UploadMultiImgBiz uploadMultiImgBiz = new UploadMultiImgBiz();
-                uploadMultiImgBiz.doUpload(photos, new UploadMultiImgBiz.OnFinishListener() {
-                    @Override
-                    public void finished(List<PictureBean> pictures) {
-                        int size = pictures.size();
-                    }
-                });
+                contentText = contentEt.getText().toString();
+                if (TextUtils.isEmpty(contentText)) {
+                    ShowToast.show(PutFriendCircleActivity.this, "说点什么再提交吧~");
+                } else {
+                    putFriendCirclePresenter.start();
+                }
             }
         });
         addimgFirst.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +106,7 @@ public class PutFriendCircleActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (0 == requestCode && resultCode == Activity.RESULT_OK){
+        if (0 == requestCode && resultCode == Activity.RESULT_OK) {
             photos = (List<String>) data.getSerializableExtra(GalleryActivity.PHOTOS);
             addimgFirst.setVisibility(View.GONE);
             addImgAdapter = new AddImgAdapter(PutFriendCircleActivity.this, photos);
@@ -112,5 +128,45 @@ public class PutFriendCircleActivity extends AppCompatActivity {
 //                .filterMimeTypes(new String[]{"image/jpeg"})
                 .build();
         GalleryActivity.openActivity(PutFriendCircleActivity.this, 0, config);
+    }
+
+    @Override
+    public FriendCircleBean getFriendCircleBean() {
+        FriendCircleBean friendCircleBean = new FriendCircleBean();
+        friendCircleBean.setUUID("84f4b998-17df-4997-8fc2-828f89aec37d");
+        friendCircleBean.setFriendsCircle_content(contentText);
+        return friendCircleBean;
+    }
+
+    @Override
+    public List<String> getImgs() {
+        return photos;
+    }
+
+    @Override
+    public void showData(BaseBean baseBean, int failedCounts) {
+        if (baseBean.getResultCode() == 1) {
+            if (failedCounts > 0) {
+                Snackbar.make(toolbar, "发布成功, 但是有 " + failedCounts + "张图片上传失败", Snackbar.LENGTH_LONG).show();
+            } else {
+                Snackbar.make(toolbar, "发布成功", Snackbar.LENGTH_LONG).show();
+                finish();
+            }
+        }
+    }
+
+    @Override
+    public void showLoading() {
+        progressDialog.show();
+    }
+
+    @Override
+    public void hideLoading() {
+        progressDialog.dismiss();
+    }
+
+    @Override
+    public void showFailed() {
+        Snackbar.make(toolbar, "发布失败", Snackbar.LENGTH_LONG).show();
     }
 }

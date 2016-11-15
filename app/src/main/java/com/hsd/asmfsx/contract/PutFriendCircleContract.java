@@ -20,13 +20,14 @@ public interface PutFriendCircleContract {
 
     interface View extends BaseView {
         FriendCircleBean getFriendCircleBean();
-        void showData(BaseBean baseBean);
+        List<String> getImgs();
+        void showData(BaseBean baseBean, int failedCounts);
     }
     interface IPutFriendCircleBiz{
         interface OnPutFriendCircleListener{
-            void success(BaseBean baseBean);
+            void success(BaseBean baseBean, int failedCounts);
             void failed();
         }
-        void doPut(List<PictureBean> pictures, FriendCircleBean friendCircleBean, OnPutFriendCircleListener putFriendCircleListener);
+        void doPut(List<String> imgs, FriendCircleBean friendCircleBean, OnPutFriendCircleListener putFriendCircleListener);
     }
 }

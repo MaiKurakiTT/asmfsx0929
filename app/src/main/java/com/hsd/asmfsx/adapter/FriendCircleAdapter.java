@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.baidu.mapapi.map.Text;
 import com.bumptech.glide.Glide;
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.bean.FriendCircleBean;
@@ -68,24 +69,25 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             //给每个item的父布局加上tag为当前position
             myViewHolder.itemParent.setTag(position);
             //显示头像
-            Glide.with(context).load(friendCircleBean.getFriendsCircle_icon()).into(myViewHolder.headImage);
+            Glide.with(context).load(friendCircleBean.getFriendsCircle_icon()).placeholder(R.mipmap.ic_inithead).into(myViewHolder.headImage);
             //显示发表人昵称
             myViewHolder.putName.setText(friendCircleBean.getFriendsCircle_nickname());
             //显示说说内容，为空的就直接隐藏该textview
             if (TextUtils.isEmpty(friendCircleBean.getFriendsCircle_content())) {
-                myViewHolder.friendcircleContent.setVisibility(View.GONE);
+//                myViewHolder.friendcircleContent.setVisibility(View.GONE);
             } else {
                 myViewHolder.friendcircleContent.setText(friendCircleBean.getFriendsCircle_content());
             }
+
             //显示发布时间
             myViewHolder.putTime.setText("" + DateFormatUtils.formatDate2Before(friendCircleBean.getFriendsCircle_time()));
 
             //将点过赞的item的position加到List集合中，加载item之前先判断该item的position是否在集合中，防止复用时候错乱
             if (beClickGood.contains(((int) myViewHolder.itemParent.getTag()))) {
-                Logger.d("点过赞了" + position);
+//                Logger.d("点过赞了" + position);
                 myViewHolder.goodImg.setImageResource(R.mipmap.ic_good_press);
             } else {
-                Logger.d("当前item没有点过赞" + position);
+//                Logger.d("当前item没有点过赞" + position);
                 myViewHolder.goodImg.setImageResource(R.mipmap.ic_good);
             }
             //让刚点过赞的那条说说的点赞imageView变色
@@ -94,22 +96,30 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 public void onClick(View view) {
                     //点赞过的item的position加入集合中
                     beClickGood.add(position);
-                    Logger.d("给第" + position + "个item加了");
-                    ShowToast.show(context, "点赞" + friendCircleBean.getFriendsCircle_nickname());
+//                    Logger.d("给第" + position + "个item加了");
+//                    ShowToast.show(context, "点赞" + friendCircleBean.getFriendsCircle_nickname());
                     myViewHolder.goodImg.setImageResource(R.mipmap.ic_good_press);
                 }
             });
-            //设置评论数量textView
-            myViewHolder.commentCounts.setText(friendCircleBean.getComments().size() + "");
             //设置点赞数量textView
             if (friendCircleBean.getLikeCount() == null) {
                 myViewHolder.goodCounts.setText("0");
             } else {
                 myViewHolder.goodCounts.setText("" + friendCircleBean.getLikeCount());
             }
+
             List<String> comments = friendCircleBean.getComments();
+            Logger.d("昵称：" + friendCircleBean.getFriendsCircle_nickname() +
+                    ", 内容：" + friendCircleBean.getFriendsCircle_content() +
+                    "， 评论数量：" + comments.size());
+            //设置评论数量textView
+            myViewHolder.commentCounts.setText(comments.size() + "");
             //判断评论条数，如果是最后一条就不加换行符了
-            if (comments.size() > 0) {
+            if (comments.size() == 0) {
+//                Logger.d("昵称：" + friendCircleBean.getFriendsCircle_nickname() + ", 评论为空");
+                //如果评论数为0则不显示textView
+//                myViewHolder.commentsText.setVisibility(View.GONE);
+            } else {
                 String display = "";
                 for (int i = 0; i < comments.size(); i++) {
                     String temp = comments.get(i);
@@ -120,9 +130,6 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     }
                 }
                 myViewHolder.commentsText.setText(display);
-            } else {
-                //如果评论数为0则不显示textView
-                myViewHolder.commentsText.setVisibility(View.GONE);
             }
             //显示说说的图片，利用NineGridImageView
             if (friendCircleBean.getPictures().size() > 0) {
