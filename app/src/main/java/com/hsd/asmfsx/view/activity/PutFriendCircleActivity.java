@@ -35,6 +35,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by apple on 2016/11/11.
+ * 发布朋友圈
  */
 
 public class PutFriendCircleActivity extends AppCompatActivity implements PutFriendCircleContract.View {
@@ -57,6 +58,8 @@ public class PutFriendCircleActivity extends AppCompatActivity implements PutFri
     private PutFriendCirclePresenter putFriendCirclePresenter;
     private ProgressDialog progressDialog;
     private String contentText;
+
+    private int PUTFRIENDCIRCLE_RESULT = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -88,7 +91,7 @@ public class PutFriendCircleActivity extends AppCompatActivity implements PutFri
             @Override
             public void onClick(View view) {
                 contentText = contentEt.getText().toString();
-                if (TextUtils.isEmpty(contentText)) {
+                if (TextUtils.isEmpty(contentText) & photos.size() == 0) {
                     ShowToast.show(PutFriendCircleActivity.this, "说点什么再提交吧~");
                 } else {
                     putFriendCirclePresenter.start();
@@ -150,6 +153,7 @@ public class PutFriendCircleActivity extends AppCompatActivity implements PutFri
                 Snackbar.make(toolbar, "发布成功, 但是有 " + failedCounts + "张图片上传失败", Snackbar.LENGTH_LONG).show();
             } else {
                 Snackbar.make(toolbar, "发布成功", Snackbar.LENGTH_LONG).show();
+                setResult(PUTFRIENDCIRCLE_RESULT);
                 finish();
             }
         }

@@ -50,6 +50,9 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
     private List<FriendCircleBean> friendCircleList;
     private FriendCircleAdapter friendCircleAdapter;
 
+    private int PUTFRIENDCIRCLE_REQUEST = 0;
+    private int PUTFRIENDCIRCLE_RESULT = 1;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,9 +87,18 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
         toolbarRighttext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(FriendCircleActivity.this, PutFriendCircleActivity.class));
+                startActivityForResult(new Intent(FriendCircleActivity.this, PutFriendCircleActivity.class), PUTFRIENDCIRCLE_REQUEST);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PUTFRIENDCIRCLE_REQUEST && resultCode == PUTFRIENDCIRCLE_RESULT){
+            //发布完说说后来到这里
+            friendCirclePresenter.start();
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /**
@@ -105,7 +117,11 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
 //                Log.d(TAG, "totalItemCount = " + totalItemCount + ", lastVisibleItem = "
 //                        + lastVisibleItem + ", lastCompletelyVisibleItem = " + lastCompletelyVisibleItem);
                 if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 == adapter.getItemCount()) {
-                    friendCirclePresenter.loadMore();
+                    if (adapter.getStatus() == 0) {
+                        //判断当前是否正在刷新，为0代表没有在刷新
+                        adapter.setStatus(1);
+                        friendCirclePresenter.loadMore();
+                    }
                 }
             }
 
@@ -148,6 +164,7 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
             if (moreDataList.size() > 0) {
                 friendCircleList.addAll(moreDataList);
                 if (friendCircleAdapter != null) {
+                    friendCircleAdapter.setStatus(0);
                     friendCircleAdapter.notifyDataSetChanged();
                 } else {
                     friendCircleAdapter = new FriendCircleAdapter(this, friendCircleList);

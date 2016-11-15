@@ -23,7 +23,9 @@ import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,11 +39,14 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private static int TYPE_ITEM = 0;
     private static int TYPE_FOOTER = 1;
+    //上拉加载的刷新状态，1为正在刷新
+    private int status = 0;
 
 
     private Context context;
     private List<FriendCircleBean> friendCircleList;
     private List<Integer> beClickGood = new ArrayList<>();
+    private Map map = new HashMap();
 
     public FriendCircleAdapter(Context context, List<FriendCircleBean> friendCircleList) {
         this.context = context;
@@ -62,107 +67,113 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int pos) {
         if (holder instanceof MyViewHolder) {
+            final int position = pos;
             final MyViewHolder myViewHolder = (MyViewHolder) holder;
-            final FriendCircleBean friendCircleBean = friendCircleList.get(position);
             //给每个item的父布局加上tag为当前position
             myViewHolder.itemParent.setTag(position);
-            //显示头像
-            Glide.with(context).load(friendCircleBean.getFriendsCircle_icon()).placeholder(R.mipmap.ic_inithead).into(myViewHolder.headImage);
-            //显示发表人昵称
-            myViewHolder.putName.setText(friendCircleBean.getFriendsCircle_nickname());
-            //显示说说内容，为空的就直接隐藏该textview
-            if (TextUtils.isEmpty(friendCircleBean.getFriendsCircle_content())) {
-//                myViewHolder.friendcircleContent.setVisibility(View.GONE);
-            } else {
-                myViewHolder.friendcircleContent.setText(friendCircleBean.getFriendsCircle_content());
-            }
+            final FriendCircleBean friendCircleBean = friendCircleList.get(position);
+            setData2View(myViewHolder, position, friendCircleBean);
 
-            //显示发布时间
-            myViewHolder.putTime.setText("" + DateFormatUtils.formatDate2Before(friendCircleBean.getFriendsCircle_time()));
-
-            //将点过赞的item的position加到List集合中，加载item之前先判断该item的position是否在集合中，防止复用时候错乱
-            if (beClickGood.contains(((int) myViewHolder.itemParent.getTag()))) {
-//                Logger.d("点过赞了" + position);
-                myViewHolder.goodImg.setImageResource(R.mipmap.ic_good_press);
-            } else {
-//                Logger.d("当前item没有点过赞" + position);
-                myViewHolder.goodImg.setImageResource(R.mipmap.ic_good);
-            }
-            //让刚点过赞的那条说说的点赞imageView变色
-            myViewHolder.goodImg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    //点赞过的item的position加入集合中
-                    beClickGood.add(position);
-//                    Logger.d("给第" + position + "个item加了");
-//                    ShowToast.show(context, "点赞" + friendCircleBean.getFriendsCircle_nickname());
-                    myViewHolder.goodImg.setImageResource(R.mipmap.ic_good_press);
-                }
-            });
-            //设置点赞数量textView
-            if (friendCircleBean.getLikeCount() == null) {
-                myViewHolder.goodCounts.setText("0");
-            } else {
-                myViewHolder.goodCounts.setText("" + friendCircleBean.getLikeCount());
-            }
-
-            List<String> comments = friendCircleBean.getComments();
-            Logger.d("昵称：" + friendCircleBean.getFriendsCircle_nickname() +
-                    ", 内容：" + friendCircleBean.getFriendsCircle_content() +
-                    "， 评论数量：" + comments.size());
-            //设置评论数量textView
-            myViewHolder.commentCounts.setText(comments.size() + "");
-            //判断评论条数，如果是最后一条就不加换行符了
-            if (comments.size() == 0) {
-//                Logger.d("昵称：" + friendCircleBean.getFriendsCircle_nickname() + ", 评论为空");
-                //如果评论数为0则不显示textView
-//                myViewHolder.commentsText.setVisibility(View.GONE);
-            } else {
-                String display = "";
-                for (int i = 0; i < comments.size(); i++) {
-                    String temp = comments.get(i);
-                    if (i == comments.size() - 1) {
-                        display = display + temp;
-                    } else {
-                        display = display + temp + '\n';
-                    }
-                }
-                myViewHolder.commentsText.setText(display);
-            }
-            //显示说说的图片，利用NineGridImageView
-            if (friendCircleBean.getPictures().size() > 0) {
-                NineGridImageViewAdapter<String> nineGridImageViewAdapter = new NineGridImageViewAdapter<String>() {
-                    @Override
-                    protected void onDisplayImage(Context context, ImageView imageView, String s) {
-                        Glide.with(context).load(s).placeholder(R.mipmap.ic_initimg).into(imageView);
-                    }
-
-                    @Override
-                    protected ImageView generateImageView(Context context) {
-                        return super.generateImageView(context);
-                    }
-
-                    @Override
-                    protected void onItemImageClick(Context context, int index, List<String> list) {
-                        super.onItemImageClick(context, index, list);
-                    }
-                };
-                myViewHolder.ninegridImg.setAdapter(nineGridImageViewAdapter);
-                List<PictureBean> pictures = friendCircleBean.getPictures();
-                List<String> pics = new ArrayList<>();
-                for (int i = 0; i < pictures.size(); i++) {
-                    PictureBean pictureBean = pictures.get(i);
-                    String picture_url = pictureBean.getPicture_URL();
-                    pics.add(picture_url);
-                }
-                myViewHolder.ninegridImg.setImagesData(pics);
-            } else {
-                myViewHolder.ninegridImg.setVisibility(View.GONE);
-            }
         } else {
             FooterViewHolder footerViewHolder = (FooterViewHolder) holder;
+        }
+    }
+
+    private void setData2View(final MyViewHolder myViewHolder, final int position, FriendCircleBean friendCircleBean) {
+
+        //显示头像
+        Glide.with(context).load(friendCircleBean.getFriendsCircle_icon()).placeholder(R.mipmap.ic_inithead).into(myViewHolder.headImage);
+        //显示发表人昵称
+        myViewHolder.putName.setText(friendCircleBean.getFriendsCircle_nickname());
+        //显示说说内容，为空的就直接隐藏该textview
+        if (TextUtils.isEmpty(friendCircleBean.getFriendsCircle_content())) {
+            myViewHolder.friendcircleContent.setVisibility(View.GONE);
+        } else {
+            myViewHolder.friendcircleContent.setVisibility(View.VISIBLE);
+            myViewHolder.friendcircleContent.setText(friendCircleBean.getFriendsCircle_content());
+        }
+
+        //显示发布时间
+        myViewHolder.putTime.setText("" + DateFormatUtils.formatDate2Before(friendCircleBean.getFriendsCircle_time()));
+
+        //将点过赞的item的position加到List集合中，加载item之前先判断该item的position是否在集合中，防止复用时候错乱
+        if (beClickGood.contains((myViewHolder.itemParent.getTag()))) {
+//                Logger.d("点过赞了" + position);
+            myViewHolder.goodImg.setImageResource(R.mipmap.ic_good_press);
+        } else {
+//                Logger.d("当前item没有点过赞" + position);
+            myViewHolder.goodImg.setImageResource(R.mipmap.ic_good);
+        }
+        //让刚点过赞的那条说说的点赞imageView变色
+        myViewHolder.goodImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //点赞过的item的position加入集合中
+                beClickGood.add(position);
+//                    Logger.d("给第" + position + "个item加了");
+//                    ShowToast.show(context, "点赞" + friendCircleBean.getFriendsCircle_nickname());
+                myViewHolder.goodImg.setImageResource(R.mipmap.ic_good_press);
+            }
+        });
+        //设置点赞数量textView
+        if (friendCircleBean.getLikeCount() == null) {
+            myViewHolder.goodCounts.setText("0");
+        } else {
+            myViewHolder.goodCounts.setText("" + friendCircleBean.getLikeCount());
+        }
+
+        List<String> comments = friendCircleBean.getComments();
+
+        //设置评论数量textView
+        myViewHolder.commentCounts.setText(comments.size() + "");
+        String display = "";
+        //判断评论条数，如果是最后一条就不加换行符了
+        if (comments.size() == 0) {
+            //如果评论数为0则不显示textView
+            myViewHolder.commentsText.setVisibility(View.GONE);
+        } else {
+            for (int i = 0; i < comments.size(); i++) {
+                String temp = comments.get(i);
+                if (i == comments.size() - 1) {
+                    display = display + temp;
+                } else {
+                    display = display + temp + '\n';
+                }
+            }
+            myViewHolder.commentsText.setVisibility(View.VISIBLE);
+            myViewHolder.commentsText.setText(display);
+        }
+        //显示说说的图片，利用NineGridImageView
+        if (friendCircleBean.getPictures().size() > 0) {
+            NineGridImageViewAdapter<String> nineGridImageViewAdapter = new NineGridImageViewAdapter<String>() {
+                @Override
+                protected void onDisplayImage(Context context, ImageView imageView, String s) {
+                    Glide.with(context).load(s).placeholder(R.mipmap.ic_initimg).into(imageView);
+                }
+
+                @Override
+                protected ImageView generateImageView(Context context) {
+                    return super.generateImageView(context);
+                }
+
+                @Override
+                protected void onItemImageClick(Context context, int index, List<String> list) {
+                    super.onItemImageClick(context, index, list);
+                }
+            };
+            myViewHolder.ninegridImg.setAdapter(nineGridImageViewAdapter);
+            List<PictureBean> pictures = friendCircleBean.getPictures();
+            List<String> pics = new ArrayList<>();
+            for (int i = 0; i < pictures.size(); i++) {
+                PictureBean pictureBean = pictures.get(i);
+                String picture_url = pictureBean.getPicture_URL();
+                pics.add(picture_url);
+            }
+            myViewHolder.ninegridImg.setImagesData(pics);
+        } else {
+            myViewHolder.ninegridImg.setVisibility(View.GONE);
         }
     }
 
@@ -220,5 +231,11 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+    public void setStatus(int status){
+        this.status = status;
+    }
+    public int getStatus(){
+        return status;
     }
 }
