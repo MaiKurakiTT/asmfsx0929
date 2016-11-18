@@ -56,4 +56,5 @@ dependencies {
     compile 'de.greenrobot:eventbus:3.0.0-beta1'
     compile files('libs/glide-3.7.0.jar')
     compile files('libs/hyphenatechat_3.2.0.jar')
+    compile 'com.github.clans:fab:1.6.4'
 }

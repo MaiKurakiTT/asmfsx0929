@@ -335,7 +335,8 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
     @Override
     public void showDataForComment(BaseBean baseBean) {
         if (baseBean.getResultCode() == 1){
-            friendCirclePresenter.start();
+//            friendCirclePresenter.start();
+
         }
     }
 

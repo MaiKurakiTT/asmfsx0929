@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hsd.asmfsx.adapter.HeartBeatListAdapter;
+import com.hsd.asmfsx.adapter.SeeAdapter;
 import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.chat.ChatActivity;
@@ -31,6 +33,7 @@ import com.hsd.asmfsx.view.activity.FriendCircleActivity;
 import com.hsd.asmfsx.view.activity.LoginActivity;
 import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
+import com.hsd.asmfsx.view.activity.UserInfoActivity;
 import com.hsd.asmfsx.view.fragment.FriendsFragment;
 import com.hsd.asmfsx.view.fragment.HomeFragment;
 import com.hsd.asmfsx.view.fragment.SeeFragment;
@@ -92,6 +95,11 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     private EaseUI easeUI;
 
     private RecyclerView rightRecycle;
+    private RecyclerView seeRecycleView;
+
+    private String[] seeTitles = {"朋友圈", "消息", "show出来", "日志", "休闲", "旅行"};
+    private int[] seeImgs = {R.mipmap.ic_news, R.mipmap.ic_mail, R.mipmap.ic_show,
+            R.mipmap.ic_log, R.mipmap.ic_game, R.mipmap.ic_traffic};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,9 +113,7 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         presenter = new RequestHeartBeatPresenter(this);
         button = (Button) findViewById(R.id.button);
 
-        View headerView = navigationViewRight.getHeaderView(0);
-        rightRecycle = (RecyclerView) headerView.findViewById(R.id.right_navi_recycle);
-        rightRecycle.setLayoutManager(new LinearLayoutManager(this));
+
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -170,13 +176,62 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         initToolbar();
         initListener();
         initBottomSheet();
+        initLeftNavigation();
+        initRightNavigation();
 
+    }
+
+    private void initRightNavigation() {
+        View headerView = navigationViewRight.getHeaderView(0);
+        rightRecycle = (RecyclerView) headerView.findViewById(R.id.right_navi_recycle);
+        rightRecycle.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    private void initLeftNavigation() {
+        View leftHeadView = navigationViewLeft.getHeaderView(0);
+        leftHeadView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
+                intent.putExtra("type", 0);
+                startActivityForResult(intent, 0);
+            }
+        });
     }
 
     private void initBottomSheet() {
         View bottomSheet = findViewById(R.id.design_bottom_sheet);
+        seeRecycleView = (RecyclerView) bottomSheet.findViewById(R.id.see_recycle);
         final BottomSheetBehavior<View> sheetBehavior = BottomSheetBehavior.from(bottomSheet);
         sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        SeeAdapter seeAdapter = new SeeAdapter(this, seeTitles, seeImgs);
+        seeRecycleView.setLayoutManager(new GridLayoutManager(this, 3));
+        seeRecycleView.setAdapter(seeAdapter);
+        seeAdapter.setOnItemClickListener(new SeeAdapter.OnItemClickListener() {
+            @Override
+            public void click(View view, int position) {
+                switch (position) {
+                    case 0:
+
+                        break;
+                    case 1:
+
+                        break;
+                    case 2:
+
+                        break;
+                    case 3:
+
+                        break;
+                    case 4:
+
+                        break;
+                    case 5:
+
+                        break;
+                }
+            }
+        });
         bottombutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
