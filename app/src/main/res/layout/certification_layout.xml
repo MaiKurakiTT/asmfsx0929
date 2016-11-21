@@ -2,94 +2,85 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary"
-    android:orientation="vertical"
-    android:paddingLeft="24dp"
-    android:paddingRight="24dp"
-    android:paddingTop="56dp">
+    android:background="@mipmap/ic_loginback_sm"
+    android:orientation="vertical">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="72dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="80dp"
         android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="24dp"
-        android:src="@mipmap/templogo" />
+        android:src="@mipmap/ic_head2" />
+    <RelativeLayout
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:background="@drawable/edittext_radius_white"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="80dp">
+        <com.jaredrummler.materialspinner.MaterialSpinner
+            android:id="@+id/school_spinner"
+            android:layout_width="230dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
 
-    <com.jaredrummler.materialspinner.MaterialSpinner
-        android:id="@+id/school_spinner"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp" />
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/stuidinput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp">
-
-        <android.support.design.widget.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="学号"
-            android:inputType="number"
-            android:textColor="@color/white" />
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/stupswinput"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp">
-
-        <android.support.design.widget.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="密码"
-            android:inputType="textPassword"
-            android:textColor="@color/white" />
-    </android.support.design.widget.TextInputLayout>
-
+    <EditText
+        android:id="@+id/studentid_edit"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:drawableLeft="@mipmap/ic_user_stu2"
+        android:drawablePadding="10dp"
+        android:paddingLeft="20dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:inputType="number"
+        android:hint="学号"
+        android:background="@drawable/edittext_radius_white"/>
+    <EditText
+        android:id="@+id/psw_edit"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:drawableLeft="@mipmap/ic_password"
+        android:drawablePadding="10dp"
+        android:paddingLeft="20dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:inputType="textPassword"
+        android:hint="密码"
+        android:background="@drawable/edittext_radius_white"/>
     <LinearLayout
         android:id="@+id/vercodeview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal"
-        android:visibility="gone">
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/vercodeinput"
+        android:visibility="gone"
+        android:layout_gravity="center_horizontal">
+        <EditText
+            android:id="@+id/code_edit"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight="9">
-
-            <android.support.design.widget.TextInputEditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="验证码"
-                android:textColor="@color/white" />
-        </android.support.design.widget.TextInputLayout>
-
+            android:layout_height="40dp"
+            android:layout_weight="2"
+            android:inputType="number"
+            android:paddingLeft="20dp"
+            android:hint="验证码"
+            android:background="@drawable/edittext_radius_white"/>
         <ImageView
             android:id="@+id/vercodeimg"
             android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_vertical"
-            android:src="@mipmap/ic_initimg"
-            android:layout_weight="4" />
+            android:layout_height="40dp"
+            android:layout_weight="1"
+            android:src="@mipmap/ic_initimg"/>
     </LinearLayout>
+    <Button
+        android:id="@+id/certification_but"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
+        android:background="@drawable/button_radius_blue"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:textColor="@color/white"
+        android:text="登录"/>
 
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/check_but"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
-        android:layout_marginTop="24dp"
-        android:background="@color/primary_dark"
-        android:padding="12dp"
-        android:text="验证"
-        android:textColor="@color/white" />
 </LinearLayout>

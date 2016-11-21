@@ -1,22 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary">
+    android:background="@color/white">
+    <include layout="@layout/toolbar_normal_layout"/>
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
-
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/headimg"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
-        android:src="@mipmap/ic_whitehead"
+        android:src="@mipmap/ic_head"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:clickable="true"/>
@@ -30,7 +31,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center_vertical"
-        android:background="@color/primary">
+        android:background="@color/white">
 
         <TextView
             android:id="@+id/match_phonetext"
@@ -38,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:textSize="@dimen/normal_textsize"
-            android:textColor="@color/it_matchwhite_textcolor"
+            android:textColor="@color/it_matchnormal_textcolor"
             android:text="手机号"/>
         <TextView
             android:id="@+id/phonetext"
@@ -46,7 +47,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/setafterregistermarginlift"
             android:textSize="@dimen/normal_textsize"
-            android:textColor="@color/it_whitetextcolor"
+            android:textColor="@color/black"
             android:text="1234567890"
             />
     </RelativeLayout>
@@ -59,26 +60,25 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center_vertical"
-        android:background="@color/primary">
+        android:background="@color/white">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:textSize="@dimen/normal_textsize"
-            android:textColor="@color/it_matchwhite_textcolor"
+            android:textColor="@color/it_matchnormal_textcolor"
             android:text="昵称"/>
         <EditText
             android:id="@+id/nametext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/setafterregistermarginlift"
-            android:background="@color/primary"
+            android:background="@color/white"
             android:maxLength="10"
             android:textSize="@dimen/normal_textsize"
-            android:textColor="@color/it_whitetextcolor"
+            android:textColor="@color/black"
             android:hint="输入昵称"
-            android:textColorHint="@color/it_matchwhite_textcolor"
             />
     </RelativeLayout>
     <View
@@ -101,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
                 android:textSize="@dimen/normal_textsize"
-                android:textColor="@color/it_matchwhite_textcolor"
+                android:textColor="@color/it_matchnormal_textcolor"
                 android:text="性别"/>
             <TextView
                 android:id="@+id/sextext"
@@ -109,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/setafterregistermarginlift"
                 android:textSize="@dimen/normal_textsize"
-                android:textColor="@color/it_whitetextcolor"
+                android:textColor="@color/black"
                 />
         </RelativeLayout>
 
@@ -133,7 +133,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:textSize="@dimen/normal_textsize"
-            android:textColor="@color/it_matchwhite_textcolor"
+            android:textColor="@color/it_matchnormal_textcolor"
             android:text="生日"/>
         <TextView
             android:id="@+id/birthdaytext"
@@ -141,7 +141,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/setafterregistermarginlift"
             android:textSize="@dimen/normal_textsize"
-            android:textColor="@color/it_whitetextcolor"
+            android:textColor="@color/black"
             />
     </RelativeLayout>
     <View
@@ -163,7 +163,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:textSize="@dimen/normal_textsize"
-            android:textColor="@color/it_matchwhite_textcolor"
+            android:textColor="@color/it_matchnormal_textcolor"
             android:text="身高"/>
 
         <TextView
@@ -172,7 +172,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/setafterregistermarginlift"
             android:textSize="@dimen/normal_textsize"
-            android:textColor="@color/it_whitetextcolor"
+            android:textColor="@color/black"
             />
     </RelativeLayout>
     <View
@@ -194,7 +194,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:textSize="@dimen/normal_textsize"
-            android:textColor="@color/it_matchwhite_textcolor"
+            android:textColor="@color/it_matchnormal_textcolor"
             android:text="家乡" />
 
         <TextView
@@ -203,7 +203,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/setafterregistermarginlift"
             android:textSize="@dimen/normal_textsize"
-            android:textColor="@color/it_whitetextcolor"
+            android:textColor="@color/black"
             />
     </RelativeLayout>
     <View
@@ -225,7 +225,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:textSize="@dimen/normal_textsize"
-            android:textColor="@color/it_matchwhite_textcolor"
+            android:textColor="@color/it_matchnormal_textcolor"
             android:text="学校"/>
         <TextView
             android:id="@+id/schooltext"
@@ -233,7 +233,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/setafterregistermarginlift"
             android:textSize="@dimen/normal_textsize"
-            android:textColor="@color/it_whitetextcolor"
+            android:textColor="@color/black"
             />
     </RelativeLayout>
     <View
@@ -255,7 +255,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:textSize="@dimen/normal_textsize"
-            android:textColor="@color/it_matchwhite_textcolor"
+            android:textColor="@color/it_matchnormal_textcolor"
             android:text="恋爱状态"/>
         <TextView
             android:id="@+id/statustext"
@@ -263,7 +263,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/setafterregistermarginlift"
             android:textSize="@dimen/normal_textsize"
-            android:textColor="@color/it_whitetextcolor"
+            android:textColor="@color/black"
             />
     </RelativeLayout>
     <View
@@ -277,8 +277,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="30dp"
-            android:background="@color/primary_dark"
+            android:background="@color/primary"
             android:textColor="@color/white"
             android:text="完成"/>
     </LinearLayout>
-</android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.NestedScrollView>
+</LinearLayout>

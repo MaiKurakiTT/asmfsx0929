@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -35,18 +37,18 @@ import butterknife.ButterKnife;
 public class CertificationActivity extends AppCompatActivity implements CertificationContract.View, CheckSchoolContract.View {
     @BindView(R.id.school_spinner)
     MaterialSpinner schoolSpinner;
-    @BindView(R.id.stuidinput)
-    TextInputLayout stuidinput;
-    @BindView(R.id.stupswinput)
-    TextInputLayout stupswinput;
-    @BindView(R.id.vercodeinput)
-    TextInputLayout vercodeinput;
     @BindView(R.id.vercodeimg)
     ImageView vercodeimg;
     @BindView(R.id.vercodeview)
     LinearLayout vercodeview;
-    @BindView(R.id.check_but)
-    AppCompatButton checkBut;
+    @BindView(R.id.studentid_edit)
+    EditText studentidEdit;
+    @BindView(R.id.psw_edit)
+    EditText pswEdit;
+    @BindView(R.id.code_edit)
+    EditText codeEdit;
+    @BindView(R.id.certification_but)
+    Button certificationBut;
     private CertificationPresenter certificationPresenter;
     String[] ITEMS = {"河南师范大学", "新乡医学院", "新乡学院", "河南科技学院"};
     private int SCHOOL = 0;
@@ -100,7 +102,7 @@ public class CertificationActivity extends AppCompatActivity implements Certific
                 }
             }
         });
-        checkBut.setOnClickListener(new View.OnClickListener() {
+        certificationBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 doCertification();
@@ -109,25 +111,25 @@ public class CertificationActivity extends AppCompatActivity implements Certific
     }
 
     private void doCertification() {
-        if (NetworkUtils.isNetworkAvailable(this)){
+        if (NetworkUtils.isNetworkAvailable(this)) {
             schoolName = schoolSpinner.getText().toString();
-            stuId = stuidinput.getEditText().getText().toString();
-            stuPsw = stupswinput.getEditText().getText().toString();
-            verCode = vercodeinput.getEditText().getText().toString();
-            if (HASCODE == true){
-                if (TextUtils.isEmpty(stuId) || TextUtils.isEmpty(stuPsw) || TextUtils.isEmpty(verCode)){
+            stuId = studentidEdit.getText().toString();
+            stuPsw = pswEdit.getText().toString();
+            verCode = codeEdit.getText().toString();
+            if (HASCODE == true) {
+                if (TextUtils.isEmpty(stuId) || TextUtils.isEmpty(stuPsw) || TextUtils.isEmpty(verCode)) {
                     ShowToast.show(CertificationActivity.this, "信息填写有误！");
-                }else {
+                } else {
                     certificationPresenter.start();
                 }
-            }else {
-                if (TextUtils.isEmpty(stuId) || TextUtils.isEmpty(stuPsw)){
+            } else {
+                if (TextUtils.isEmpty(stuId) || TextUtils.isEmpty(stuPsw)) {
                     ShowToast.show(CertificationActivity.this, "信息填写有误！");
-                }else {
+                } else {
                     certificationPresenter.start();
                 }
             }
-        }else {
+        } else {
             ShowToast.show(CertificationActivity.this, "网络好像出问题了，请检查你的网络状况~");
         }
 
@@ -140,17 +142,17 @@ public class CertificationActivity extends AppCompatActivity implements Certific
 
     @Override
     public String getStuNum() {
-        return stuidinput.getEditText().getText().toString();
+        return studentidEdit.getText().toString();
     }
 
     @Override
     public String getStuPsw() {
-        return stupswinput.getEditText().getText().toString();
+        return pswEdit.getText().toString();
     }
 
     @Override
     public String getCode() {
-        return vercodeinput.getEditText().getText().toString();
+        return codeEdit.getText().toString();
     }
 
     @Override

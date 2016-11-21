@@ -23,4 +23,6 @@
     <color name="view_module">#11000000</color>
 
     <color name="normal_background">#11000000</color>
+    <color name="gray_background">#D2DDD9</color>
+
 </resources>

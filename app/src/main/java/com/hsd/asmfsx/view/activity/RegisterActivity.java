@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.bean.RegisterBean;
@@ -28,16 +30,16 @@ import butterknife.ButterKnife;
 
 public class RegisterActivity extends AppCompatActivity implements RegisterContract.View {
 
-    @BindView(R.id.usernameinput)
-    TextInputLayout usernameinput;
-    @BindView(R.id.vercodeinput)
-    TextInputLayout vercodeinput;
-    @BindView(R.id.getvercodebut)
-    AppCompatButton getvercodebut;
-    @BindView(R.id.passwordinput)
-    TextInputLayout passwordinput;
     @BindView(R.id.register_but)
-    AppCompatButton registerBut;
+    Button registerBut;
+    @BindView(R.id.phone_edit)
+    EditText phoneEdit;
+    @BindView(R.id.code_edit)
+    EditText codeEdit;
+    @BindView(R.id.code_but)
+    Button codeBut;
+    @BindView(R.id.psw_edit)
+    EditText pswEdit;
     private RegisterPresenter registerPresenter;
     private String stuId;
     private String schoolName;
@@ -69,15 +71,15 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
     }
 
     private void doRegister() {
-        if (NetworkUtils.isNetworkAvailable(this)){
-            username = usernameinput.getEditText().getText().toString();
-            password = passwordinput.getEditText().getText().toString();
-            if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)){
+        if (NetworkUtils.isNetworkAvailable(this)) {
+            username = phoneEdit.getText().toString();
+            password = pswEdit.getText().toString();
+            if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
                 ShowToast.show(RegisterActivity.this, "信息填写有误！");
-            }else {
+            } else {
                 registerPresenter.start();
             }
-        }else {
+        } else {
             ShowToast.show(RegisterActivity.this, "网络好像出问题了，请检查你的网络状况~");
         }
     }

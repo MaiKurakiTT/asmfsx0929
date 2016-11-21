@@ -12,6 +12,8 @@ import android.support.v7.widget.AppCompatButton;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
@@ -33,18 +35,14 @@ import butterknife.ButterKnife;
  */
 
 public class LoginActivity extends AppCompatActivity implements LoginContract.View {
-    @BindView(R.id.usernametext)
-    TextInputEditText usernametext;
-    @BindView(R.id.usernameinput)
-    TextInputLayout usernameinput;
-    @BindView(R.id.passwordtext)
-    TextInputEditText passwordtext;
-    @BindView(R.id.passwordinput)
-    TextInputLayout passwordinput;
     @BindView(R.id.login_but)
-    AppCompatButton loginBut;
+    Button loginBut;
     @BindView(R.id.register_link)
     TextView registerLink;
+    @BindView(R.id.phone_edit)
+    EditText phoneEdit;
+    @BindView(R.id.psw_edit)
+    EditText pswEdit;
     private String TAG = "LoginActivity";
     private LoginPresenter loginPresenter;
     private DbBeanHelper driverHelper;
@@ -69,7 +67,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         registerLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, CertificationActivity.class));
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
                 finish();
             }
         });
@@ -86,15 +84,15 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     private void doLogin() {
-        if (NetworkUtils.isNetworkAvailable(LoginActivity.this)){
-            username = usernameinput.getEditText().getText().toString();
-            password = passwordinput.getEditText().getText().toString();
-            if (TextUtils.isEmpty(username)|| TextUtils.isEmpty(password)){
+        if (NetworkUtils.isNetworkAvailable(LoginActivity.this)) {
+            username = phoneEdit.getText().toString();
+            password = pswEdit.getText().toString();
+            if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
                 ShowToast.show(LoginActivity.this, "手机号或密码为空");
-            }else {
+            } else {
                 loginPresenter.start();
             }
-        }else {
+        } else {
             ShowToast.show(LoginActivity.this, "网络好像出问题了，请检查你的网络状况~");
         }
     }
@@ -111,7 +109,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void showData(LoginBean loginBean) {
-        if (loginBean.getResultCode() == 1){
+        if (loginBean.getResultCode() == 1) {
             Log.d(TAG, loginBean.getUser_uuid());
             driverHelper = DbUtil.getDriverHelper();
             int size = driverHelper.queryAll().size();
@@ -128,7 +126,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
                 dbBean.setUser_nickname("update");
                 driverHelper.update(dbBean);
             }
-        }else {
+        } else {
             ShowToast.show(LoginActivity.this, "" + loginBean.getDescribe());
         }
 

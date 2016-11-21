@@ -2,11 +2,9 @@ package com.hsd.asmfsx.view.activity;
 
 import android.Manifest;
 import android.app.ProgressDialog;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -18,29 +16,24 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
-import com.hsd.asmfsx.bean.BaseBean;
-import com.hsd.asmfsx.bean.UserBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.contract.SetAfterRegisterContract;
-import com.hsd.asmfsx.model.UploadImgBiz;
 import com.hsd.asmfsx.presenter.SetAfterRegisterPresenter;
 import com.hsd.asmfsx.utils.DateFormatUtils;
 import com.hsd.asmfsx.utils.PickViewUtils;
 import com.hsd.asmfsx.utils.ShowToast;
-import com.hsd.asmfsx.utils.Uri2PathUtils;
 import com.orhanobut.logger.Logger;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -103,6 +96,12 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
     RelativeLayout statusparent;
     @BindView(R.id.okbut)
     AppCompatButton okbut;
+    @BindView(R.id.toolbar_centertext)
+    TextView toolbarCentertext;
+    @BindView(R.id.toolbar_righttext)
+    TextView toolbarRighttext;
+    @BindView(R.id.normal_toolbar)
+    Toolbar normalToolbar;
     private SetAfterRegisterPresenter setAfterRegisterPresenter;
     //拍照裁剪图片前后图片URI
     private Uri snocrop = Uri.parse("file:///sdcard/snocrop");
@@ -161,6 +160,10 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
     }
 
     private void initView() {
+        setSupportActionBar(normalToolbar);
+        getSupportActionBar().setTitle("");
+        toolbarCentertext.setText("填写信息");
+        toolbarRighttext.setVisibility(View.GONE);
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("正在加载...");
         progressDialog.setCanceledOnTouchOutside(false);
@@ -224,9 +227,9 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
                         || TextUtils.isEmpty(birthdayString) || TextUtils.isEmpty(heightString) || TextUtils.isEmpty(home) ||
                         TextUtils.isEmpty(school) || TextUtils.isEmpty(statusString)) {
                     ShowToast.show(SetAfterRegisterActivity.this, "请先完善信息");
-                }else if(TextUtils.isEmpty(cropSuccessPath)){
+                } else if (TextUtils.isEmpty(cropSuccessPath)) {
                     ShowToast.show(SetAfterRegisterActivity.this, "要设置头像哦~");
-                }else {
+                } else {
                     setAfterRegisterPresenter.start();
                 }
             }
@@ -348,9 +351,9 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
 
     @Override
     public void showData(UserInformationBean userInformationBean) {
-        if (userInformationBean.getResultCode() == 1){
+        if (userInformationBean.getResultCode() == 1) {
             Snackbar.make(okbut, "信息设置成功", Snackbar.LENGTH_LONG).show();
-        }else {
+        } else {
             Snackbar.make(okbut, "信息设置失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
