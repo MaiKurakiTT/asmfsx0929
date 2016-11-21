@@ -2,19 +2,18 @@ package com.hsd.asmfsx;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,9 +33,6 @@ import com.hsd.asmfsx.view.activity.LoginActivity;
 import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
 import com.hsd.asmfsx.view.activity.UserInfoActivity;
-import com.hsd.asmfsx.view.fragment.FriendsFragment;
-import com.hsd.asmfsx.view.fragment.HomeFragment;
-import com.hsd.asmfsx.view.fragment.SeeFragment;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
@@ -48,7 +44,6 @@ import com.hyphenate.util.EMLog;
 import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -91,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     Button findfriendbut;
     @BindView(R.id.friendcirclebut)
     Button friendcirclebut;
+    @BindView(R.id.bottom_but)
+    ImageButton bottomImgBut;
     private RequestHeartBeatPresenter presenter;
     private EaseUI easeUI;
 
@@ -112,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
 
         presenter = new RequestHeartBeatPresenter(this);
         button = (Button) findViewById(R.id.button);
-
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -204,9 +200,29 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         View bottomSheet = findViewById(R.id.design_bottom_sheet);
         seeRecycleView = (RecyclerView) bottomSheet.findViewById(R.id.see_recycle);
         final BottomSheetBehavior<View> sheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState){
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                        bottomImgBut.setImageResource(R.mipmap.ic_up);
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        bottomImgBut.setImageResource(R.mipmap.ic_down);
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
         SeeAdapter seeAdapter = new SeeAdapter(this, seeTitles, seeImgs);
-        seeRecycleView.setLayoutManager(new GridLayoutManager(this, 3));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        seeRecycleView.setLayoutManager(linearLayoutManager);
         seeRecycleView.setAdapter(seeAdapter);
         seeAdapter.setOnItemClickListener(new SeeAdapter.OnItemClickListener() {
             @Override
@@ -233,7 +249,7 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
                 }
             }
         });
-        bottombutton.setOnClickListener(new View.OnClickListener() {
+        bottomImgBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showBottomSheet(sheetBehavior);
@@ -242,10 +258,10 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     }
 
     private void showBottomSheet(BottomSheetBehavior<View> sheetBehavior) {
-        if (sheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN) {
-            sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        if (sheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+            sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         } else {
-            sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         }
     }
 
