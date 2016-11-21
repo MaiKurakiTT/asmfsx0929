@@ -47,6 +47,7 @@
         <activity android:name=".view.activity.UserInfoActivity"/>
         <activity android:name=".view.activity.FriendCircleActivity"/>
         <activity android:name=".view.activity.PutFriendCircleActivity"/>
+        <activity android:name=".view.activity.SetUserInfoActivity"/>
         <!-- 设置环信应用的AppKey -->
         <meta-data android:name="EASEMOB_APPKEY"  android:value="zacharysun#firsttestim" />
         <!-- 声明SDK所需的service SDK核心功能-->

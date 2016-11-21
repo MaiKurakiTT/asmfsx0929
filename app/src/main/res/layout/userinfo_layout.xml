@@ -91,23 +91,26 @@
                         android:layout_alignParentLeft="@id/name"
                         android:layout_below="@id/name"
                         android:layout_marginTop="5dp"
+                        android:textColor="@color/white"
                         android:background="@drawable/textview_bg"
                         android:text="20岁"/>
                     <TextView
-                        android:id="@+id/height"
+                        android:id="@+id/star"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@id/age"
                         android:layout_alignTop="@id/age"
+                        android:textColor="@color/white"
                         android:background="@drawable/textview_bg_pink"
                         android:layout_marginLeft="10dp"
-                        android:text="海拔170"/>
+                        android:text="天蝎座"/>
                     <TextView
                         android:id="@+id/school"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/height"
+                        android:layout_toRightOf="@id/star"
                         android:layout_alignTop="@id/age"
+                        android:textColor="@color/white"
                         android:background="@drawable/textview_bg_blue"
                         android:layout_marginLeft="10dp"
                         android:text="河南师范大学"/>
@@ -203,6 +206,7 @@
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
     <com.github.clans.fab.FloatingActionMenu
+        android:id="@+id/fab_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"

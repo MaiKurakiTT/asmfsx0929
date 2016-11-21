@@ -109,7 +109,7 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
     private Uri scropped = Uri.parse("file:///sdcard/scropped");
     private String[] sexItems = {"男", "女"};
     private String[] schoolItems = {"河南师范大学"};
-    private String[] statusItems = {"单身", "热恋ing", "分手了"};
+    private String[] statusItems = {"单身", "恋爱ing", "分手了"};
     private AlertDialog.Builder headBuilder;
     private String phone;
     private String name;

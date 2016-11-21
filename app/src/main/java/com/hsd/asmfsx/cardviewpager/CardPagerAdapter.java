@@ -78,7 +78,7 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
                 .inflate(R.layout.findfriendsitem_layout, container, false);
         TextView nameText = (TextView) view.findViewById(R.id.name);
         TextView ageText = (TextView) view.findViewById(R.id.age);
-        TextView heightText = (TextView) view.findViewById(R.id.height);
+        TextView starText = (TextView) view.findViewById(R.id.star);
         TextView schoolText = (TextView) view.findViewById(R.id.school);
         ImageView img = (ImageView) view.findViewById(R.id.img);
 
@@ -86,12 +86,12 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         Logger.d("当前昵称: " + userInformationBean.getUser_nickname());
         nameText.setText("" + userInformationBean.getUser_nickname());
         int age = GetAgeFromDate.getAge(userInformationBean.getUser_birthday());
+
         ageText.setText("" + age + "岁");
-        heightText.setText("海拔" + userInformationBean.getUser_height() + "");
+        starText.setText(userInformationBean.getUser_star() + "");
         schoolText.setText("" + userInformationBean.getUser_school());
         Glide.with(context).load(mList.get(position).getUser_icon()).into(img);
         Log.d("CardPagerAdapter", "instantiateItem当前List总数: " + mList.size());
-
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -195,6 +195,7 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
                 Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
                 intent.putExtra("type", 0);
                 startActivityForResult(intent, 0);
+                drawerView.closeDrawers();
             }
         });
     }
