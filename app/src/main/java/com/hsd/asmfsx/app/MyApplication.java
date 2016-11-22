@@ -6,6 +6,7 @@ import com.hsd.asmfsx.db.DbCore;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMOptions;
 import com.hyphenate.easeui.controller.EaseUI;
+import com.hyphenate.easeui.domain.EaseUser;
 import com.orhanobut.logger.Logger;
 
 

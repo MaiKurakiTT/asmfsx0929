@@ -25,18 +25,8 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.chat_layout);
 
         toName = getIntent().getStringExtra("name");
-        EaseUI easeUI = EaseUI.getInstance();
-        final EaseUser easeUser = new EaseUser("环信ID: " + toName);
-        easeUser.setAvatar("http://pics.sc.chinaz.com/files/pic/pic9/201508/apic14052.jpg");
-//        UserInfoProvider userInfoProvider = new UserInfoProvider("测试", "https://www.google.com/logos/doodles/2016/united-states-elections-2016-reminder-day-1-5669879209263104-hp.jpg");
-        easeUI.setUserProfileProvider(new EaseUI.EaseUserProfileProvider() {
-            @Override
-            public EaseUser getUser(String username) {
-                return easeUser;
-            }
-        });
         //new出EaseChatFragment或其子类的实例
-        EaseChatFragment chatFragment = new EaseChatFragment();
+        EaseChatFragment chatFragment = new ChatFragment();
         chatFragment.hideTitleBar();
         //传入参数
         Bundle args = new Bundle();

@@ -34,6 +34,8 @@
         </activity>
         <activity android:name=".chat.ChatActivity"
                     android:launchMode="singleTask"/>
+        <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"/>
+        <activity android:name="com.hyphenate.easeui.ui.EaseBaiduMapActivity"/>
         <activity android:name=".chat.ChatWithActivity"/>
         <activity android:name=".chat.RegAndLogin"/>
         <activity android:name=".view.activity.TestRetrofit"/>
@@ -64,6 +66,20 @@
                 <action android:name="android.intent.action.USER_PRESENT" />
             </intent-filter>
         </receiver>
+        <!-- 百度地图所需的service -->
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" />
+        <!-- umeng appkey，可忽略 -->
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="53912a3156240b01a7075ed1" >
+        </meta-data>
+        <meta-data android:value="easemob" android:name="UMENG_CHANNEL"/>
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="3ecea51f560650b1ed8a4b99808f52e8" />
     </application>
 
 </manifest>

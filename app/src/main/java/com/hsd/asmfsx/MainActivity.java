@@ -333,6 +333,17 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
                 return intent;
             }
         });
+        final EaseUser easeUser = new EaseUser("环信");
+        easeUser.setInitialLetter("haha");
+        easeUser.setAvatar("http://pics.sc.chinaz.com/files/pic/pic9/201508/apic14052.jpg");
+//        UserInfoProvider userInfoProvider = new UserInfoProvider("测试", "https://www.google.com/logos/doodles/2016/united-states-elections-2016-reminder-day-1-5669879209263104-hp.jpg");
+        easeUI.setUserProfileProvider(new EaseUI.EaseUserProfileProvider() {
+            @Override
+            public EaseUser getUser(String username) {
+                //通过传来的用户的username在APP服务器查询该用户的信息，通过内容提供着EaseUser传给EaseUI
+                return easeUser;
+            }
+        });
     }
 
     private void testup() throws IOException {
@@ -381,6 +392,7 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
 
     @Override
     protected void onDestroy() {
+        EMClient.getInstance().logout(true);
         super.onDestroy();
     }
 
