@@ -6,8 +6,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -28,13 +30,16 @@ import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.contract.SetAfterRegisterContract;
 import com.hsd.asmfsx.presenter.SetAfterRegisterPresenter;
 import com.hsd.asmfsx.utils.DateFormatUtils;
+import com.hsd.asmfsx.utils.PermissionUtils;
 import com.hsd.asmfsx.utils.PickViewUtils;
 import com.hsd.asmfsx.utils.ShowToast;
 import com.orhanobut.logger.Logger;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -126,6 +131,9 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
     private File imgFile;
     private ProgressDialog progressDialog;
 
+    private int HEAD_PERMISSION = 0;
+    private PermissionUtils permissionUtils;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -156,7 +164,7 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
     }
 
     private void initData() {
-
+        permissionUtils = new PermissionUtils(this);
     }
 
     private void initView() {
@@ -279,32 +287,16 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
                         Crop.pickImage(SetAfterRegisterActivity.this);
                         break;
                     case 1:
-                        if (ContextCompat.checkSelfPermission(SetAfterRegisterActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
-                                ) {
-                            ActivityCompat.requestPermissions(SetAfterRegisterActivity.this, new String[]{Manifest.permission.CAMERA}, 1);
-                            if (ActivityCompat.shouldShowRequestPermissionRationale(SetAfterRegisterActivity.this, Manifest.permission.CAMERA)
-                                    ) {
-                                new AlertDialog.Builder(SetAfterRegisterActivity.this)
-                                        .setMessage("申请相机权限")
-                                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                //申请相机权限
-                                                ActivityCompat.requestPermissions(SetAfterRegisterActivity.this,
-                                                        new String[]{Manifest.permission.CAMERA}, 1);
-                                            }
-                                        })
-                                        .show();
-                            } else {
-                                //申请相机权限
-                                ActivityCompat.requestPermissions(SetAfterRegisterActivity.this,
-                                        new String[]{Manifest.permission.CAMERA}, 1);
-                            }
-                        } else {
+                        String[] permissions = {Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_FINE_LOCATION};
+                        if (permissionUtils.checkPermissions(permissions)){
                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, snocrop);
                             startActivityForResult(intent, 1);// 采用ForResult打开
+                        }else {
+                            requestPermission(permissions, HEAD_PERMISSION);
                         }
+
 
                         break;
                 }
@@ -313,21 +305,6 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
         headBuilder.show();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case 1:
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, snocrop);
-                    startActivityForResult(intent, 1);// 采用ForResult打开
-                } else {
-                    ShowToast.show(SetAfterRegisterActivity.this, "缺少相机权限");
-                }
-                break;
-        }
-    }
 
     @Override
     public UserInformationBean getUserInformationBean() {
@@ -412,6 +389,71 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
         } else if (resultCode == Crop.RESULT_ERROR) {
             Logger.d("" + Crop.getError(result).getMessage());
             ShowToast.show(SetAfterRegisterActivity.this, Crop.getError(result).getMessage());
+        }
+    }
+
+
+
+    /**
+     * 请求权限
+     *
+     * @param permissions 请求的权限
+     * @param requestCode 请求权限的请求码
+     */
+    public void requestPermission(String[] permissions, int requestCode) {
+        permissionUtils.REQUEST_CODE_PERMISSION = requestCode;
+        if (permissionUtils.checkPermissions(permissions)) {
+            permissionSuccess(permissionUtils.REQUEST_CODE_PERMISSION);
+        } else {
+            List<String> needPermissions = permissionUtils.getDeniedPermissions(permissions);
+            ActivityCompat.requestPermissions(this, needPermissions.toArray(new String[needPermissions.size()]), permissionUtils.REQUEST_CODE_PERMISSION);
+        }
+    }
+
+
+    /**
+     * 获取权限成功
+     *
+     * @param requestCode
+     */
+    public void permissionSuccess(int requestCode) {
+        if (requestCode == HEAD_PERMISSION){
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, snocrop);
+            startActivityForResult(intent, 1);// 采用ForResult打开
+        }
+//        Log.d(TAG, "获取权限成功=" + requestCode);
+
+    }
+
+    /**
+     * 权限获取失败
+     *
+     * @param requestCode
+     */
+    public void permissionFail(int requestCode) {
+//        Log.d(TAG, "获取权限失败=" + requestCode);
+    }
+
+
+
+    /**
+     * 系统请求权限回调
+     *
+     * @param requestCode
+     * @param permissions
+     * @param grantResults
+     */
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == permissionUtils.REQUEST_CODE_PERMISSION) {
+            if (permissionUtils.verifyPermissions(grantResults)) {
+                permissionSuccess(permissionUtils.REQUEST_CODE_PERMISSION);
+            } else {
+                permissionFail(permissionUtils.REQUEST_CODE_PERMISSION);
+                permissionUtils.showTipsDialog();
+            }
         }
     }
 }
