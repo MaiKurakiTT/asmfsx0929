@@ -1,6 +1,7 @@
 package com.hsd.asmfsx.app;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.hsd.asmfsx.db.DbCore;
 import com.hyphenate.chat.EMClient;
@@ -27,7 +28,9 @@ public class MyApplication extends Application{
         EMClient.getInstance().setDebugMode(true);
 
     }
-
+    public static Context getAppContext(){
+        return getAppContext();
+    }
 
 
 }

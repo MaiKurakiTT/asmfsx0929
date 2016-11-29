@@ -19,11 +19,15 @@ import android.widget.Toast;
 
 import com.hsd.asmfsx.adapter.HeartBeatListAdapter;
 import com.hsd.asmfsx.adapter.SeeAdapter;
+import com.hsd.asmfsx.app.MyApplication;
 import com.hsd.asmfsx.bean.BaseBean;
+import com.hsd.asmfsx.bean.LoginBean2;
 import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.chat.ChatActivity;
 import com.hsd.asmfsx.chat.RegAndLogin;
 import com.hsd.asmfsx.contract.RequestHeartBeatContract;
+import com.hsd.asmfsx.global.GetRetrofit;
+import com.hsd.asmfsx.model.RetrofitService;
 import com.hsd.asmfsx.model.UploadImgBiz;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
 import com.hsd.asmfsx.view.activity.CertificationActivity;
@@ -49,6 +53,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.hyphenate.easeui.utils.EaseUserUtils.getUserInfo;
 
@@ -164,6 +171,29 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, FriendCircleActivity.class));
+            }
+        });
+        bottombutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                testNewApi();
+            }
+        });
+    }
+
+    private void testNewApi() {
+        RetrofitService service = GetRetrofit.getRetrofit2(this).create(RetrofitService.class);
+        LoginBean2 loginBean2 = new LoginBean2("1", "1");
+        Call<Object> call = service.postLogin2(loginBean2);
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                Object body = response.body();
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                t.printStackTrace();
             }
         });
     }

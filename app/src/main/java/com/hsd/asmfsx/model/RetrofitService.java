@@ -5,6 +5,7 @@ import com.hsd.asmfsx.bean.CertificationBean;
 import com.hsd.asmfsx.bean.FindFriendsBean;
 import com.hsd.asmfsx.bean.FriendCircleBean;
 import com.hsd.asmfsx.bean.LoginBean;
+import com.hsd.asmfsx.bean.LoginBean2;
 import com.hsd.asmfsx.bean.RegisterBean;
 import com.hsd.asmfsx.bean.UserBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
@@ -29,6 +30,9 @@ public interface RetrofitService {
      */
     @POST("/Server/MainServer?method=login")
     Call<LoginBean> postLogin(@Body LoginBean loginBean);
+
+    @POST("/F/login.action")
+    Call<Object> postLogin2(@Body LoginBean2 loginBean);
 
     /**
      * 请求心动列表
