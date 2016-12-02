@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="/Users/apple/Desktop/workspace/asmfsx0929/easeui/src/main/assets"/><source path="/Users/apple/Desktop/workspace/asmfsx0929/easeui/build/generated/assets/shaders/release"/></dataSet><dataSet config="release"><source path="/Users/apple/Desktop/workspace/asmfsx0929/easeui/src/release/assets"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="D:\AndroidFile\WorkSpace\asmfsx0929\easeui\src\main\assets"/><source path="D:\AndroidFile\WorkSpace\asmfsx0929\easeui\build\generated\assets\shaders\release"/></dataSet><dataSet config="release"><source path="D:\AndroidFile\WorkSpace\asmfsx0929\easeui\src\release\assets"/></dataSet></merger>
