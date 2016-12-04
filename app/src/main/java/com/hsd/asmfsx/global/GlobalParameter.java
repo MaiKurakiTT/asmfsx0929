@@ -12,6 +12,7 @@ public  interface GlobalParameter {
     // 192.168.23.1  210.42.242.16  115.29.41.122
     String ip = "http://www.liuxinkeji.com:8080/";
     String project = "Server/";
+    String project2 = "fsxasm/";
     String ip2 = "http://192.168.191.1:8080/";
 
     String welcomeImageURl = "http://pic.nipic.com/2007-11-09/200711912453162_2.jpg";

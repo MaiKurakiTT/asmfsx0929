@@ -5,13 +5,11 @@ import com.hsd.asmfsx.bean.CertificationBean;
 import com.hsd.asmfsx.bean.FindFriendsBean;
 import com.hsd.asmfsx.bean.FriendCircleBean;
 import com.hsd.asmfsx.bean.LoginBean;
-import com.hsd.asmfsx.bean.LoginBean2;
 import com.hsd.asmfsx.bean.RegisterBean;
-import com.hsd.asmfsx.bean.UserBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
+import com.hsd.asmfsx.global.GlobalParameter;
 
 import okhttp3.MultipartBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -33,11 +31,11 @@ public interface RetrofitService {
     @POST("/Server/MainServer?method=login")
     Call<LoginBean> postLogin(@Body LoginBean loginBean);
 
-    @POST("/F/login.action")
+    @POST(GlobalParameter.project2 + "login.action")
     @FormUrlEncoded
     Call<Object> postLogin2(@Field("phone") String phone, @Field("password") String password);
 
-    @POST("/F/user/me.action")
+    @POST(GlobalParameter.project2 + "user/me.action")
     Call<Object> postGetMe();
 
     /**
