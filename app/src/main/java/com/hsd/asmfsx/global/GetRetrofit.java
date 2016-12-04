@@ -1,14 +1,14 @@
 package com.hsd.asmfsx.global;
 
+
+
 import android.content.Context;
 
-import com.franmontiel.persistentcookiejar.ClearableCookieJar;
-import com.franmontiel.persistentcookiejar.PersistentCookieJar;
-import com.franmontiel.persistentcookiejar.cache.SetCookieCache;
-import com.franmontiel.persistentcookiejar.persistence.SharedPrefsCookiePersistor;
+import com.hsd.asmfsx.app.MyApplication;
+import com.hsd.asmfsx.model.cookie.CookieManger;
 
-import okhttp3.CookieJar;
-import okhttp3.HttpUrl;
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -20,8 +20,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class GetRetrofit {
     static Retrofit retrofit;
     static Retrofit retrofit2;
-    static ClearableCookieJar cookieJar;
-    static OkHttpClient okHttpClient;
     public static Retrofit getRetrofit(){
         if (retrofit == null){
             retrofit = new Retrofit.Builder()
@@ -31,30 +29,27 @@ public class GetRetrofit {
         }
         return retrofit;
     }
-    public static Retrofit getRetrofit2(Context context){
-        ClearableCookieJar cookieJar = getCookieJar(context);
-        OkHttpClient okHttpClient = getOkHttpClient(cookieJar);
-        if (retrofit2 == null){
-            retrofit2 = new Retrofit.Builder()
+    public static Retrofit getRetrofit3(){
+        if (retrofit == null){
+            retrofit = new Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create(GetGson.getGson()))
                     .baseUrl(GlobalParameter.iip)
+                    .build();
+        }
+        return retrofit;
+    }
+    public static Retrofit getRetrofit2(){
+        if (retrofit2 == null){
+            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                    .cookieJar(new CookieManger(MyApplication.getAppContext()))
+                    .connectTimeout(10000, TimeUnit.SECONDS)
+                    .build();
+            retrofit2 = new Retrofit.Builder()
                     .client(okHttpClient)
+                    .addConverterFactory(GsonConverterFactory.create(GetGson.getGson()))
+                    .baseUrl(GlobalParameter.iip)
                     .build();
         }
         return retrofit2;
-    }
-    static ClearableCookieJar getCookieJar(Context context){
-        if (cookieJar == null){
-            cookieJar = new PersistentCookieJar(new SetCookieCache(), new SharedPrefsCookiePersistor(context));
-        }
-        return cookieJar;
-    }
-    static OkHttpClient getOkHttpClient(ClearableCookieJar cookieJar){
-        if (okHttpClient == null){
-            okHttpClient = new OkHttpClient.Builder()
-                    .cookieJar(cookieJar)
-                    .build();
-        }
-        return okHttpClient;
     }
 }

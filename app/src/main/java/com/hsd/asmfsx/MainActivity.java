@@ -53,6 +53,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -95,6 +100,8 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     Button friendcirclebut;
     @BindView(R.id.bottom_but)
     ImageButton bottomImgBut;
+    @BindView(R.id.bottombutton2)
+    Button bottombutton2;
     private RequestHeartBeatPresenter presenter;
     private EaseUI easeUI;
 
@@ -179,21 +186,68 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
                 testNewApi();
             }
         });
+        bottombutton2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                testNew3();
+            }
+        });
     }
 
     private void testNewApi() {
-        RetrofitService service = GetRetrofit.getRetrofit2(this).create(RetrofitService.class);
-        LoginBean2 loginBean2 = new LoginBean2("1", "1");
-        Call<Object> call = service.postLogin2(loginBean2);
+        RetrofitService service = GetRetrofit.getRetrofit2().create(RetrofitService.class);
+        Call<Object> call = service.postLogin2("1", "1");
         call.enqueue(new Callback<Object>() {
             @Override
             public void onResponse(Call<Object> call, Response<Object> response) {
                 Object body = response.body();
+                Logger.d(body);
             }
 
             @Override
             public void onFailure(Call<Object> call, Throwable t) {
                 t.printStackTrace();
+                Logger.d(t.toString());
+            }
+        });
+    }
+
+    private void testNew2() {
+        final OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder().add("phone", "1").add("password", "1").build();
+        Request request = new Request.Builder()
+                .url("http://123.206.204.205:8080/F/login.action")
+                .post(body)
+                .build();
+
+        client.newCall(request).enqueue(new okhttp3.Callback() {
+            @Override
+            public void onFailure(okhttp3.Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
+                ResponseBody body1 = response.body();
+                String string = body1.string();
+                System.out.println(string);
+            }
+        });
+    }
+    private void testNew3(){
+        RetrofitService service = GetRetrofit.getRetrofit2().create(RetrofitService.class);
+        Call<Object> call = service.postGetMe();
+        call.enqueue(new Callback<Object>() {
+            @Override
+            public void onResponse(Call<Object> call, Response<Object> response) {
+                Object body = response.body();
+                Logger.d(body);
+            }
+
+            @Override
+            public void onFailure(Call<Object> call, Throwable t) {
+                t.printStackTrace();
+                Logger.d(t.toString());
             }
         });
     }
@@ -234,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                switch (newState){
+                switch (newState) {
                     case BottomSheetBehavior.STATE_COLLAPSED:
                         bottomImgBut.setImageResource(R.mipmap.ic_up);
                         break;

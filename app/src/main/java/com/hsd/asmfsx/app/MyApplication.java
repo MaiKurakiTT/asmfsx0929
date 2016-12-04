@@ -17,9 +17,11 @@ import com.orhanobut.logger.Logger;
  */
 
 public class MyApplication extends Application{
+    private static Context context;
     @Override
     public void onCreate() {
         super.onCreate();
+        context = getApplicationContext();
         Logger.init("MyLog");
         //初始化数据库
         DbCore.init(this);
@@ -29,7 +31,7 @@ public class MyApplication extends Application{
 
     }
     public static Context getAppContext(){
-        return getAppContext();
+        return context;
     }
 
 
