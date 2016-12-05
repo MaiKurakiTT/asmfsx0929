@@ -2,6 +2,7 @@ package com.hsd.asmfsx;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -22,13 +24,17 @@ import com.hsd.asmfsx.adapter.SeeAdapter;
 import com.hsd.asmfsx.app.MyApplication;
 import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.LoginBean2;
+import com.hsd.asmfsx.bean.NormalResultBean;
+import com.hsd.asmfsx.bean.UserBean2;
 import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.chat.ChatActivity;
 import com.hsd.asmfsx.chat.RegAndLogin;
 import com.hsd.asmfsx.contract.RequestHeartBeatContract;
+import com.hsd.asmfsx.global.GetGson;
 import com.hsd.asmfsx.global.GetRetrofit;
 import com.hsd.asmfsx.model.RetrofitService;
 import com.hsd.asmfsx.model.UploadImgBiz;
+import com.hsd.asmfsx.model.UploadImgBiz2;
 import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
 import com.hsd.asmfsx.view.activity.CertificationActivity;
 import com.hsd.asmfsx.view.activity.FindFriendsActivity;
@@ -47,6 +53,7 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 import com.orhanobut.logger.Logger;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -189,48 +196,43 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         bottombutton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                testNew3();
+                testNew2();
+//                testNew3();
             }
         });
     }
 
     private void testNewApi() {
         RetrofitService service = GetRetrofit.getRetrofit2().create(RetrofitService.class);
-        Call<Object> call = service.postLogin2("1", "1");
-        call.enqueue(new Callback<Object>() {
+        Call<NormalResultBean<UserBean2>> call = service.postLogin2("1", "1");
+        call.enqueue(new Callback<NormalResultBean<UserBean2>>() {
             @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                Object body = response.body();
+            public void onResponse(Call<NormalResultBean<UserBean2>> call, Response<NormalResultBean<UserBean2>> response) {
+                String s = response.toString();
+                NormalResultBean<UserBean2> body = response.body();
                 Logger.d(body);
             }
 
             @Override
-            public void onFailure(Call<Object> call, Throwable t) {
+            public void onFailure(Call<NormalResultBean<UserBean2>> call, Throwable t) {
                 t.printStackTrace();
-                Logger.d(t.toString());
             }
         });
+
     }
 
     private void testNew2() {
-        final OkHttpClient client = new OkHttpClient();
-        RequestBody body = new FormBody.Builder().add("phone", "1").add("password", "1").build();
-        Request request = new Request.Builder()
-                .url("http://123.206.204.205:8080/F/login.action")
-                .post(body)
-                .build();
-
-        client.newCall(request).enqueue(new okhttp3.Callback() {
+        File file = new File(Environment.getExternalStorageDirectory(), "snocrop.jpg");
+        new UploadImgBiz2().uploadImg(file, new UploadImgBiz2.OnUploadListener() {
             @Override
-            public void onFailure(okhttp3.Call call, IOException e) {
-                e.printStackTrace();
+            public void success(NormalResultBean resultBean) {
+                String json = (String)resultBean.getJson();
+                Logger.d(json);
             }
 
             @Override
-            public void onResponse(okhttp3.Call call, okhttp3.Response response) throws IOException {
-                ResponseBody body1 = response.body();
-                String string = body1.string();
-                System.out.println(string);
+            public void failed() {
+
             }
         });
     }

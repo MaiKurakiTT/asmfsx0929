@@ -6,7 +6,7 @@ package com.hsd.asmfsx.bean;
 
 public class BaseBean2 {
     private String action;
-    private String state;
+    private int state;
     private String msg;
 
     public String getAction() {
@@ -17,11 +17,11 @@ public class BaseBean2 {
         this.action = action;
     }
 
-    public String getState() {
+    public int getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(int state) {
         this.state = state;
     }
 

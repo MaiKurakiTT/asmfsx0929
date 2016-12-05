@@ -6,7 +6,7 @@ package com.hsd.asmfsx.global;
 
 public  interface GlobalParameter {
 
-    String iip = "http://123.206.204.205:8080";
+    String iip = "http://123.206.204.205:8080/";
 //    String iip = "http://122.206.196.207:8080";
 
     // 192.168.23.1  210.42.242.16  115.29.41.122

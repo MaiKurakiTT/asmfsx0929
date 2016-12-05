@@ -5,24 +5,24 @@ package com.hsd.asmfsx.bean;
  */
 
 public class UserBean2 {
-    private String id;
-    private String phone;
+    private int id;
+    private int phone;
     private String description;
-    private String studentID;
+    private int studentID;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public String getPhone() {
+    public int getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone) {
+    public void setPhone(int phone) {
         this.phone = phone;
     }
 
@@ -34,11 +34,11 @@ public class UserBean2 {
         this.description = description;
     }
 
-    public String getStudentID() {
+    public int getStudentID() {
         return studentID;
     }
 
-    public void setStudentID(String studentID) {
+    public void setStudentID(int studentID) {
         this.studentID = studentID;
     }
 }

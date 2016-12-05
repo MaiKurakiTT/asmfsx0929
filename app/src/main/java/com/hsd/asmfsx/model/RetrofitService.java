@@ -1,12 +1,16 @@
 package com.hsd.asmfsx.model;
 
 import com.hsd.asmfsx.bean.BaseBean;
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.CertificationBean;
 import com.hsd.asmfsx.bean.FindFriendsBean;
 import com.hsd.asmfsx.bean.FriendCircleBean;
 import com.hsd.asmfsx.bean.LoginBean;
+import com.hsd.asmfsx.bean.NormalResultBean;
 import com.hsd.asmfsx.bean.RegisterBean;
+import com.hsd.asmfsx.bean.UserBean2;
 import com.hsd.asmfsx.bean.UserInformationBean;
+import com.hsd.asmfsx.bean.UserInformationBean2;
 import com.hsd.asmfsx.global.GlobalParameter;
 
 import okhttp3.MultipartBody;
@@ -33,10 +37,27 @@ public interface RetrofitService {
 
     @POST(GlobalParameter.project2 + "login.action")
     @FormUrlEncoded
-    Call<Object> postLogin2(@Field("phone") String phone, @Field("password") String password);
+    Call<NormalResultBean<UserBean2>> postLogin2(@Field("phone") String phone, @Field("password") String password);
 
     @POST(GlobalParameter.project2 + "user/me.action")
     Call<Object> postGetMe();
+
+    /**
+     * 更新或设置用户信息
+     * @param userInformationBean
+     * @return
+     */
+    @POST(GlobalParameter.project + "updateUserInformation.action")
+    Call<BaseBean2> postSetUserInfo(@Body UserInformationBean2 userInformationBean);
+
+    /**
+     * 图片上传
+     * @param img
+     * @return
+     */
+    @Multipart
+    @POST("img/" + "upload")
+    Call<NormalResultBean<String[]>> uploadImg2(@Part MultipartBody.Part img);
 
     /**
      * 请求心动列表
