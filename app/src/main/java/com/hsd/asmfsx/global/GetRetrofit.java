@@ -24,7 +24,7 @@ public class GetRetrofit {
         if (retrofit == null){
             retrofit = new Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create(GetGson.getGson()))
-                    .baseUrl(GlobalParameter.ip)
+                    .baseUrl(GlobalParameter.iip)
                     .build();
         }
         return retrofit;

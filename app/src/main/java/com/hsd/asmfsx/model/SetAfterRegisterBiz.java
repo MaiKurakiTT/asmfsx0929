@@ -1,8 +1,13 @@
 package com.hsd.asmfsx.model;
 
 import com.hsd.asmfsx.bean.BaseBean;
+import com.hsd.asmfsx.bean.BaseBean2;
+import com.hsd.asmfsx.bean.NormalResultBean;
+import com.hsd.asmfsx.bean.UserBean2;
 import com.hsd.asmfsx.bean.UserInformationBean;
+import com.hsd.asmfsx.bean.UserInformationBean2;
 import com.hsd.asmfsx.contract.SetAfterRegisterContract;
+import com.hsd.asmfsx.global.GetGson;
 import com.hsd.asmfsx.global.GetRetrofit;
 import com.orhanobut.logger.Logger;
 
@@ -19,41 +24,50 @@ import retrofit2.Response;
  */
 
 public class SetAfterRegisterBiz implements SetAfterRegisterContract.ISetAfterRegisterBiz{
-    @Override
-    public void doSetInfo(File imgFile, final UserInformationBean userInformationBean, final OnSetAfterRegisterListener setAfterRegisterListener) {
-        UploadImgBiz uploadImgBiz = new UploadImgBiz();
-            uploadImgBiz.uploadImg(imgFile, new UploadImgBiz.OnUploadListener() {
-                @Override
-                public void success(BaseBean baseBean) {
-                    Logger.d("头像上传成功，URL = "+baseBean.getBody());
-                    String headUrl = baseBean.getBody();
-                    userInformationBean.setUser_icon(headUrl);
-                    uploadUserInfo(userInformationBean, setAfterRegisterListener);
-                }
 
-                @Override
-                public void failed() {
-                    Logger.d("头像上传失败，只传其他资料");
-                    uploadUserInfo(userInformationBean, setAfterRegisterListener);
-                }
-            });
+    private void uploadUserInfo(UserInformationBean2 userInformationBean, final OnRequestListener<NormalResultBean<UserBean2>> requestListener) {
+        String s = GetGson.getGson().toJson(userInformationBean, UserInformationBean2.class);
+        Logger.d(s);
+        GetRetrofit
+                .getRetrofit2()
+                .create(RetrofitService.class)
+                .postSetUserInfo(userInformationBean)
+                .enqueue(new Callback<NormalResultBean<UserBean2>>() {
+                    @Override
+                    public void onResponse(Call<NormalResultBean<UserBean2>> call, Response<NormalResultBean<UserBean2>> response) {
+                        NormalResultBean<UserBean2> body = response.body();
+                        if (body.getState() == 0){
+                            requestListener.success(body);
+                        }else {
+                            requestListener.failedForResult(body);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<NormalResultBean<UserBean2>> call, Throwable t) {
+                        requestListener.failedForException(t);
+                    }
+                });
     }
 
-    private void uploadUserInfo(UserInformationBean userInformationBean, final OnSetAfterRegisterListener setAfterRegisterListener) {
-        RetrofitService service = GetRetrofit.getRetrofit().create(RetrofitService.class);
-        Call<UserInformationBean> call = service.postSetUserInfo(userInformationBean);
-        call.enqueue(new Callback<UserInformationBean>() {
+    @Override
+    public void doSetInfo(File imgFile, final UserInformationBean2 userInformationBean, final OnRequestListener<NormalResultBean<UserBean2>> requestListener) {
+        UploadImgBiz2 uploadImgBiz = new UploadImgBiz2();
+        uploadImgBiz.uploadImg(imgFile, new UploadImgBiz2.OnUploadListener() {
             @Override
-            public void onResponse(Call<UserInformationBean> call, Response<UserInformationBean> response) {
-                UserInformationBean body = response.body();
-                setAfterRegisterListener.success(body);
+            public void success(String[] urls) {
+                userInformationBean.setIcon(urls[0]);
+                uploadUserInfo(userInformationBean, requestListener);
             }
 
             @Override
-            public void onFailure(Call<UserInformationBean> call, Throwable t) {
-                t.printStackTrace();
-                setAfterRegisterListener.failed();
-                Logger.d("" + t.toString());
+            public void failedForResult(BaseBean2 baseBean) {
+
+            }
+
+            @Override
+            public void failedForException(Throwable t) {
+
             }
         });
     }

@@ -275,6 +275,11 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
     }
 
     @Override
+    public void showFailedForException(Throwable t) {
+
+    }
+
+    /*@Override
     public void showFailed() {
         Snackbar.make(toolbar, "加载失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
             @Override
@@ -282,7 +287,7 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
                 friendCirclePresenter.start();
             }
         });
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

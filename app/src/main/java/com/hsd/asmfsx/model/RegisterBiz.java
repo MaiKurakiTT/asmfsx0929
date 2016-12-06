@@ -1,5 +1,7 @@
 package com.hsd.asmfsx.model;
 
+import com.hsd.asmfsx.bean.BaseBean;
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.RegisterBean;
 import com.hsd.asmfsx.contract.RegisterContract;
 import com.hsd.asmfsx.global.GetRetrofit;
@@ -15,6 +17,32 @@ import retrofit2.Response;
 
 public class RegisterBiz implements RegisterContract.IRegisterBiz{
     @Override
+    public void doRegister(String stuId, String username, String password, final OnRequestListener<BaseBean2> requestListener) {
+        GetRetrofit
+                .getRetrofit2()
+                .create(RetrofitService.class)
+                .postRegister2(stuId, username, password)
+                .enqueue(new Callback<BaseBean2>() {
+                    @Override
+                    public void onResponse(Call<BaseBean2> call, Response<BaseBean2> response) {
+                        BaseBean2 body = response.body();
+                        if (body.getState() == 0){
+                            requestListener.success(body);
+                        }else {
+                            requestListener.failedForResult(body);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<BaseBean2> call, Throwable t) {
+                        t.printStackTrace();
+                        Logger.d("" + t.toString());
+                        requestListener.failedForException(t);
+                    }
+                });
+    }
+
+    /*@Override
     public void doRegister(String stuId, String username, String password, final OnRegisterListener registerListener) {
         RetrofitService service = GetRetrofit.getRetrofit().create(RetrofitService.class);
         RegisterBean registerBean = new RegisterBean();
@@ -40,5 +68,7 @@ public class RegisterBiz implements RegisterContract.IRegisterBiz{
                 registerListener.failed();
             }
         });
-    }
+    }*/
+
+
 }

@@ -6,6 +6,7 @@ import com.hsd.asmfsx.bean.CertificationBean;
 import com.hsd.asmfsx.bean.FindFriendsBean;
 import com.hsd.asmfsx.bean.FriendCircleBean;
 import com.hsd.asmfsx.bean.LoginBean;
+import com.hsd.asmfsx.bean.LoginBean2;
 import com.hsd.asmfsx.bean.NormalResultBean;
 import com.hsd.asmfsx.bean.RegisterBean;
 import com.hsd.asmfsx.bean.UserBean2;
@@ -27,17 +28,27 @@ import retrofit2.http.Part;
  */
 
 public interface RetrofitService {
-    /**
-     * 登录请求
-     * @param loginBean 需要传一个LoginBean
-     * @return  返回一个LoginBean
-     */
-    @POST("/Server/MainServer?method=login")
-    Call<LoginBean> postLogin(@Body LoginBean loginBean);
 
+    /**
+     * 登录，需要手机号和密码
+     * @param phone
+     * @param password
+     * @return
+     */
     @POST(GlobalParameter.project2 + "login.action")
     @FormUrlEncoded
     Call<NormalResultBean<UserBean2>> postLogin2(@Field("phone") String phone, @Field("password") String password);
+
+    /**
+     * 注册，需要手机号、密码、学号
+     * @param phone
+     * @param password
+     * @param studentID
+     * @return
+     */
+    @POST(GlobalParameter.project2 + "register.action")
+    @FormUrlEncoded
+    Call<BaseBean2> postRegister2(@Field("studentID") String studentID, @Field("phone") String phone, @Field("password") String password);
 
     @POST(GlobalParameter.project2 + "user/me.action")
     Call<Object> postGetMe();
@@ -47,8 +58,16 @@ public interface RetrofitService {
      * @param userInformationBean
      * @return
      */
-    @POST(GlobalParameter.project + "updateUserInformation.action")
-    Call<BaseBean2> postSetUserInfo(@Body UserInformationBean2 userInformationBean);
+    @POST(GlobalParameter.project2 + "user/updateUserInformation.action")
+    Call<NormalResultBean<UserBean2>> postSetUserInfo(@Body UserInformationBean2 userInformationBean);
+
+    /**
+     * 获取用户信息，需要一个userid
+     * @param userInformationID
+     * @return
+     */
+    @POST(GlobalParameter.project2 + "user/getUserInformation.action")
+    Call<NormalResultBean<UserInformationBean2>> postGetUserInfo(@Field("userInformationID") int userInformationID);
 
     /**
      * 图片上传
@@ -58,6 +77,23 @@ public interface RetrofitService {
     @Multipart
     @POST("img/" + "upload")
     Call<NormalResultBean<String[]>> uploadImg2(@Part MultipartBody.Part img);
+
+
+
+
+
+
+
+
+
+    /**
+     * 登录请求
+     * @param loginBean 需要传一个LoginBean
+     * @return  返回一个LoginBean
+     */
+    @POST("/Server/MainServer?method=login")
+    Call<LoginBean> postLogin(@Body LoginBean loginBean);
+
 
     /**
      * 请求心动列表

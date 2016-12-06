@@ -39,7 +39,7 @@ public class FindFriendsPresenter implements FindFriendsContract.Presenter {
                 GetHandler.getHandler().post(new Runnable() {
                     @Override
                     public void run() {
-                        view.showFailed();
+//                        view.showFailedForException();
                         view.hideLoading();
                     }
                 });
@@ -70,7 +70,7 @@ public class FindFriendsPresenter implements FindFriendsContract.Presenter {
                 GetHandler.getHandler().post(new Runnable() {
                     @Override
                     public void run() {
-                        view.showFailed();
+//                        view.showFailedForException();
                         view.hideLoading();
                     }
                 });

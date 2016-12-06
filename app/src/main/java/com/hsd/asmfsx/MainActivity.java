@@ -23,15 +23,19 @@ import com.hsd.asmfsx.adapter.HeartBeatListAdapter;
 import com.hsd.asmfsx.adapter.SeeAdapter;
 import com.hsd.asmfsx.app.MyApplication;
 import com.hsd.asmfsx.bean.BaseBean;
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.LoginBean2;
 import com.hsd.asmfsx.bean.NormalResultBean;
 import com.hsd.asmfsx.bean.UserBean2;
 import com.hsd.asmfsx.bean.UserInformationBean;
+import com.hsd.asmfsx.bean.UserInformationBean2;
 import com.hsd.asmfsx.chat.ChatActivity;
 import com.hsd.asmfsx.chat.RegAndLogin;
 import com.hsd.asmfsx.contract.RequestHeartBeatContract;
 import com.hsd.asmfsx.global.GetGson;
 import com.hsd.asmfsx.global.GetRetrofit;
+import com.hsd.asmfsx.model.BaseListener;
+import com.hsd.asmfsx.model.LoginBiz;
 import com.hsd.asmfsx.model.RetrofitService;
 import com.hsd.asmfsx.model.UploadImgBiz;
 import com.hsd.asmfsx.model.UploadImgBiz2;
@@ -196,45 +200,71 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         bottombutton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                testNew2();
-//                testNew3();
+//                testNew2();
+                testNew3();
+            }
+        });
+        findViewById(R.id.bottombutton3).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                testUpDate();
             }
         });
     }
 
+    private void testUpDate() {
+        UserInformationBean2 userInformationBean2 = new UserInformationBean2();
+        userInformationBean2.setNickname("yy");
+        GetRetrofit.getRetrofit2()
+                .create(RetrofitService.class)
+                .postSetUserInfo(userInformationBean2)
+                .enqueue(new Callback<NormalResultBean<UserBean2>>() {
+                    @Override
+                    public void onResponse(Call<NormalResultBean<UserBean2>> call, Response<NormalResultBean<UserBean2>> response) {
+                        NormalResultBean<UserBean2> body = response.body();
+                    }
+
+                    @Override
+                    public void onFailure(Call<NormalResultBean<UserBean2>> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
+    }
+
     private void testNewApi() {
-        RetrofitService service = GetRetrofit.getRetrofit2().create(RetrofitService.class);
-        Call<NormalResultBean<UserBean2>> call = service.postLogin2("1", "1");
-        call.enqueue(new Callback<NormalResultBean<UserBean2>>() {
+        new LoginBiz().login("1", "1", new BaseListener.OnRequestListener<UserBean2>() {
             @Override
-            public void onResponse(Call<NormalResultBean<UserBean2>> call, Response<NormalResultBean<UserBean2>> response) {
-                String s = response.toString();
-                NormalResultBean<UserBean2> body = response.body();
-                Logger.d(body);
+            public void success(UserBean2 userBean2) {
+                Logger.d(userBean2.getPhone());
             }
 
             @Override
-            public void onFailure(Call<NormalResultBean<UserBean2>> call, Throwable t) {
-                t.printStackTrace();
+            public void failedForResult(BaseBean2 baseBean) {
+                Logger.d(baseBean.getMsg());
+            }
+
+            @Override
+            public void failedForException(Throwable t) {
+                Logger.d("抛异常了");
             }
         });
 
     }
 
     private void testNew2() {
-        File file = new File(Environment.getExternalStorageDirectory(), "snocrop.jpg");
+        /*File file = new File(Environment.getExternalStorageDirectory(), "snocrop.png");
         new UploadImgBiz2().uploadImg(file, new UploadImgBiz2.OnUploadListener() {
             @Override
             public void success(NormalResultBean resultBean) {
-                String json = (String)resultBean.getJson();
-                Logger.d(json);
+                String[] json = (String[])resultBean.getJson();
+                Logger.d(json[0]);
             }
 
             @Override
             public void failed() {
 
             }
-        });
+        });*/
     }
     private void testNew3(){
         RetrofitService service = GetRetrofit.getRetrofit2().create(RetrofitService.class);
@@ -461,6 +491,12 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     }
 
     @Override
+    public void showFailedForException(Throwable t) {
+
+    }
+
+
+    @Override
     public String getUuid() {
         return "84f4b998-17df-4997-8fc2-828f89aec37d";
     }
@@ -471,10 +507,6 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         rightRecycle.setAdapter(adapter);
     }
 
-    @Override
-    public void showFailed() {
-        Toast.makeText(this, "failed", Toast.LENGTH_LONG).show();
-    }
 
     @Override
     protected void onDestroy() {

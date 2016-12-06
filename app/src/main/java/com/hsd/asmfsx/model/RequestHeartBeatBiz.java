@@ -89,7 +89,7 @@ public class RequestHeartBeatBiz implements RequestHeartBeatContract.IRequestHea
                 .execute(new StringCallback() {
                     @Override
                     public void onError(Call call, Exception e, int id) {
-                        requestListener.failed();
+                        requestListener.failedForException();
                     }
 
                     @Override

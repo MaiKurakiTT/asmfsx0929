@@ -2,8 +2,13 @@ package com.hsd.asmfsx.contract;
 
 import com.hsd.asmfsx.base.BasePresenter;
 import com.hsd.asmfsx.base.BaseView;
+import com.hsd.asmfsx.bean.BaseBean2;
+import com.hsd.asmfsx.bean.NormalResultBean;
 import com.hsd.asmfsx.bean.UserBean;
+import com.hsd.asmfsx.bean.UserBean2;
 import com.hsd.asmfsx.bean.UserInformationBean;
+import com.hsd.asmfsx.bean.UserInformationBean2;
+import com.hsd.asmfsx.model.BaseListener;
 
 import java.io.File;
 
@@ -16,15 +21,12 @@ public interface SetAfterRegisterContract {
 
     }
     interface View extends BaseView{
-        UserInformationBean getUserInformationBean();
+        UserInformationBean2 getUserInformationBean();
         File getImgFile();
-        void showData(UserInformationBean userInformationBean);
+        void showData(BaseBean2 baseBean);
+        void showFailedForResult(BaseBean2 baseBean);
     }
-    interface ISetAfterRegisterBiz{
-        interface OnSetAfterRegisterListener{
-            void success(UserInformationBean userInformationBean);
-            void failed();
-        }
-        void doSetInfo(File imgFile, UserInformationBean userInformationBean, OnSetAfterRegisterListener setAfterRegisterListener);
+    interface ISetAfterRegisterBiz extends BaseListener{
+        void doSetInfo(File imgFile, UserInformationBean2 userInformationBean, OnRequestListener<NormalResultBean<UserBean2>> requestListener);
     }
 }

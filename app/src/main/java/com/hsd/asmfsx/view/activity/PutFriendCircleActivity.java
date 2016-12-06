@@ -174,9 +174,14 @@ public class PutFriendCircleActivity extends AppCompatActivity implements PutFri
     }
 
     @Override
+    public void showFailedForException(Throwable t) {
+
+    }
+
+    /*@Override
     public void showFailed() {
         Snackbar.make(toolbar, "发布失败", Snackbar.LENGTH_LONG).show();
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

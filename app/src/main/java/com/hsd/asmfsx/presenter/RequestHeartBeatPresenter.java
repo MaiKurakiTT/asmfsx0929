@@ -49,7 +49,7 @@ public class RequestHeartBeatPresenter implements RequestHeartBeatContract.Prese
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
-                        view.showFailed();
+//                        view.showFailedForException();
                         view.hideLoading();
                     }
                 });

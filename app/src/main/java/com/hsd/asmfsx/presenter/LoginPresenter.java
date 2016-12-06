@@ -1,8 +1,11 @@
 package com.hsd.asmfsx.presenter;
 
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.LoginBean;
+import com.hsd.asmfsx.bean.UserBean2;
 import com.hsd.asmfsx.contract.LoginContract;
 import com.hsd.asmfsx.global.GetHandler;
+import com.hsd.asmfsx.model.BaseListener;
 import com.hsd.asmfsx.model.LoginBiz;
 
 /**
@@ -20,30 +23,43 @@ public class LoginPresenter implements LoginContract.Presenter{
     @Override
     public void start() {
         view.showLoading();
-        loginBiz.login(view.getUserName(), view.getPassWord(), "",  new LoginContract.ILoginBiz.OnLoginListener() {
+        loginBiz.login(view.getUserName(), view.getPassWord(), new BaseListener.OnRequestListener<UserBean2>() {
             @Override
-            public void success(final LoginBean loginBean) {
+            public void success(final UserBean2 userBean2) {
                 GetHandler.getHandler().post(new Runnable() {
                     @Override
                     public void run() {
                         view.clearData();
-                        view.showData(loginBean);
+                        view.showData(userBean2);
                         view.hideLoading();
                     }
                 });
             }
 
             @Override
-            public void failed() {
+            public void failedForResult(final BaseBean2 baseBean) {
                 GetHandler.getHandler().post(new Runnable() {
                     @Override
                     public void run() {
                         view.clearData();
-                        view.showFailed();
+                        view.showFailedForResult(baseBean);
+                        view.hideLoading();
+                    }
+                });
+            }
+
+            @Override
+            public void failedForException(final Throwable t) {
+                GetHandler.getHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.clearData();
+                        view.showFailedForException(t);
                         view.hideLoading();
                     }
                 });
             }
         });
+
     }
 }

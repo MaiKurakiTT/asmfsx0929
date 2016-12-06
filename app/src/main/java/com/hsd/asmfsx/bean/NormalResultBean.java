@@ -12,7 +12,4 @@ public class NormalResultBean<T> extends BaseBean2{
         return json;
     }
 
-    public void setJson(T json) {
-        this.json = json;
-    }
 }

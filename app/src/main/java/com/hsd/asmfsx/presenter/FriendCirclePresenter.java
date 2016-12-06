@@ -71,7 +71,7 @@ public class FriendCirclePresenter implements FriendCircleContract.Presenter {
                     @Override
                     public void run() {
                         if (type == 0) {
-                            view.showFailed();
+//                            view.showFailedForException();
                         }else {
                             view.showFailedForLoadMore();
                         }

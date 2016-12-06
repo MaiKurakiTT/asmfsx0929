@@ -38,7 +38,7 @@ public class PutFriendCirclePresenter implements PutFriendCircleContract.Present
                 GetHandler.getHandler().post(new Runnable() {
                     @Override
                     public void run() {
-                        view.showFailed();
+//                        view.showFailedForException();
                         view.hideLoading();
                     }
                 });

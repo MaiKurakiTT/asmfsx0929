@@ -18,7 +18,7 @@
     <string name="user_card">Business card</string>
     <string name="move_up_to_cancel">Finger up to cancel sending</string>
     <string name="release_to_cancel">Finger release to cancel sending</string>
-    <string name="send_fail">Send failed</string>
+    <string name="send_fail">Send failedForException</string>
     <string name="delete_message">Delete message</string>
     <string name="delete_conversation_messages">Delete conversation and messages</string>
     <string name="delete_conversation">Delete conversation</string>
@@ -200,8 +200,8 @@
     <string name="please_set_the_current">"Please set the current user's nickname \ n to ios offline push not userid but Nick, see comments"</string>
     <string name="Is_landing">logining..</string>
     <string name="list_is_for">Retrieving the groups and contacts</string>
-    <string name="login_failure_failed">Logon failure: failed to retrieve contacts or groups</string>
-    <string name="Login_failed">Login failed:</string>
+    <string name="login_failure_failed">Logon failure: failedForException to retrieve contacts or groups</string>
+    <string name="Login_failed">Login failedForException:</string>
     <string name="receive_the_passthrough">Receive cmd message : action：</string>
     <string name="have_you_removed">Have you removed from his buddy list</string>
     <string name="can_not_connect_chat_server_connection">Cannot connect to server</string>
@@ -232,7 +232,7 @@
     <string name="have_connected_with">Connected to the peer and waiting for the peer to accept</string>
     <string name="In_the_call">In the call..</string>
     <string name="The_other_party_refused_to_accept">The call was refused</string>
-    <string name="Connection_failure">Connection failed!</string>
+    <string name="Connection_failure">Connection failedForException!</string>
     <string name="The_other_party_is_not_online">The peer is not online now, please try later</string>
     <string name="The_other_is_on_the_phone_please">The peer is busy now, please try later</string>
     <string name="The_other_is_hang_up">The peer has ended the call</string>
@@ -269,7 +269,7 @@
     <string name="input_new_nick_hint">Input a new nick</string>
     <string name="search_pubic_group">Search public group</string>
     <string name="group_not_existed">The group does not exist</string>
-    <string name="group_search_failed">Search failed</string>
+    <string name="group_search_failed">Search failedForException</string>
     <string name="nickname_description">Once this nick is set, this nick will be used in push notification (by default this is HuanXin ID ) when the receiver is using the IOS device.</string>
     <string name="error_send_invalid_content">The message content is not allowed to be sent!</string>
     <string name="error_send_not_in_the_group">You already were not in the group</string>

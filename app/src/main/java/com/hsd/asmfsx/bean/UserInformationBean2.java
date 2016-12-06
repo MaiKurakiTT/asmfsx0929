@@ -19,7 +19,7 @@ public class UserInformationBean2 {
      */
     private String nickname;
     private Integer sex;
-    private Date birthday;
+    private Long birthday;
     private String star;//
     private Integer height;
     private String sign;//
@@ -31,8 +31,8 @@ public class UserInformationBean2 {
     private String idol;//
     private String book;//
     private String adore;//
-    private String school;
-    private String state;
+    private Integer school;
+    private Integer state;
     private Date registerDate;
 
     public Long getId() {
@@ -75,11 +75,11 @@ public class UserInformationBean2 {
         this.sex = sex;
     }
 
-    public Date getBirthday() {
+    public Long getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(Long birthday) {
         this.birthday = birthday;
     }
 
@@ -171,19 +171,19 @@ public class UserInformationBean2 {
         this.adore = adore;
     }
 
-    public String getSchool() {
+    public Integer getSchool() {
         return school;
     }
 
-    public void setSchool(String school) {
+    public void setSchool(Integer school) {
         this.school = school;
     }
 
-    public String getState() {
+    public Integer getState() {
         return state;
     }
 
-    public void setState(String state) {
+    public void setState(Integer state) {
         this.state = state;
     }
 

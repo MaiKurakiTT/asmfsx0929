@@ -217,6 +217,11 @@ public class CertificationActivity extends AppCompatActivity implements Certific
     }
 
     @Override
+    public void showFailedForException(Throwable t) {
+
+    }
+
+    /*@Override
     public void showFailed() {
         Logger.d("实名认证失败");
         Snackbar.make(schoolSpinner, "实名认证失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
@@ -225,7 +230,7 @@ public class CertificationActivity extends AppCompatActivity implements Certific
                 doCertification();
             }
         }).show();
-    }
+    }*/
 
     @Override
     protected void onDestroy() {

@@ -135,6 +135,11 @@ public class FindFriendsActivity extends AppCompatActivity implements FindFriend
     }
 
     @Override
+    public void showFailedForException(Throwable t) {
+
+    }
+
+    /*@Override
     public void showFailed() {
         Snackbar.make(changebut, "加载失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
             @Override
@@ -142,7 +147,7 @@ public class FindFriendsActivity extends AppCompatActivity implements FindFriend
                 findFriendsPresenter.start();
             }
         }).show();
-    }
+    }*/
 
     public static float dpToPixels(int dp, Context context) {
         return dp * (context.getResources().getDisplayMetrics().density);

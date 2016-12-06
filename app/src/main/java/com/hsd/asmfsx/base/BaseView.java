@@ -8,5 +8,5 @@ package com.hsd.asmfsx.base;
 public interface BaseView {
     void showLoading();
     void hideLoading();
-    void showFailed();
+    void showFailedForException(Throwable t);
 }

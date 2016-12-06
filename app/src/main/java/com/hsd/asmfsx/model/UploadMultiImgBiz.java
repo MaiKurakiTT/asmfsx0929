@@ -114,7 +114,7 @@ public class UploadMultiImgBiz {
                         }
 
                         @Override
-                        public void failed() {
+                        public void failedForException() {
                             okImgCounts = okImgCounts + 1;
                             if (okImgCounts == imgs.size()){
                                 Message msg = new Message();

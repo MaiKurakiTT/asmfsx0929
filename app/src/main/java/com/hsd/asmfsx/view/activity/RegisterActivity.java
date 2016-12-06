@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.RegisterBean;
 import com.hsd.asmfsx.contract.RegisterContract;
 import com.hsd.asmfsx.presenter.RegisterPresenter;
@@ -107,6 +108,21 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
     }
 
     @Override
+    public void showData(BaseBean2 baseBean) {
+        Logger.d(baseBean.getMsg());
+    }
+
+    @Override
+    public void showFailedForResult(BaseBean2 baseBean) {
+        Logger.d(baseBean.getMsg());
+    }
+
+    @Override
+    public void showFailedForException(Throwable t) {
+        Logger.d(t.toString());
+    }
+
+    /*@Override
     public void showData(RegisterBean registerBean) {
         if (registerBean.getResultCode() == 1) {
             Logger.d("返回码为" + registerBean.getResultCode() + registerBean.getDescribe());
@@ -115,7 +131,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
             Logger.d("返回码为" + registerBean.getResultCode() + registerBean.getDescribe());
             ShowToast.show(RegisterActivity.this, "" + registerBean.getDescribe());
         }
-    }
+    }*/
 
     @Override
     public void showLoading() {
@@ -127,7 +143,9 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         progressDialog.dismiss();
     }
 
-    @Override
+
+
+    /*@Override
     public void showFailed() {
         Snackbar.make(registerBut, "注册失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
             @Override
@@ -135,5 +153,5 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
                 doRegister();
             }
         });
-    }
+    }*/
 }

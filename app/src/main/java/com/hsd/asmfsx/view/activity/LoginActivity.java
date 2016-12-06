@@ -17,7 +17,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.LoginBean;
+import com.hsd.asmfsx.bean.UserBean2;
 import com.hsd.asmfsx.contract.LoginContract;
 import com.hsd.asmfsx.db.DbBean;
 import com.hsd.asmfsx.db.DbBeanHelper;
@@ -108,6 +110,16 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     @Override
+    public void showData(UserBean2 userBean) {
+
+    }
+
+    @Override
+    public void showFailedForResult(BaseBean2 baseBean) {
+
+    }
+
+    /*@Override
     public void showData(LoginBean loginBean) {
         if (loginBean.getResultCode() == 1) {
             Log.d(TAG, loginBean.getUser_uuid());
@@ -130,7 +142,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
             ShowToast.show(LoginActivity.this, "" + loginBean.getDescribe());
         }
 
-    }
+    }*/
 
     public DbBean insertInfo(DbBean dbBean, LoginBean loginBean) {
         dbBean.setUser_ID(loginBean.getUser_ID());
@@ -169,13 +181,20 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     @Override
+    public void showFailedForException(Throwable t) {
+
+    }
+
+
+
+    /*@Override
     public void showFailed() {
-        Logger.d("failed");
+        Logger.d("failedForException");
         Snackbar.make(loginBut, "登录失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 doLogin();
             }
         });
-    }
+    }*/
 }

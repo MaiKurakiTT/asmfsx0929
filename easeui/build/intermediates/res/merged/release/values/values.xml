@@ -90,7 +90,7 @@
     <string name="Cant_chat_with_yourself">cannot chat with yourself</string>
     <string name="Change_the_group_name">Change group name</string>
     <string name="Confirm_password_cannot_be_empty">Confirm password cannot be empty!</string>
-    <string name="Connection_failure">Connection failed!</string>
+    <string name="Connection_failure">Connection failedForException!</string>
     <string name="Current_version">Current version</string>
     <string name="Delete_failed">Failed to delete</string>
     <string name="Delete_the_contact">Delete the contact</string>
@@ -132,7 +132,7 @@
     <string name="Join_the_group_chat">Join the group</string>
     <string name="Log_Upload_failed">Failed to upload the log</string>
     <string name="Log_uploaded_successfully">Log was uploaded successfully</string>
-    <string name="Login_failed">Login failed:</string>
+    <string name="Login_failed">Login failedForException:</string>
     <string name="Logoff_notification">Logoff notification</string>
     <string name="Making_sure_your_location">Making sure your location..</string>
     <string name="Modify_the_group_name_successful">Modify the group name successful</string>
@@ -271,7 +271,7 @@
     <string name="group_name">Group name</string>
     <string name="group_not_existed">The group does not exist</string>
     <string name="group_of_shielding">Group of shielding failure, please check the network or try again later</string>
-    <string name="group_search_failed">Search failed</string>
+    <string name="group_search_failed">Search failedForException</string>
     <string name="hang_up">Hang up</string>
     <string name="hanging_up">Hanging up..</string>
     <string name="have_connected_with">Connected to the peer and waiting for the peer to accept</string>
@@ -287,7 +287,7 @@
     <string name="location_prefix">[my location]</string>
     <string name="location_recv">[%1$s location]</string>
     <string name="login">Login</string>
-    <string name="login_failure_failed">Logon failure: failed to retrieve contacts or groups</string>
+    <string name="login_failure_failed">Logon failure: failedForException to retrieve contacts or groups</string>
     <string name="logout">Logout</string>
     <string name="logout_hint">Logout will never clear the chat history, this account can be used on next login</string>
     <string name="move_out_backlist">Remove from blacklist</string>
@@ -334,7 +334,7 @@
     <string name="search_pubic_group">Search public group</string>
     <string name="searching">searching</string>
     <string name="select_contacts">Select the contact</string>
-    <string name="send_fail">Send failed</string>
+    <string name="send_fail">Send failedForException</string>
     <string name="send_failure_please">Send failure, please test whether the server connection</string>
     <string name="send_successful">Request was sent, waiting for the peer to accept</string>
     <string name="send_the_request_is">The request was sent and waiting for owner approval</string>
@@ -405,16 +405,16 @@
     <style name="HeadScale" parent="android:Theme.Dialog">
         <item name="android:windowAnimationStyle">@style/AnimHead</item>
         <item name="android:windowFrame">@null</item>
-        <!-- 边框 -->
+        
         <item name="android:windowIsFloating">true</item>
-        <!-- 是否浮现在activity之上 -->
+        
         <item name="android:windowIsTranslucent">true</item>
-        <!-- 半透明 -->
+        
         <item name="android:windowNoTitle">true</item>
-        <!-- 无标题 -->
+        
         <item name="android:windowBackground">@android:color/black</item>
         <item name="android:backgroundDimEnabled">false</item>
-        <!-- 模糊 -->
+        
     </style>
     <style name="MyAlertDialog" parent="android:Theme.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -435,32 +435,32 @@
     <style name="MyDialogStyleBottom" parent="android:Theme.Dialog">
         <item name="android:windowAnimationStyle">@style/AnimBottom</item>
         <item name="android:windowFrame">@null</item>
-        <!-- 边框 -->
+        
         <item name="android:windowIsFloating">true</item>
-        <!-- 是否浮现在activity之上 -->
+        
         <item name="android:windowIsTranslucent">true</item>
-        <!-- 半透明 -->
+        
         <item name="android:windowNoTitle">true</item>
-        <!-- 无标题 -->
+        
         <item name="android:windowBackground">@android:color/transparent</item>
-        <!-- 背景透明 -->
+        
         <item name="android:backgroundDimEnabled">true</item>
-        <!-- 模糊 -->
+        
     </style>
     <style name="MyDialogStyleTop" parent="android:Theme.Dialog">
         <item name="android:windowAnimationStyle">@style/AnimTop2</item>
         <item name="android:windowFrame">@null</item>
-        <!-- 边框 -->
+        
         <item name="android:windowIsFloating">true</item>
-        <!-- 是否浮现在activity之上 -->
+        
         <item name="android:windowIsTranslucent">true</item>
-        <!-- 半透明 -->
+        
         <item name="android:windowNoTitle">true</item>
-        <!-- 无标题 -->
+        
         <item name="android:windowBackground">@android:color/transparent</item>
-        <!-- 背景透明 -->
+        
         <item name="android:backgroundDimEnabled">false</item>
-        <!-- 模糊 -->
+        
     </style>
     <style name="bottom_line_edit_text_style" parent="@android:style/Widget.EditText">
         <item name="android:gravity">center_vertical</item>

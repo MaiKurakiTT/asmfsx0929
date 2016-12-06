@@ -26,8 +26,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.UserInformationBean;
+import com.hsd.asmfsx.bean.UserInformationBean2;
 import com.hsd.asmfsx.contract.SetAfterRegisterContract;
+import com.hsd.asmfsx.global.GetGson;
 import com.hsd.asmfsx.presenter.SetAfterRegisterPresenter;
 import com.hsd.asmfsx.utils.DateFormatUtils;
 import com.hsd.asmfsx.utils.PermissionUtils;
@@ -113,19 +116,23 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
     private Uri scropped = Uri.parse("file:///sdcard/scropped");
     private String[] sexItems = {"男", "女"};
     private String[] schoolItems = {"河南师范大学"};
-    private String[] statusItems = {"单身", "恋爱ing", "分手了"};
+    private String[] statusItems = {"单身", "恋爱ing", "失恋了"};
     private AlertDialog.Builder headBuilder;
     private String phone;
     private String name;
     private String sex;
+    private Integer sexInt;
     private String birthdayString;
     private String heightString;
     private Date birthday;
+    private Long birthdayLong;
     private Integer height;
     private String home;
     private String school;
+    private Integer schoolInt;
+    private Integer statusInt;
     private String statusString;
-    private UserInformationBean userInformationBean;
+    private UserInformationBean2 userInformationBean;
 
     private String cropSuccessPath;
     private File imgFile;
@@ -150,9 +157,15 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
         phone = phonetext.getText().toString();
         name = nametext.getText().toString();
         sex = sextext.getText().toString();
+        if (sex.equals("男")){
+            sexInt = 0;
+        }else {
+            sexInt = 1;
+        }
         birthdayString = birthdaytext.getText().toString();
         if (!TextUtils.isEmpty(birthdayString)) {
             birthday = DateFormatUtils.FormatString2Date(birthdayString);
+            birthdayLong = birthday.getTime();
         }
         heightString = heighttext.getText().toString().replace("cm", "");
         if (!TextUtils.isEmpty(heightString)) {
@@ -160,7 +173,21 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
         }
         home = hometext.getText().toString();
         school = schooltext.getText().toString();
+        if (schoolItems[0].equals(school)){
+            schoolInt = 0;
+        }
         statusString = statustext.getText().toString();
+        switch (statusString){
+            case "单身":
+                statusInt = 0;
+                break;
+            case "恋爱ing":
+                statusInt = 1;
+                break;
+            case "失恋了":
+                statusInt = 2;
+                break;
+        }
     }
 
     private void initData() {
@@ -307,17 +334,24 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
 
 
     @Override
-    public UserInformationBean getUserInformationBean() {
-        userInformationBean = new UserInformationBean();
-        userInformationBean.setUser_phone(phone);
+    public UserInformationBean2 getUserInformationBean() {
+        userInformationBean = new UserInformationBean2();
+        userInformationBean.setPhone(phone);
+        userInformationBean.setNickname(name);
+        userInformationBean.setSex(sexInt);
+        userInformationBean.setBirthday(birthdayLong);
+        userInformationBean.setHeight(height);
+        userInformationBean.setLocality(home);
+        userInformationBean.setSchool(schoolInt);
+        userInformationBean.setState(statusInt);
+        /*userInformationBean.setUser_phone(phone);
         userInformationBean.setUser_nickname(name);
         userInformationBean.setUser_sex(sex);
         userInformationBean.setUser_birthday(birthday);
         userInformationBean.setUser_height(height);
         userInformationBean.setUser_locality(home);
         userInformationBean.setUser_school(school);
-        userInformationBean.setUser_state(statusString);
-        userInformationBean.setUUID("84f4b998-17df-4997-8fc2-828f89aec37d");
+        userInformationBean.setUser_state(statusString);*/
         return userInformationBean;
     }
 
@@ -327,17 +361,23 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
     }
 
     @Override
-    public void showData(UserInformationBean userInformationBean) {
-        if (userInformationBean.getResultCode() == 1) {
-            Snackbar.make(okbut, "信息设置成功", Snackbar.LENGTH_LONG).show();
-        } else {
-            Snackbar.make(okbut, "信息设置失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    setAfterRegisterPresenter.start();
-                }
-            }).show();
-        }
+    public void showData(BaseBean2 baseBean) {
+        Snackbar.make(okbut, "信息设置成功", Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showFailedForResult(BaseBean2 baseBean) {
+        Snackbar.make(okbut, "" + baseBean.getMsg(), Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showFailedForException(Throwable t) {
+        Snackbar.make(okbut, "信息设置失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAfterRegisterPresenter.start();
+            }
+        }).show();
     }
 
     @Override
@@ -350,7 +390,9 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
         progressDialog.dismiss();
     }
 
-    @Override
+
+
+    /*@Override
     public void showFailed() {
         Snackbar.make(okbut, "信息设置失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
             @Override
@@ -358,7 +400,7 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
                 setAfterRegisterPresenter.start();
             }
         }).show();
-    }
+    }*/
 
     /**
      * 通过相册选择图片裁剪 step 3
