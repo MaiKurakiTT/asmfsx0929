@@ -1,9 +1,7 @@
 package com.hsd.asmfsx.model;
 
-import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.BaseBean2;
-import com.hsd.asmfsx.bean.FriendCircleBean;
-import com.hsd.asmfsx.contract.PutCommentContract;
+import com.hsd.asmfsx.contract.PutGoodContract;
 import com.hsd.asmfsx.global.GetRetrofit;
 import com.orhanobut.logger.Logger;
 
@@ -12,16 +10,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * Created by apple on 2016/11/15.
+ * Created by sun on 2016/12/7.
  */
 
-public class PutCommentBiz implements PutCommentContract.IPutCommentBiz {
+public class PutFCGoodBiz implements PutGoodContract.IPutGoodBiz{
     @Override
-    public void doPutComment(String content, Long friendCircleID, Long byUserID, final OnRequestListener<BaseBean2> requestListener) {
-        GetRetrofit
-                .getRetrofit2()
+    public void doPutGood(Long friendCircleId, final OnRequestListener<BaseBean2> requestListener) {
+        GetRetrofit.getRetrofit2()
                 .create(RetrofitService.class)
-                .postFCComment(content, friendCircleID, byUserID)
+                .postFCGood(friendCircleId)
                 .enqueue(new Callback<BaseBean2>() {
                     @Override
                     public void onResponse(Call<BaseBean2> call, Response<BaseBean2> response) {
@@ -36,10 +33,9 @@ public class PutCommentBiz implements PutCommentContract.IPutCommentBiz {
                     @Override
                     public void onFailure(Call<BaseBean2> call, Throwable t) {
                         t.printStackTrace();
-                        Logger.d("发评论异常" + t.toString());
+                        Logger.d("点赞异常" + t.toString());
                         requestListener.failedForException(t);
                     }
                 });
     }
-
 }

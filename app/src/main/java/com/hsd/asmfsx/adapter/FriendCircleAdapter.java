@@ -15,7 +15,9 @@ import android.widget.TextView;
 import com.baidu.mapapi.map.Text;
 import com.bumptech.glide.Glide;
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.bean.CommentVO;
 import com.hsd.asmfsx.bean.FriendCircleBean;
+import com.hsd.asmfsx.bean.FriendCircleVO;
 import com.hsd.asmfsx.bean.PictureBean;
 import com.hsd.asmfsx.utils.DateFormatUtils;
 import com.hsd.asmfsx.utils.ShowToast;
@@ -45,7 +47,7 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
 
     private Context context;
-    private List<FriendCircleBean> friendCircleList;
+    private List<FriendCircleVO> friendCircleList;
     private List<Integer> beClickGood = new ArrayList<>();
     private List<Integer> beCommented = new ArrayList<>();
     private Map isGoodMap = new HashMap();
@@ -53,7 +55,7 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private OnGoodClickListener goodClickListener;
     private OnCommentClickListener commentClickListener;
 
-    public FriendCircleAdapter(Context context, List<FriendCircleBean> friendCircleList) {
+    public FriendCircleAdapter(Context context, List<FriendCircleVO> friendCircleList) {
         this.context = context;
         this.friendCircleList = friendCircleList;
     }
@@ -66,10 +68,10 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public interface OnGoodClickListener {
-        void click(View view, int position);
+        void click(View view, int position, Long friendCircleId);
     }
     public interface OnCommentClickListener{
-        void click(View view, int position);
+        void click(View view, int position, Long friendCircleId);
     }
 
     @Override
@@ -92,7 +94,7 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             final MyViewHolder myViewHolder = (MyViewHolder) holder;
             //给每个item的父布局加上tag为当前position
             myViewHolder.itemParent.setTag(position);
-            final FriendCircleBean friendCircleBean = friendCircleList.get(position);
+            final FriendCircleVO friendCircleBean = friendCircleList.get(position);
             setData2View(myViewHolder, position, friendCircleBean);
 
         } else {
@@ -100,22 +102,22 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    private void setData2View(final MyViewHolder myViewHolder, final int position, final FriendCircleBean friendCircleBean) {
-        Logger.d("是否赞过" + friendCircleBean.isLike());
+    private void setData2View(final MyViewHolder myViewHolder, final int position, final FriendCircleVO friendCircleBean) {
+//        Logger.d("是否赞过" + friendCircleBean.isLike());
         //显示头像
-        Glide.with(context).load(friendCircleBean.getFriendsCircle_icon()).placeholder(R.mipmap.ic_inithead).into(myViewHolder.headImage);
+        Glide.with(context).load(friendCircleBean.getUserVO().getIcon()).placeholder(R.mipmap.ic_inithead).into(myViewHolder.headImage);
         //显示发表人昵称
-        myViewHolder.putName.setText(friendCircleBean.getFriendsCircle_nickname());
+        myViewHolder.putName.setText(friendCircleBean.getUserVO().getNickname());
         //显示说说内容，为空的就直接隐藏该textview
-        if (TextUtils.isEmpty(friendCircleBean.getFriendsCircle_content())) {
+        if (TextUtils.isEmpty(friendCircleBean.getContent())) {
             myViewHolder.friendcircleContent.setVisibility(View.GONE);
         } else {
             myViewHolder.friendcircleContent.setVisibility(View.VISIBLE);
-            myViewHolder.friendcircleContent.setText(friendCircleBean.getFriendsCircle_content());
+            myViewHolder.friendcircleContent.setText(friendCircleBean.getContent());
         }
 
         //显示发布时间
-        myViewHolder.putTime.setText("" + DateFormatUtils.formatDate2Before(friendCircleBean.getFriendsCircle_time()));
+        myViewHolder.putTime.setText("" + DateFormatUtils.formatDate2Before(friendCircleBean.getCreateTime()));
 
         //将点过赞的item的position加到List集合中，加载item之前先判断该item的position是否在集合中，防止复用时候错乱
         if (beClickGood.contains((myViewHolder.itemParent.getTag()))) {
@@ -129,18 +131,19 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         myViewHolder.goodImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Long friendCircleId = friendCircleBean.getId();
                 if (beClickGood.contains((myViewHolder.itemParent.getTag()))) {
                     myViewHolder.goodImg.setImageResource(R.mipmap.ic_good);
                 } else {
                     //点赞过的item的position加入集合中
                     beClickGood.add(position);
-                    goodClickListener.click(view, position);
+                    goodClickListener.click(view, position, friendCircleId);
                     myViewHolder.goodImg.setImageResource(R.mipmap.ic_good_press);
                     //点赞后改变text
-                    if (friendCircleBean.getLikeCount() == null){
+                    if (friendCircleBean.getLikeUserVOs().size() == 0){
                         myViewHolder.goodCounts.setText("1");
                     }else {
-                        myViewHolder.goodCounts.setText("" + (friendCircleBean.getLikeCount() + 1));
+                        myViewHolder.goodCounts.setText("" + (friendCircleBean.getLikeUserVOs().size() + 1));
                     }
 
 //                    Logger.d("给第" + position + "个item加了");
@@ -148,20 +151,26 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             }
         });
+        /**
+         * 点击评论按钮
+         */
         myViewHolder.commentImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                commentClickListener.click(view, position);
+                Long friendCircleId = friendCircleBean.getId();
+                if (friendCircleId != null) {
+                    commentClickListener.click(view, position, friendCircleId);
+                }
             }
         });
         //设置点赞数量textView
-        if (friendCircleBean.getLikeCount() == null) {
+        if (friendCircleBean.getLikeUserVOs().size() == 0) {
             myViewHolder.goodCounts.setText("0");
         } else {
-            myViewHolder.goodCounts.setText("" + friendCircleBean.getLikeCount());
+            myViewHolder.goodCounts.setText("" + friendCircleBean.getLikeUserVOs().size());
         }
 
-        List<String> comments = friendCircleBean.getComments();
+        List<CommentVO> comments = friendCircleBean.getCommentVOs();
 
         //设置评论数量textView
         myViewHolder.commentCounts.setText(comments.size() + "");
@@ -172,7 +181,7 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             myViewHolder.commentsText.setVisibility(View.GONE);
         } else {
             for (int i = 0; i < comments.size(); i++) {
-                String temp = comments.get(i);
+                String temp = comments.get(i).getContent();
                 if (i == comments.size() - 1) {
                     display = display + temp;
                 } else {
@@ -183,7 +192,7 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             myViewHolder.commentsText.setText(display);
         }
         //显示说说的图片，利用NineGridImageView
-        if (friendCircleBean.getPictures().size() > 0) {
+        if (friendCircleBean.getPicutres().size() > 0) {
             NineGridImageViewAdapter<String> nineGridImageViewAdapter = new NineGridImageViewAdapter<String>() {
                 @Override
                 protected void onDisplayImage(Context context, ImageView imageView, String s) {
@@ -201,14 +210,14 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 }
             };
             myViewHolder.ninegridImg.setAdapter(nineGridImageViewAdapter);
-            List<PictureBean> pictures = friendCircleBean.getPictures();
+            /*List<PictureBean> pictures = friendCircleBean.getPictures();
             List<String> pics = new ArrayList<>();
             for (int i = 0; i < pictures.size(); i++) {
                 PictureBean pictureBean = pictures.get(i);
                 String picture_url = pictureBean.getPicture_URL();
                 pics.add(picture_url);
-            }
-            myViewHolder.ninegridImg.setImagesData(pics);
+            }*/
+            myViewHolder.ninegridImg.setImagesData(friendCircleBean.getPicutres());
         } else {
             myViewHolder.ninegridImg.setVisibility(View.GONE);
         }

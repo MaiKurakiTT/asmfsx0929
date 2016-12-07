@@ -3,7 +3,9 @@ package com.hsd.asmfsx.contract;
 import com.hsd.asmfsx.base.BasePresenter;
 import com.hsd.asmfsx.base.BaseView;
 import com.hsd.asmfsx.bean.BaseBean;
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.FriendCircleBean;
+import com.hsd.asmfsx.model.BaseListener;
 
 /**
  * Created by apple on 2016/11/15.
@@ -14,17 +16,16 @@ public interface PutCommentContract {
 
     }
     interface View extends BaseView{
-        FriendCircleBean getFriendCircleBeanForComment();
-        void showDataForComment(BaseBean baseBean);
-        void showFailedForComment();
-        void showLoadingForComment();
-        void hideLoadingForComment();
+        String getCommentContent();
+        Long getCommentFCId();
+        Long getByUserId();
+        void showDataForComment(BaseBean2 baseBean);
+        void showFailedForPutCommentResult(BaseBean2 baseBean);
+        void showExceptionForPutCommentResult(Throwable t);
+        void showLoadingForPutComment();
+        void hideLoadingForPutComment();
     }
-    interface IPutCommentBiz{
-        interface OnPutCommentListener{
-            void success(BaseBean baseBean);
-            void failed();
-        }
-        void doPutComment(FriendCircleBean friendCircleBean, OnPutCommentListener putCommentListener);
+    interface IPutCommentBiz extends BaseListener{
+        void doPutComment(String content, Long friendCircleID, Long byUserID, OnRequestListener<BaseBean2> requestListener);
     }
 }

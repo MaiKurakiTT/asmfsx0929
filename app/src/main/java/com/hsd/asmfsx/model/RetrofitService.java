@@ -5,6 +5,7 @@ import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.CertificationBean;
 import com.hsd.asmfsx.bean.FindFriendsBean;
 import com.hsd.asmfsx.bean.FriendCircleBean;
+import com.hsd.asmfsx.bean.FriendCircleVO;
 import com.hsd.asmfsx.bean.LoginBean;
 import com.hsd.asmfsx.bean.LoginBean2;
 import com.hsd.asmfsx.bean.NormalResultBean;
@@ -14,14 +15,23 @@ import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.bean.UserInformationBean2;
 import com.hsd.asmfsx.global.GlobalParameter;
 
+import java.util.List;
+import java.util.Map;
+
 import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
+import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.GET;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
+import retrofit2.http.PartMap;
+import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 /**
  * Created by apple on 2016/10/16.
@@ -77,6 +87,58 @@ public interface RetrofitService {
     @Multipart
     @POST("img/" + "upload")
     Call<NormalResultBean<String[]>> uploadImg2(@Part MultipartBody.Part img);
+
+    @Multipart
+    @POST("img/" + "upload")
+    Call<String> multiUpload(@PartMap Map<String, RequestBody> params);
+
+    /**
+     * 发布朋友圈
+     * @param content
+     * @param map
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(GlobalParameter.project2 + "user/fc/addFriendCircle.action")
+    Call<BaseBean2> doPutFC(@Field("content") String content, @Field("pictures") List<String> pictures);
+
+    /**
+     * 请求朋友圈数据
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(GlobalParameter.project2 + "user/fc/getFriendCircle.action")
+    Call<NormalResultBean<List<FriendCircleVO>>> postGetFC(@Field("page") int page, @Field("limit") int limit);
+
+    /**
+     * 给说说评论
+     * @param content 评论内容
+     * @param friendCircleID 朋友圈ID
+     * @param byUserID 被@的人的ID
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(GlobalParameter.project2 + "user/fc/addComment.action")
+    Call<BaseBean2> postFCComment(@Field("content") String content, @Field("friendCircleID") Long friendCircleID, @Field("byUserID") Long byUserID);
+
+    /**
+     * 给说说点赞
+     * @param friendCircleID 朋友圈ID
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(GlobalParameter.project2 + "user/fc/addLike.action")
+    Call<BaseBean2> postFCGood(@Field("friendCircleID") Long friendCircleID);
+
+/**
+ * ------------------------------------------------------------------------------------
+ */
+
+
+
+
+
+
 
 
 

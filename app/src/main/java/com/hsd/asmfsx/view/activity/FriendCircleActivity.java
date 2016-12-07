@@ -17,21 +17,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.reflect.TypeToken;
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.adapter.FriendCircleAdapter;
-import com.hsd.asmfsx.bean.BaseBean;
-import com.hsd.asmfsx.bean.FriendCircleBean;
+import com.hsd.asmfsx.bean.BaseBean2;
+import com.hsd.asmfsx.bean.FriendCircleVO;
 import com.hsd.asmfsx.contract.FriendCircleContract;
 import com.hsd.asmfsx.contract.PutCommentContract;
 import com.hsd.asmfsx.contract.PutGoodContract;
-import com.hsd.asmfsx.global.GetGson;
 import com.hsd.asmfsx.presenter.FriendCirclePresenter;
 import com.hsd.asmfsx.presenter.PutCommentPresenter;
-import com.hsd.asmfsx.presenter.PutGoodPresenter;
+import com.hsd.asmfsx.presenter.PutFCGoodPresenter;
 import com.hsd.asmfsx.utils.ShowToast;
 import com.orhanobut.logger.Logger;
 
@@ -59,20 +56,22 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
     @BindView(R.id.swipe_refresh)
     SwipeRefreshLayout swipeRefresh;
     private FriendCirclePresenter friendCirclePresenter;
-    private List<FriendCircleBean> friendCircleList;
+    private List<FriendCircleVO> friendCircleList;
     private FriendCircleAdapter friendCircleAdapter;
 
     private int PUTFRIENDCIRCLE_REQUEST = 0;
     private int PUTFRIENDCIRCLE_RESULT = 1;
     private int goodPosition = 0;
     private int commentPosition = 0;
-    private PutGoodPresenter putGoodPresenter;
+    private Long putCommentFCId = new Long(1); //评论的那条说说的ＩＤ
+    private Long putGoodFCId = new Long(1); //点赞的那条说说的ＩＤ
     private ProgressDialog progressDialog;
     private BottomSheetDialog bottomDialog;
     private EditText commentText;
     private Button commentOk;
     private String commentContent;
     private PutCommentPresenter putCommentPresenter;
+    private PutFCGoodPresenter putFCGoodPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -86,7 +85,7 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
     }
 
     private void initData() {
-        putGoodPresenter = new PutGoodPresenter(this);
+        putFCGoodPresenter = new PutFCGoodPresenter(this);
         putCommentPresenter = new PutCommentPresenter(this);
     }
 
@@ -187,10 +186,10 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
          */
         adapter.setOnGoodClickListener(new FriendCircleAdapter.OnGoodClickListener() {
             @Override
-            public void click(View view, int position) {
-                ShowToast.show(FriendCircleActivity.this, "点击了" + position);
+            public void click(View view, int position, Long friendCircleId) {
                 goodPosition = position;
-                putGoodPresenter.start();
+                putGoodFCId = friendCircleId;
+                putFCGoodPresenter.start();
             }
         });
         /**
@@ -198,20 +197,74 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
          */
         adapter.setOnCommentClickListener(new FriendCircleAdapter.OnCommentClickListener() {
             @Override
-            public void click(View view, int position) {
+            public void click(View view, int position, Long friendCircleId) {
                 commentPosition = position;
+                putCommentFCId = friendCircleId;
                 bottomDialog.show();
             }
         });
 
     }
 
+
     @Override
-    public String getUUID() {
-        return "84f4b998-17df-4997-8fc2-828f89aec37d";
+    public void showData(List<FriendCircleVO> friendCircleVOs) {
+        friendCircleList = friendCircleVOs;
+        Logger.d("请求到" + friendCircleList.size() + "条数据");
+        if (friendCircleList.size() > 0) {
+            recycleView.setLayoutManager(new LinearLayoutManager(this));
+            friendCircleAdapter = new FriendCircleAdapter(this, friendCircleList);
+            recycleView.setAdapter(friendCircleAdapter);
+            initRecycleLoadMore(friendCircleAdapter);
+        }
     }
 
     @Override
+    public void showMoreData(List<FriendCircleVO> friendCircleVOs) {
+        Logger.d("请求到" + friendCircleVOs.size() + "条数据");
+        if (friendCircleVOs.size() > 0) {
+            friendCircleList.addAll(friendCircleVOs);
+            if (friendCircleAdapter != null) {
+                friendCircleAdapter.setStatus(0);
+                friendCircleAdapter.notifyDataSetChanged();
+            } else {
+                friendCircleAdapter = new FriendCircleAdapter(this, friendCircleList);
+                recycleView.setAdapter(friendCircleAdapter);
+            }
+        }
+    }
+
+    @Override
+    public void showFailedForResult(BaseBean2 baseBean2) {
+        Snackbar.make(toolbar, "加载失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                friendCirclePresenter.start();
+            }
+        });
+    }
+
+    @Override
+    public void showFailedForLoadMoreResult(BaseBean2 baseBean2) {
+        Snackbar.make(toolbar, "加载失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                friendCirclePresenter.loadMore();
+            }
+        });
+    }
+
+    @Override
+    public void showFailedForLoadMoreException(Throwable t) {
+
+    }
+
+    @Override
+    public void showFailedForException(Throwable t) {
+
+    }
+
+    /*@Override
     public void showData(BaseBean baseBean) {
         if (baseBean.getResultCode() == 1) {
             String body = baseBean.getBody();
@@ -246,18 +299,9 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
             }
 
         }
-    }
+    }*/
 
 
-    @Override
-    public void showFailedForLoadMore() {
-        Snackbar.make(toolbar, "加载失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                friendCirclePresenter.loadMore();
-            }
-        });
-    }
 
     @Override
     public void showLoading() {
@@ -274,10 +318,7 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
         swipeRefresh.setRefreshing(false);
     }
 
-    @Override
-    public void showFailedForException(Throwable t) {
 
-    }
 
     /*@Override
     public void showFailed() {
@@ -299,23 +340,33 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
+    /*@Override
     public FriendCircleBean getFriendCircleBeanForGood() {
         FriendCircleBean friendCircleBean = new FriendCircleBean();
         friendCircleBean.setUUID(getUUID());
         friendCircleBean.setFriendsCircle_ID(friendCircleList.get(goodPosition).getFriendsCircle_ID());
         return friendCircleBean;
+    }*/
+
+
+    @Override
+    public Long getPutGoodFCId() {
+        return putGoodFCId;
     }
 
     @Override
-    public void showDataForGood(BaseBean baseBean) {
-        if (baseBean.getResultCode() == 1){
+    public void showDataForGood(BaseBean2 baseBean) {
 
-        }
     }
 
     @Override
-    public void showFailedForGood() {
+    public void showFailedForPutGoodResult(BaseBean2 baseBean) {
+
+    }
+
+    @Override
+    public void showExceptionForPutGoodResult(Throwable t) {
+
     }
 
     @Override
@@ -328,35 +379,47 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
         progressDialog.dismiss();
     }
 
+
+
     @Override
-    public FriendCircleBean getFriendCircleBeanForComment() {
-        FriendCircleBean friendCircleBean = new FriendCircleBean();
-        friendCircleBean.setUUID(getUUID());
-        friendCircleBean.setFriendsCircle_ID(friendCircleList.get(commentPosition).getFriendsCircle_ID());
-        friendCircleBean.setBody(commentContent);
-        return friendCircleBean;
+    public String getCommentContent() {
+        return commentText.getText().toString();
     }
 
     @Override
-    public void showDataForComment(BaseBean baseBean) {
-        if (baseBean.getResultCode() == 1){
-//            friendCirclePresenter.start();
-
-        }
+    public Long getCommentFCId() {
+        return putCommentFCId;
     }
 
     @Override
-    public void showFailedForComment() {
+    public Long getByUserId() {
+        return null;
+    }
+
+    @Override
+    public void showDataForComment(BaseBean2 baseBean) {
+        Snackbar.make(toolbar, "发表成功", Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showFailedForPutCommentResult(BaseBean2 baseBean) {
         Snackbar.make(toolbar, "发表失败", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
-    public void showLoadingForComment() {
+    public void showExceptionForPutCommentResult(Throwable t) {
+        Snackbar.make(toolbar, "发表异常", Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showLoadingForPutComment() {
         progressDialog.show();
     }
 
     @Override
-    public void hideLoadingForComment() {
+    public void hideLoadingForPutComment() {
         progressDialog.dismiss();
     }
+
+
 }

@@ -1,7 +1,9 @@
 package com.hsd.asmfsx.view.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -26,6 +28,7 @@ import com.hsd.asmfsx.db.DbBeanHelper;
 import com.hsd.asmfsx.db.DbUtil;
 import com.hsd.asmfsx.presenter.LoginPresenter;
 import com.hsd.asmfsx.utils.NetworkUtils;
+import com.hsd.asmfsx.utils.SPUtils;
 import com.hsd.asmfsx.utils.ShowToast;
 import com.orhanobut.logger.Logger;
 
@@ -51,6 +54,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     private String username;
     private String password;
     private ProgressDialog progressDialog;
+    private SPUtils spUtils;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,7 +63,18 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         ButterKnife.bind(this);
         initView();
         initData();
+        checkLogin();
 
+    }
+
+    private void checkLogin() {
+        String phone = spUtils.getString("phone");
+        String psw = spUtils.getString("psw");
+        if (!TextUtils.isEmpty(phone) && !TextUtils.isEmpty(psw)){
+            username = phone;
+            password = psw;
+            loginPresenter.start();
+        }
     }
 
     private void initView() {
@@ -76,6 +91,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     private void initData() {
+        spUtils = SPUtils.getInstance("asmfsx");
         loginPresenter = new LoginPresenter(this);
         loginBut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +127,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void showData(UserBean2 userBean) {
-
+        spUtils.putString("phone", username);
+        spUtils.putString("psw", password);
+        ShowToast.show(LoginActivity.this, "登录成功");
     }
 
     @Override
@@ -144,7 +162,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     }*/
 
-    public DbBean insertInfo(DbBean dbBean, LoginBean loginBean) {
+    /*public DbBean insertInfo(DbBean dbBean, LoginBean loginBean) {
         dbBean.setUser_ID(loginBean.getUser_ID());
         dbBean.setUser_phone(loginBean.getUser_phone());
         dbBean.setUser_uuid(loginBean.getUser_uuid());
@@ -163,7 +181,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         dbBean.setUser_state(loginBean.getUserInformation().getUser_state());
         dbBean.setUser_registerDate(loginBean.getUserInformation().getUser_registerDate());
         return dbBean;
-    }
+    }*/
 
     @Override
     public void clearData() {

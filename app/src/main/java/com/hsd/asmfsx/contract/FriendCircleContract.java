@@ -3,7 +3,12 @@ package com.hsd.asmfsx.contract;
 import com.hsd.asmfsx.base.BasePresenter;
 import com.hsd.asmfsx.base.BaseView;
 import com.hsd.asmfsx.bean.BaseBean;
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.FriendCircleBean;
+import com.hsd.asmfsx.bean.FriendCircleVO;
+import com.hsd.asmfsx.model.BaseListener;
+
+import java.util.List;
 
 /**
  * Created by apple on 2016/11/10.
@@ -14,16 +19,13 @@ public interface FriendCircleContract {
         void loadMore();
     }
     interface View extends BaseView{
-        String getUUID();
-        void showData(BaseBean baseBean);
-        void showMoreData(BaseBean baseBean);
-        void showFailedForLoadMore();
+        void showData(List<FriendCircleVO> friendCircleVOs);
+        void showMoreData(List<FriendCircleVO> friendCircleVOs);
+        void showFailedForResult(BaseBean2 baseBean2);
+        void showFailedForLoadMoreResult(BaseBean2 baseBean2);
+        void showFailedForLoadMoreException(Throwable t);
     }
-    interface IFriendCircleBiz{
-        interface OnFriendCircleListener{
-            void success(BaseBean baseBean);
-            void failed();
-        }
-        void friendCircle(FriendCircleBean friendCircleBean, OnFriendCircleListener friendCircleListener);
+    interface IFriendCircleBiz extends BaseListener{
+        void friendCircle(int page, int limit, OnRequestListener<List<FriendCircleVO>> requestListener);
     }
 }

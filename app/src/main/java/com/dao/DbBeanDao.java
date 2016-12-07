@@ -25,23 +25,22 @@ public class DbBeanDao extends AbstractDao<DbBean, Long> {
      */
     public static class Properties {
         public final static Property DbId = new Property(0, Long.class, "dbId", true, "_id");
-        public final static Property User_ID = new Property(1, Integer.class, "user_ID", false, "USER__ID");
-        public final static Property User_phone = new Property(2, String.class, "user_phone", false, "USER_PHONE");
-        public final static Property User_uuid = new Property(3, String.class, "user_uuid", false, "USER_UUID");
-        public final static Property Student_ID = new Property(4, String.class, "student_ID", false, "STUDENT__ID");
-        public final static Property User_icon = new Property(5, String.class, "user_icon", false, "USER_ICON");
-        public final static Property User_nickname = new Property(6, String.class, "user_nickname", false, "USER_NICKNAME");
-        public final static Property User_sex = new Property(7, String.class, "user_sex", false, "USER_SEX");
-        public final static Property User_birthday = new Property(8, java.util.Date.class, "user_birthday", false, "USER_BIRTHDAY");
-        public final static Property User_star = new Property(9, String.class, "user_star", false, "USER_STAR");
-        public final static Property User_height = new Property(10, Integer.class, "user_height", false, "USER_HEIGHT");
-        public final static Property User_sign = new Property(11, String.class, "user_sign", false, "USER_SIGN");
-        public final static Property User_education = new Property(12, String.class, "user_education", false, "USER_EDUCATION");
-        public final static Property User_department = new Property(13, String.class, "user_department", false, "USER_DEPARTMENT");
-        public final static Property User_locality = new Property(14, String.class, "user_locality", false, "USER_LOCALITY");
-        public final static Property User_school = new Property(15, String.class, "user_school", false, "USER_SCHOOL");
-        public final static Property User_state = new Property(16, String.class, "user_state", false, "USER_STATE");
-        public final static Property User_registerDate = new Property(17, String.class, "user_registerDate", false, "USER_REGISTER_DATE");
+        public final static Property UserID = new Property(1, Long.class, "userID", false, "USER_ID");
+        public final static Property Phone = new Property(2, String.class, "phone", false, "PHONE");
+        public final static Property StudentID = new Property(3, String.class, "studentID", false, "STUDENT_ID");
+        public final static Property Icon = new Property(4, String.class, "icon", false, "ICON");
+        public final static Property Nickname = new Property(5, String.class, "nickname", false, "NICKNAME");
+        public final static Property Sex = new Property(6, int.class, "sex", false, "SEX");
+        public final static Property Birthday = new Property(7, java.util.Date.class, "birthday", false, "BIRTHDAY");
+        public final static Property Star = new Property(8, String.class, "star", false, "STAR");
+        public final static Property Height = new Property(9, Integer.class, "height", false, "HEIGHT");
+        public final static Property Sign = new Property(10, String.class, "sign", false, "SIGN");
+        public final static Property Education = new Property(11, String.class, "education", false, "EDUCATION");
+        public final static Property Department = new Property(12, String.class, "department", false, "DEPARTMENT");
+        public final static Property Locality = new Property(13, String.class, "locality", false, "LOCALITY");
+        public final static Property School = new Property(14, int.class, "school", false, "SCHOOL");
+        public final static Property State = new Property(15, int.class, "state", false, "STATE");
+        public final static Property User_registerDate = new Property(16, java.util.Date.class, "user_registerDate", false, "USER_REGISTER_DATE");
     }
 
 
@@ -58,23 +57,22 @@ public class DbBeanDao extends AbstractDao<DbBean, Long> {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"DB_BEAN\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY ," + // 0: dbId
-                "\"USER__ID\" INTEGER," + // 1: user_ID
-                "\"USER_PHONE\" TEXT," + // 2: user_phone
-                "\"USER_UUID\" TEXT," + // 3: user_uuid
-                "\"STUDENT__ID\" TEXT," + // 4: student_ID
-                "\"USER_ICON\" TEXT," + // 5: user_icon
-                "\"USER_NICKNAME\" TEXT," + // 6: user_nickname
-                "\"USER_SEX\" TEXT," + // 7: user_sex
-                "\"USER_BIRTHDAY\" INTEGER," + // 8: user_birthday
-                "\"USER_STAR\" TEXT," + // 9: user_star
-                "\"USER_HEIGHT\" INTEGER," + // 10: user_height
-                "\"USER_SIGN\" TEXT," + // 11: user_sign
-                "\"USER_EDUCATION\" TEXT," + // 12: user_education
-                "\"USER_DEPARTMENT\" TEXT," + // 13: user_department
-                "\"USER_LOCALITY\" TEXT," + // 14: user_locality
-                "\"USER_SCHOOL\" TEXT," + // 15: user_school
-                "\"USER_STATE\" TEXT," + // 16: user_state
-                "\"USER_REGISTER_DATE\" TEXT);"); // 17: user_registerDate
+                "\"USER_ID\" INTEGER," + // 1: userID
+                "\"PHONE\" TEXT," + // 2: phone
+                "\"STUDENT_ID\" TEXT," + // 3: studentID
+                "\"ICON\" TEXT," + // 4: icon
+                "\"NICKNAME\" TEXT," + // 5: nickname
+                "\"SEX\" INTEGER NOT NULL ," + // 6: sex
+                "\"BIRTHDAY\" INTEGER," + // 7: birthday
+                "\"STAR\" TEXT," + // 8: star
+                "\"HEIGHT\" INTEGER," + // 9: height
+                "\"SIGN\" TEXT," + // 10: sign
+                "\"EDUCATION\" TEXT," + // 11: education
+                "\"DEPARTMENT\" TEXT," + // 12: department
+                "\"LOCALITY\" TEXT," + // 13: locality
+                "\"SCHOOL\" INTEGER NOT NULL ," + // 14: school
+                "\"STATE\" INTEGER NOT NULL ," + // 15: state
+                "\"USER_REGISTER_DATE\" INTEGER);"); // 16: user_registerDate
     }
 
     /** Drops the underlying database table. */
@@ -92,89 +90,72 @@ public class DbBeanDao extends AbstractDao<DbBean, Long> {
             stmt.bindLong(1, dbId);
         }
  
-        Integer user_ID = entity.getUser_ID();
-        if (user_ID != null) {
-            stmt.bindLong(2, user_ID);
+        Long userID = entity.getUserID();
+        if (userID != null) {
+            stmt.bindLong(2, userID);
         }
  
-        String user_phone = entity.getUser_phone();
-        if (user_phone != null) {
-            stmt.bindString(3, user_phone);
+        String phone = entity.getPhone();
+        if (phone != null) {
+            stmt.bindString(3, phone);
         }
  
-        String user_uuid = entity.getUser_uuid();
-        if (user_uuid != null) {
-            stmt.bindString(4, user_uuid);
+        String studentID = entity.getStudentID();
+        if (studentID != null) {
+            stmt.bindString(4, studentID);
         }
  
-        String student_ID = entity.getStudent_ID();
-        if (student_ID != null) {
-            stmt.bindString(5, student_ID);
+        String icon = entity.getIcon();
+        if (icon != null) {
+            stmt.bindString(5, icon);
         }
  
-        String user_icon = entity.getUser_icon();
-        if (user_icon != null) {
-            stmt.bindString(6, user_icon);
+        String nickname = entity.getNickname();
+        if (nickname != null) {
+            stmt.bindString(6, nickname);
+        }
+        stmt.bindLong(7, entity.getSex());
+ 
+        java.util.Date birthday = entity.getBirthday();
+        if (birthday != null) {
+            stmt.bindLong(8, birthday.getTime());
         }
  
-        String user_nickname = entity.getUser_nickname();
-        if (user_nickname != null) {
-            stmt.bindString(7, user_nickname);
+        String star = entity.getStar();
+        if (star != null) {
+            stmt.bindString(9, star);
         }
  
-        String user_sex = entity.getUser_sex();
-        if (user_sex != null) {
-            stmt.bindString(8, user_sex);
+        Integer height = entity.getHeight();
+        if (height != null) {
+            stmt.bindLong(10, height);
         }
  
-        java.util.Date user_birthday = entity.getUser_birthday();
-        if (user_birthday != null) {
-            stmt.bindLong(9, user_birthday.getTime());
+        String sign = entity.getSign();
+        if (sign != null) {
+            stmt.bindString(11, sign);
         }
  
-        String user_star = entity.getUser_star();
-        if (user_star != null) {
-            stmt.bindString(10, user_star);
+        String education = entity.getEducation();
+        if (education != null) {
+            stmt.bindString(12, education);
         }
  
-        Integer user_height = entity.getUser_height();
-        if (user_height != null) {
-            stmt.bindLong(11, user_height);
+        String department = entity.getDepartment();
+        if (department != null) {
+            stmt.bindString(13, department);
         }
  
-        String user_sign = entity.getUser_sign();
-        if (user_sign != null) {
-            stmt.bindString(12, user_sign);
+        String locality = entity.getLocality();
+        if (locality != null) {
+            stmt.bindString(14, locality);
         }
+        stmt.bindLong(15, entity.getSchool());
+        stmt.bindLong(16, entity.getState());
  
-        String user_education = entity.getUser_education();
-        if (user_education != null) {
-            stmt.bindString(13, user_education);
-        }
- 
-        String user_department = entity.getUser_department();
-        if (user_department != null) {
-            stmt.bindString(14, user_department);
-        }
- 
-        String user_locality = entity.getUser_locality();
-        if (user_locality != null) {
-            stmt.bindString(15, user_locality);
-        }
- 
-        String user_school = entity.getUser_school();
-        if (user_school != null) {
-            stmt.bindString(16, user_school);
-        }
- 
-        String user_state = entity.getUser_state();
-        if (user_state != null) {
-            stmt.bindString(17, user_state);
-        }
- 
-        String user_registerDate = entity.getUser_registerDate();
+        java.util.Date user_registerDate = entity.getUser_registerDate();
         if (user_registerDate != null) {
-            stmt.bindString(18, user_registerDate);
+            stmt.bindLong(17, user_registerDate.getTime());
         }
     }
 
@@ -187,89 +168,72 @@ public class DbBeanDao extends AbstractDao<DbBean, Long> {
             stmt.bindLong(1, dbId);
         }
  
-        Integer user_ID = entity.getUser_ID();
-        if (user_ID != null) {
-            stmt.bindLong(2, user_ID);
+        Long userID = entity.getUserID();
+        if (userID != null) {
+            stmt.bindLong(2, userID);
         }
  
-        String user_phone = entity.getUser_phone();
-        if (user_phone != null) {
-            stmt.bindString(3, user_phone);
+        String phone = entity.getPhone();
+        if (phone != null) {
+            stmt.bindString(3, phone);
         }
  
-        String user_uuid = entity.getUser_uuid();
-        if (user_uuid != null) {
-            stmt.bindString(4, user_uuid);
+        String studentID = entity.getStudentID();
+        if (studentID != null) {
+            stmt.bindString(4, studentID);
         }
  
-        String student_ID = entity.getStudent_ID();
-        if (student_ID != null) {
-            stmt.bindString(5, student_ID);
+        String icon = entity.getIcon();
+        if (icon != null) {
+            stmt.bindString(5, icon);
         }
  
-        String user_icon = entity.getUser_icon();
-        if (user_icon != null) {
-            stmt.bindString(6, user_icon);
+        String nickname = entity.getNickname();
+        if (nickname != null) {
+            stmt.bindString(6, nickname);
+        }
+        stmt.bindLong(7, entity.getSex());
+ 
+        java.util.Date birthday = entity.getBirthday();
+        if (birthday != null) {
+            stmt.bindLong(8, birthday.getTime());
         }
  
-        String user_nickname = entity.getUser_nickname();
-        if (user_nickname != null) {
-            stmt.bindString(7, user_nickname);
+        String star = entity.getStar();
+        if (star != null) {
+            stmt.bindString(9, star);
         }
  
-        String user_sex = entity.getUser_sex();
-        if (user_sex != null) {
-            stmt.bindString(8, user_sex);
+        Integer height = entity.getHeight();
+        if (height != null) {
+            stmt.bindLong(10, height);
         }
  
-        java.util.Date user_birthday = entity.getUser_birthday();
-        if (user_birthday != null) {
-            stmt.bindLong(9, user_birthday.getTime());
+        String sign = entity.getSign();
+        if (sign != null) {
+            stmt.bindString(11, sign);
         }
  
-        String user_star = entity.getUser_star();
-        if (user_star != null) {
-            stmt.bindString(10, user_star);
+        String education = entity.getEducation();
+        if (education != null) {
+            stmt.bindString(12, education);
         }
  
-        Integer user_height = entity.getUser_height();
-        if (user_height != null) {
-            stmt.bindLong(11, user_height);
+        String department = entity.getDepartment();
+        if (department != null) {
+            stmt.bindString(13, department);
         }
  
-        String user_sign = entity.getUser_sign();
-        if (user_sign != null) {
-            stmt.bindString(12, user_sign);
+        String locality = entity.getLocality();
+        if (locality != null) {
+            stmt.bindString(14, locality);
         }
+        stmt.bindLong(15, entity.getSchool());
+        stmt.bindLong(16, entity.getState());
  
-        String user_education = entity.getUser_education();
-        if (user_education != null) {
-            stmt.bindString(13, user_education);
-        }
- 
-        String user_department = entity.getUser_department();
-        if (user_department != null) {
-            stmt.bindString(14, user_department);
-        }
- 
-        String user_locality = entity.getUser_locality();
-        if (user_locality != null) {
-            stmt.bindString(15, user_locality);
-        }
- 
-        String user_school = entity.getUser_school();
-        if (user_school != null) {
-            stmt.bindString(16, user_school);
-        }
- 
-        String user_state = entity.getUser_state();
-        if (user_state != null) {
-            stmt.bindString(17, user_state);
-        }
- 
-        String user_registerDate = entity.getUser_registerDate();
+        java.util.Date user_registerDate = entity.getUser_registerDate();
         if (user_registerDate != null) {
-            stmt.bindString(18, user_registerDate);
+            stmt.bindLong(17, user_registerDate.getTime());
         }
     }
 
@@ -282,23 +246,22 @@ public class DbBeanDao extends AbstractDao<DbBean, Long> {
     public DbBean readEntity(Cursor cursor, int offset) {
         DbBean entity = new DbBean( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // dbId
-            cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1), // user_ID
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // user_phone
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // user_uuid
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // student_ID
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // user_icon
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // user_nickname
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // user_sex
-            cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)), // user_birthday
-            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // user_star
-            cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10), // user_height
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // user_sign
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // user_education
-            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // user_department
-            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // user_locality
-            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // user_school
-            cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16), // user_state
-            cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17) // user_registerDate
+            cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1), // userID
+            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // phone
+            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // studentID
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // icon
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // nickname
+            cursor.getInt(offset + 6), // sex
+            cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)), // birthday
+            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // star
+            cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9), // height
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // sign
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // education
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // department
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // locality
+            cursor.getInt(offset + 14), // school
+            cursor.getInt(offset + 15), // state
+            cursor.isNull(offset + 16) ? null : new java.util.Date(cursor.getLong(offset + 16)) // user_registerDate
         );
         return entity;
     }
@@ -306,23 +269,22 @@ public class DbBeanDao extends AbstractDao<DbBean, Long> {
     @Override
     public void readEntity(Cursor cursor, DbBean entity, int offset) {
         entity.setDbId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setUser_ID(cursor.isNull(offset + 1) ? null : cursor.getInt(offset + 1));
-        entity.setUser_phone(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setUser_uuid(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setStudent_ID(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setUser_icon(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setUser_nickname(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setUser_sex(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setUser_birthday(cursor.isNull(offset + 8) ? null : new java.util.Date(cursor.getLong(offset + 8)));
-        entity.setUser_star(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
-        entity.setUser_height(cursor.isNull(offset + 10) ? null : cursor.getInt(offset + 10));
-        entity.setUser_sign(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setUser_education(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
-        entity.setUser_department(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
-        entity.setUser_locality(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
-        entity.setUser_school(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
-        entity.setUser_state(cursor.isNull(offset + 16) ? null : cursor.getString(offset + 16));
-        entity.setUser_registerDate(cursor.isNull(offset + 17) ? null : cursor.getString(offset + 17));
+        entity.setUserID(cursor.isNull(offset + 1) ? null : cursor.getLong(offset + 1));
+        entity.setPhone(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
+        entity.setStudentID(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
+        entity.setIcon(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setNickname(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setSex(cursor.getInt(offset + 6));
+        entity.setBirthday(cursor.isNull(offset + 7) ? null : new java.util.Date(cursor.getLong(offset + 7)));
+        entity.setStar(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
+        entity.setHeight(cursor.isNull(offset + 9) ? null : cursor.getInt(offset + 9));
+        entity.setSign(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setEducation(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setDepartment(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setLocality(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setSchool(cursor.getInt(offset + 14));
+        entity.setState(cursor.getInt(offset + 15));
+        entity.setUser_registerDate(cursor.isNull(offset + 16) ? null : new java.util.Date(cursor.getLong(offset + 16)));
      }
     
     @Override

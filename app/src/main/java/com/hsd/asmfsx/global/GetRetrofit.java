@@ -7,9 +7,13 @@ import android.content.Context;
 import com.hsd.asmfsx.app.MyApplication;
 import com.hsd.asmfsx.model.cookie.CookieManger;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -43,6 +47,16 @@ public class GetRetrofit {
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .cookieJar(new CookieManger(MyApplication.getAppContext()))
                     .connectTimeout(10000, TimeUnit.SECONDS)
+                    .addInterceptor(new Interceptor() {
+                        @Override
+                        public Response intercept(Chain chain) throws IOException {
+                            Request request = chain.request()
+                                    .newBuilder()
+                                    .addHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8")
+                                    .build();
+                            return chain.proceed(request);
+                        }
+                    })
                     .build();
             retrofit2 = new Retrofit.Builder()
                     .client(okHttpClient)

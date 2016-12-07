@@ -29,7 +29,7 @@ public class LoginPresenter implements LoginContract.Presenter{
                 GetHandler.getHandler().post(new Runnable() {
                     @Override
                     public void run() {
-                        view.clearData();
+//                        view.clearData();
                         view.showData(userBean2);
                         view.hideLoading();
                     }
@@ -41,7 +41,7 @@ public class LoginPresenter implements LoginContract.Presenter{
                 GetHandler.getHandler().post(new Runnable() {
                     @Override
                     public void run() {
-                        view.clearData();
+//                        view.clearData();
                         view.showFailedForResult(baseBean);
                         view.hideLoading();
                     }

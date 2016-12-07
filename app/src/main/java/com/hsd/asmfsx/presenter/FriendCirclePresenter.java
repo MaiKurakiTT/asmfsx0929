@@ -1,10 +1,15 @@
 package com.hsd.asmfsx.presenter;
 
 import com.hsd.asmfsx.bean.BaseBean;
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.FriendCircleBean;
+import com.hsd.asmfsx.bean.FriendCircleVO;
 import com.hsd.asmfsx.contract.FriendCircleContract;
 import com.hsd.asmfsx.global.GetHandler;
+import com.hsd.asmfsx.model.BaseListener;
 import com.hsd.asmfsx.model.FriendCircleBiz;
+
+import java.util.List;
 
 /**
  * Created by apple on 2016/11/10.
@@ -13,8 +18,8 @@ import com.hsd.asmfsx.model.FriendCircleBiz;
 public class FriendCirclePresenter implements FriendCircleContract.Presenter {
     private FriendCircleContract.View view;
     private FriendCircleContract.IFriendCircleBiz friendCircleBiz;
-    private int page = 1;
-    private int pageSize = 20;
+    private int page = 2; //页码，默认1
+    private int limit = 10; //每页条数，默认10
 
     public FriendCirclePresenter(FriendCircleContract.View view) {
         this.view = view;
@@ -23,41 +28,33 @@ public class FriendCirclePresenter implements FriendCircleContract.Presenter {
 
     @Override
     public void start() {
-        FriendCircleBean friendCircleBean = new FriendCircleBean();
-        friendCircleBean.setUUID(view.getUUID());
-        friendCircleBean.setFriendsCircle_pageNow(1);
-        friendCircleBean.setFriendsCircle_pageSize(pageSize);
-        requestData(friendCircleBean, 0);
+        requestData(0);
     }
 
     @Override
     public void loadMore() {
-        FriendCircleBean friendCircleBean = new FriendCircleBean();
-        friendCircleBean.setUUID(view.getUUID());
-        friendCircleBean.setFriendsCircle_pageNow(page);
-        friendCircleBean.setFriendsCircle_pageSize(pageSize);
-        requestData(friendCircleBean, 1);
+        requestData(1);
     }
 
     /**
      * 请求数据
-     * @param friendCircleBean
      * @param type 0为正常刷新数据，1为加载更多数据
      */
-    private void requestData(FriendCircleBean friendCircleBean, final int type) {
+    private void requestData(final int type) {
         if (type == 0){
             view.showLoading();
+            page = 1;
         }
-        friendCircleBiz.friendCircle(friendCircleBean, new FriendCircleContract.IFriendCircleBiz.OnFriendCircleListener() {
+        friendCircleBiz.friendCircle(page, limit, new BaseListener.OnRequestListener<List<FriendCircleVO>>() {
             @Override
-            public void success(final BaseBean baseBean) {
+            public void success(final List<FriendCircleVO> friendCircleVOs) {
                 GetHandler.getHandler().post(new Runnable() {
                     @Override
                     public void run() {
                         if (type == 0) {
-                            view.showData(baseBean);
+                            view.showData(friendCircleVOs);
                         }else {
-                            view.showMoreData(baseBean);
+                            view.showMoreData(friendCircleVOs);
                         }
                         page++;
                         view.hideLoading();
@@ -66,14 +63,29 @@ public class FriendCirclePresenter implements FriendCircleContract.Presenter {
             }
 
             @Override
-            public void failed() {
+            public void failedForResult(final BaseBean2 baseBean) {
                 GetHandler.getHandler().post(new Runnable() {
                     @Override
                     public void run() {
                         if (type == 0) {
-//                            view.showFailedForException();
+                            view.showFailedForResult(baseBean);
                         }else {
-                            view.showFailedForLoadMore();
+                            view.showFailedForLoadMoreResult(baseBean);
+                        }
+                        view.hideLoading();
+                    }
+                });
+            }
+
+            @Override
+            public void failedForException(final Throwable t) {
+                GetHandler.getHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (type == 0) {
+                            view.showFailedForException(t);
+                        }else {
+                            view.showFailedForLoadMoreException(t);
                         }
                         view.hideLoading();
                     }

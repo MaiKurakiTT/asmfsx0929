@@ -59,12 +59,16 @@ import com.orhanobut.logger.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.FormBody;
+import okhttp3.Headers;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -207,7 +211,8 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         findViewById(R.id.bottombutton3).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                testUpDate();
+//                testUpDate();
+                testNew2();
             }
         });
     }
@@ -252,19 +257,6 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     }
 
     private void testNew2() {
-        /*File file = new File(Environment.getExternalStorageDirectory(), "snocrop.png");
-        new UploadImgBiz2().uploadImg(file, new UploadImgBiz2.OnUploadListener() {
-            @Override
-            public void success(NormalResultBean resultBean) {
-                String[] json = (String[])resultBean.getJson();
-                Logger.d(json[0]);
-            }
-
-            @Override
-            public void failed() {
-
-            }
-        });*/
     }
     private void testNew3(){
         RetrofitService service = GetRetrofit.getRetrofit2().create(RetrofitService.class);

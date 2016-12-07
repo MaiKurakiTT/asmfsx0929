@@ -115,7 +115,7 @@ public class SetUserInfoActivity extends AppCompatActivity {
         nickName = nametext.getText().toString();
         birthdayString = birthdaytext.getText().toString();
         if (!TextUtils.isEmpty(birthdaytext.getText().toString())) {
-            birthday = DateFormatUtils.FormatString2Date(birthdayString);
+            birthday = DateFormatUtils.formatString2Date(birthdayString);
         }
         star = startext.getText().toString();
         home = hometext.getText().toString();
@@ -147,7 +147,7 @@ public class SetUserInfoActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String s = birthdaytext.getText().toString();
                 if (!TextUtils.isEmpty(s)) {
-                    Date date = DateFormatUtils.FormatString2Date(s);
+                    Date date = DateFormatUtils.formatString2Date(s);
                     if (date != null){
                         startext.setText(Date2Star.date2Constellation(date)+"");
                     }

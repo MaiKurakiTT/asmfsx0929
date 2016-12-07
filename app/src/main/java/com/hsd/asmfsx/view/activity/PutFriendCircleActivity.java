@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.adapter.AddImgAdapter;
 import com.hsd.asmfsx.bean.BaseBean;
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.FriendCircleBean;
 import com.hsd.asmfsx.contract.PutFriendCircleContract;
 import com.hsd.asmfsx.presenter.PutFriendCirclePresenter;
@@ -137,12 +138,10 @@ public class PutFriendCircleActivity extends AppCompatActivity implements PutFri
         GalleryActivity.openActivity(PutFriendCircleActivity.this, 0, config);
     }
 
+
     @Override
-    public FriendCircleBean getFriendCircleBean() {
-        FriendCircleBean friendCircleBean = new FriendCircleBean();
-        friendCircleBean.setUUID("84f4b998-17df-4997-8fc2-828f89aec37d");
-        friendCircleBean.setFriendsCircle_content(contentText);
-        return friendCircleBean;
+    public String getContent() {
+        return contentEt.getText().toString();
     }
 
     @Override
@@ -151,6 +150,21 @@ public class PutFriendCircleActivity extends AppCompatActivity implements PutFri
     }
 
     @Override
+    public void showData(BaseBean2 baseBean, int failedCounts) {
+        ShowToast.show(PutFriendCircleActivity.this, "发布成功");
+    }
+
+    @Override
+    public void showFailedForResult(BaseBean2 baseBean) {
+
+    }
+
+    @Override
+    public void showFailedForException(Throwable t) {
+
+    }
+
+    /*@Override
     public void showData(BaseBean baseBean, int failedCounts) {
         if (baseBean.getResultCode() == 1) {
             if (failedCounts > 0) {
@@ -161,7 +175,7 @@ public class PutFriendCircleActivity extends AppCompatActivity implements PutFri
                 finish();
             }
         }
-    }
+    }*/
 
     @Override
     public void showLoading() {
@@ -173,10 +187,7 @@ public class PutFriendCircleActivity extends AppCompatActivity implements PutFri
         progressDialog.dismiss();
     }
 
-    @Override
-    public void showFailedForException(Throwable t) {
 
-    }
 
     /*@Override
     public void showFailed() {
