@@ -13,8 +13,10 @@ import android.widget.Button;
 
 import com.google.gson.reflect.TypeToken;
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.FindFriendsBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
+import com.hsd.asmfsx.bean.UserInformationBean2;
 import com.hsd.asmfsx.cardviewpager.CardPagerAdapter;
 import com.hsd.asmfsx.cardviewpager.ShadowTransformer;
 import com.hsd.asmfsx.contract.FindFriendsContract;
@@ -40,7 +42,7 @@ public class FindFriendsActivity extends AppCompatActivity implements FindFriend
     @BindView(R.id.changebut)
     Button changebut;
     private FindFriendsPresenter findFriendsPresenter;
-    private List<UserInformationBean> mList;
+    private List<UserInformationBean2> mList;
     private CardPagerAdapter cardPagerAdapter;
     private ShadowTransformer shadowTransformer;
     private ProgressDialog progressDialog;
@@ -70,17 +72,8 @@ public class FindFriendsActivity extends AppCompatActivity implements FindFriend
 
     }
 
-    @Override
-    public FindFriendsBean getFindFriendsBean() {
-        FindFriendsBean findFriendsBean = new FindFriendsBean();
-        findFriendsBean.setUUID("84f4b998-17df-4997-8fc2-828f89aec37d");
-        findFriendsBean.setSex("男");
-        findFriendsBean.setFindFriend_pageNow(Integer.valueOf(1));
-        findFriendsBean.setFindFriend_pageSize(Integer.valueOf(10));
-        return findFriendsBean;
-    }
 
-    @Override
+    /*@Override
     public void showData(FindFriendsBean findFriendsBean) {
         String body = findFriendsBean.getBody();
         List<UserInformationBean> list = GetGson.getGson().fromJson(body, new TypeToken<List<UserInformationBean>>() {
@@ -112,17 +105,8 @@ public class FindFriendsActivity extends AppCompatActivity implements FindFriend
         viewpager.setPageTransformer(false, shadowTransformer);
         viewpager.setOffscreenPageLimit(3);
 
-    }
+    }*/
 
-    @Override
-    public void showFailedForLoadMore() {
-        Snackbar.make(changebut, "加载失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                findFriendsPresenter.loadMoreData();
-            }
-        }).show();
-    }
 
     @Override
     public void showLoading() {
@@ -139,18 +123,57 @@ public class FindFriendsActivity extends AppCompatActivity implements FindFriend
 
     }
 
-    /*@Override
-    public void showFailed() {
+
+    public static float dpToPixels(int dp, Context context) {
+        return dp * (context.getResources().getDisplayMetrics().density);
+    }
+
+    @Override
+    public void showData(List<UserInformationBean2> userInformationBean2s) {
+        mList = userInformationBean2s;
+
+        cardPagerAdapter = new CardPagerAdapter(this, mList);
+        shadowTransformer = new ShadowTransformer(viewpager, cardPagerAdapter);
+
+        viewpager.setAdapter(cardPagerAdapter);
+        viewpager.setPageTransformer(false, shadowTransformer);
+        viewpager.setOffscreenPageLimit(3);
+    }
+
+    @Override
+    public void showMoreData(List<UserInformationBean2> userInformationBean2s) {
+        mList = userInformationBean2s;
+        viewpager.removeAllViews();
+        cardPagerAdapter = new CardPagerAdapter(FindFriendsActivity.this, mList);
+        shadowTransformer = new ShadowTransformer(viewpager, cardPagerAdapter);
+        viewpager.setAdapter(cardPagerAdapter);
+        viewpager.setPageTransformer(false, shadowTransformer);
+        viewpager.setOffscreenPageLimit(3);
+    }
+
+    @Override
+    public void showFailedForResult(BaseBean2 baseBean2) {
         Snackbar.make(changebut, "加载失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 findFriendsPresenter.start();
             }
         }).show();
-    }*/
+    }
 
-    public static float dpToPixels(int dp, Context context) {
-        return dp * (context.getResources().getDisplayMetrics().density);
+    @Override
+    public void showFailedForMoreResult(BaseBean2 baseBean2) {
+        Snackbar.make(changebut, "加载失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                findFriendsPresenter.loadMoreData();
+            }
+        }).show();
+    }
+
+    @Override
+    public void showFailedForMoreException(Throwable t) {
+
     }
 }
 /**

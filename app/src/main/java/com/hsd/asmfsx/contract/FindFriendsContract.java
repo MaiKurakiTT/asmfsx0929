@@ -2,7 +2,13 @@ package com.hsd.asmfsx.contract;
 
 import com.hsd.asmfsx.base.BasePresenter;
 import com.hsd.asmfsx.base.BaseView;
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.FindFriendsBean;
+import com.hsd.asmfsx.bean.NormalResultBean;
+import com.hsd.asmfsx.bean.UserInformationBean2;
+import com.hsd.asmfsx.model.BaseListener;
+
+import java.util.List;
 
 /**
  * Created by 紫荆 on 2016/10/22.
@@ -13,16 +19,13 @@ public interface FindFriendsContract {
         void loadMoreData();
     }
     interface  View extends BaseView{
-        FindFriendsBean getFindFriendsBean();
-        void showData(FindFriendsBean findFriendsBean);
-        void showMoreData(FindFriendsBean findFriendsBean);
-        void showFailedForLoadMore();
+        void showData(List<UserInformationBean2> userInformationBean2s);
+        void showMoreData(List<UserInformationBean2> userInformationBean2s);
+        void showFailedForResult(BaseBean2 baseBean2);
+        void showFailedForMoreResult(BaseBean2 baseBean2);
+        void showFailedForMoreException(Throwable t);
     }
-    interface IFindFriendsBiz{
-        interface OnFindFriendsListener{
-            void success(FindFriendsBean findFriendsBean);
-            void failed();
-        }
-        void doFindFriends(FindFriendsBean findFriendsBean, OnFindFriendsListener findFriendsListener);
+    interface IFindFriendsBiz extends BaseListener{
+        void doFindFriends(int page, int limit, OnRequestListener<List<UserInformationBean2>> requestListener);
     }
 }

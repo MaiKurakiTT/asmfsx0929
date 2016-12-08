@@ -10,6 +10,8 @@ import com.hyphenate.easeui.controller.EaseUI;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.orhanobut.logger.Logger;
 
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
 
 
 /**
@@ -29,10 +31,14 @@ public class MyApplication extends Application{
         EaseUI.getInstance().init(this, new EMOptions());
         EMClient.getInstance().setDebugMode(true);
 
+        SMSSDK.initSDK(this, "19537e46b6692", "e1afbf73ef9df65ce566b1a0d1cb785a");
+
+
     }
     public static Context getAppContext(){
         return context;
     }
+
 
 
 }

@@ -24,6 +24,8 @@ import com.orhanobut.logger.Logger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.smssdk.EventHandler;
+import cn.smssdk.SMSSDK;
 
 /**
  * Created by apple on 2016/10/20.
@@ -47,6 +49,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
     private ProgressDialog progressDialog;
     private String username;
     private String password;
+    private String code;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,16 +72,27 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
                 doRegister();
             }
         });
+        codeBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                username = phoneEdit.getText().toString();
+                if (!TextUtils.isEmpty(username)){
+                    SMSSDK.getVerificationCode("+86", username);
+                }
+            }
+        });
     }
 
     private void doRegister() {
         if (NetworkUtils.isNetworkAvailable(this)) {
             username = phoneEdit.getText().toString();
             password = pswEdit.getText().toString();
+            code = codeEdit.getText().toString();
             if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
                 ShowToast.show(RegisterActivity.this, "信息填写有误！");
             } else {
-                registerPresenter.start();
+//                registerPresenter.start();
+                SMSSDK.submitVerificationCode("+86", code, username);
             }
         } else {
             ShowToast.show(RegisterActivity.this, "网络好像出问题了，请检查你的网络状况~");
@@ -90,6 +104,30 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         stuId = intent.getStringExtra("stuId");
         schoolName = intent.getStringExtra("schoolName");
         registerPresenter = new RegisterPresenter(this);
+
+        SMSSDK.getSupportedCountries();
+
+        EventHandler eh=new EventHandler(){
+            @Override
+            public void afterEvent(int event, int result, Object data) {
+                if (result == SMSSDK.RESULT_COMPLETE) {
+                    //回调完成
+                    if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
+                        //提交验证码成功
+                        Logger.d(data);
+                    }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
+                        //获取验证码成功
+                        Logger.d(data);
+                    }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
+                        //返回支持发送验证码的国家列表
+                        Logger.d(data);
+                    }
+                }else{
+                    ((Throwable)data).printStackTrace();
+                }
+            }
+        };
+        SMSSDK.registerEventHandler(eh); //注册短信回调
     }
 
     @Override

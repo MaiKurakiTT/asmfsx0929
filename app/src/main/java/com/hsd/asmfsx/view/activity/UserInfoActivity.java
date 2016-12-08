@@ -15,6 +15,7 @@ import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.bean.UserInformationBean;
+import com.hsd.asmfsx.bean.UserInformationBean2;
 import com.hsd.asmfsx.utils.ShowToast;
 
 import butterknife.BindView;
@@ -90,12 +91,12 @@ public class UserInfoActivity extends AppCompatActivity {
     private void initData() {
         type = getIntent().getIntExtra("type", 1);
 
-        UserInformationBean userInformationBean = (UserInformationBean) getIntent().getSerializableExtra("userInformationBean");
+        UserInformationBean2 userInformationBean = (UserInformationBean2) getIntent().getSerializableExtra("userInformationBean");
         if (userInformationBean == null) {
 
         } else {
-            String user_nickname = userInformationBean.getUser_nickname();
-            String user_icon = userInformationBean.getUser_icon();
+            String user_nickname = userInformationBean.getNickname();
+            String user_icon = userInformationBean.getIcon();
             name.setText(user_nickname);
             Glide.with(this).load(user_icon).into(userImg);
             ShowToast.show(UserInfoActivity.this, user_nickname);

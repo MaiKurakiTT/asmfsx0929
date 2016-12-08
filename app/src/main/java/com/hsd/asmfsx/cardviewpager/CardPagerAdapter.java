@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.bean.UserInformationBean;
+import com.hsd.asmfsx.bean.UserInformationBean2;
 import com.hsd.asmfsx.global.GetGson;
 import com.hsd.asmfsx.utils.GetAgeFromDate;
 import com.hsd.asmfsx.view.activity.UserInfoActivity;
@@ -24,18 +25,19 @@ import com.orhanobut.logger.Logger;
 
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
 
     private List<CardView> mViews;
     private List<String> mData;
-    private List<UserInformationBean> mList;
+    private List<UserInformationBean2> mList;
     private float mBaseElevation;
     private Context context;
     private OnItemClickListener itemClickListener;
 
-    public CardPagerAdapter(Context context, List<UserInformationBean> mList) {
+    public CardPagerAdapter(Context context, List<UserInformationBean2> mList) {
         mData = new ArrayList<>();
         mViews = new ArrayList<>();
         this.mList = mList;
@@ -82,15 +84,16 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
         TextView schoolText = (TextView) view.findViewById(R.id.school);
         ImageView img = (ImageView) view.findViewById(R.id.img);
 
-        final UserInformationBean userInformationBean = mList.get(position);
-        Logger.d("当前昵称: " + userInformationBean.getUser_nickname());
-        nameText.setText("" + userInformationBean.getUser_nickname());
-        int age = GetAgeFromDate.getAge(userInformationBean.getUser_birthday());
-
-        ageText.setText("" + age + "岁");
-        starText.setText(userInformationBean.getUser_star() + "");
-        schoolText.setText("" + userInformationBean.getUser_school());
-        Glide.with(context).load(mList.get(position).getUser_icon()).into(img);
+        final UserInformationBean2 userInformationBean = mList.get(position);
+        Logger.d("当前昵称: " + userInformationBean.getNickname());
+        nameText.setText("" + userInformationBean.getNickname());
+        Date date = new Date(userInformationBean.getBirthday());
+//        int age = GetAgeFromDate.getAge(date);
+//
+//        ageText.setText("" + age + "岁");
+        starText.setText(userInformationBean.getStar() + "");
+        schoolText.setText("" + userInformationBean.getSchool());
+        Glide.with(context).load(mList.get(position).getIcon()).into(img);
         Log.d("CardPagerAdapter", "instantiateItem当前List总数: " + mList.size());
         view.setOnClickListener(new View.OnClickListener() {
             @Override

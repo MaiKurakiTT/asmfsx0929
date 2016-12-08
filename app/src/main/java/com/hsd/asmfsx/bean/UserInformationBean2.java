@@ -1,12 +1,13 @@
 package com.hsd.asmfsx.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by sun on 2016/12/5.
  */
 
-public class UserInformationBean2 {
+public class UserInformationBean2 implements Serializable {
     private Long id;
 
     private String phone;

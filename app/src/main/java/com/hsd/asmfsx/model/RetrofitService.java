@@ -130,6 +130,14 @@ public interface RetrofitService {
     @POST(GlobalParameter.project2 + "user/fc/addLike.action")
     Call<BaseBean2> postFCGood(@Field("friendCircleID") Long friendCircleID);
 
+    /**
+     * 找朋友
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(GlobalParameter.project2 + "user/getUserInformationListWithKeys.action")
+    Call<NormalResultBean<List<UserInformationBean2>>> postFindFriends(@Field("page") int page, @Field("limit") int limit);
+
 /**
  * ------------------------------------------------------------------------------------
  */
