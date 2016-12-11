@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.baidu.mapapi.map.Text;
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.RegisterBean;
@@ -69,6 +70,19 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
         registerBut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (NetworkUtils.isNetworkAvailable(RegisterActivity.this)) {
+                    username = phoneEdit.getText().toString();
+                    password = pswEdit.getText().toString();
+                    code = codeEdit.getText().toString();
+                    if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(code)) {
+                        ShowToast.show(RegisterActivity.this, "信息填写有误！");
+                    } else {
+//                registerPresenter.start();
+                        SMSSDK.submitVerificationCode("86", username, code);
+                    }
+                } else {
+                    ShowToast.show(RegisterActivity.this, "网络好像出问题了，请检查你的网络状况~");
+                }
                 doRegister();
             }
         });
@@ -77,7 +91,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
             public void onClick(View view) {
                 username = phoneEdit.getText().toString();
                 if (!TextUtils.isEmpty(username)){
-                    SMSSDK.getVerificationCode("+86", username);
+                    SMSSDK.getVerificationCode("86", username);
                 }
             }
         });
@@ -92,7 +106,6 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
                 ShowToast.show(RegisterActivity.this, "信息填写有误！");
             } else {
 //                registerPresenter.start();
-                SMSSDK.submitVerificationCode("+86", code, username);
             }
         } else {
             ShowToast.show(RegisterActivity.this, "网络好像出问题了，请检查你的网络状况~");
@@ -115,15 +128,34 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                         //提交验证码成功
                         Logger.d(data);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ShowToast.show(RegisterActivity.this, "短信验证码验证成功");
+                            }
+                        });
+                        doRegister();
                     }else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE){
                         //获取验证码成功
                         Logger.d(data);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ShowToast.show(RegisterActivity.this, "短信验证码已发送至您的手机，请注意查收");
+                            }
+                        });
                     }else if (event ==SMSSDK.EVENT_GET_SUPPORTED_COUNTRIES){
                         //返回支持发送验证码的国家列表
                         Logger.d(data);
                     }
                 }else{
                     ((Throwable)data).printStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ShowToast.show(RegisterActivity.this, "短信验证码验证失败");
+                        }
+                    });
                 }
             }
         };

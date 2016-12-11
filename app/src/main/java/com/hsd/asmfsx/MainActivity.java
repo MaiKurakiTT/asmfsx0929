@@ -46,6 +46,7 @@ import com.hsd.asmfsx.view.activity.FriendCircleActivity;
 import com.hsd.asmfsx.view.activity.LoginActivity;
 import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
+import com.hsd.asmfsx.view.activity.ShopHomeActivity;
 import com.hsd.asmfsx.view.activity.UserInfoActivity;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
@@ -343,7 +344,8 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
 
                         break;
                     case 2:
-
+                        Intent intent = new Intent(MainActivity.this, ShopHomeActivity.class);
+                        startActivity(intent);
                         break;
                     case 3:
 

@@ -40,6 +40,7 @@
         </activity>
         <activity android:name=".chat.ChatActivity"
                     android:launchMode="singleTask"/>
+
         <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"/>
         <activity android:name="com.hyphenate.easeui.ui.EaseBaiduMapActivity"/>
         <activity android:name=".chat.ChatWithActivity"/>
@@ -56,6 +57,21 @@
         <activity android:name=".view.activity.FriendCircleActivity"/>
         <activity android:name=".view.activity.PutFriendCircleActivity"/>
         <activity android:name=".view.activity.SetUserInfoActivity"/>
+        <activity android:name=".view.activity.ShopHomeActivity"/>
+        <activity android:name=".view.activity.ItemShopActivity"/>
+
+
+
+        <!-- alipay sdk begin -->
+        <!-- 若手机没有安装支付宝，则调用H5支付页面 -->
+        <activity
+            android:name="com.alipay.sdk.app.H5PayActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:exported="false"
+            android:screenOrientation="behind"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
+        </activity>
+
         <!-- 设置环信应用的AppKey -->
         <meta-data android:name="EASEMOB_APPKEY"  android:value="zacharysun#firsttestim" />
         <!-- 声明SDK所需的service SDK核心功能-->

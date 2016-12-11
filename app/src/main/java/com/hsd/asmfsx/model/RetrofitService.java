@@ -138,6 +138,17 @@ public interface RetrofitService {
     @POST(GlobalParameter.project2 + "user/getUserInformationListWithKeys.action")
     Call<NormalResultBean<List<UserInformationBean2>>> postFindFriends(@Field("page") int page, @Field("limit") int limit);
 
+    /**
+     * 商品下订单
+     * @param commodityIDs
+     * @param amounts
+     * @param detail
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(GlobalParameter.project2 + "user/addOrder.action")
+    Call<BaseBean2> postPlaceOrder(@Field("commodityIDs") List<Long> commodityIDs, @Field("amounts") List<Integer> amounts, @Field("detail") String detail);
+
 /**
  * ------------------------------------------------------------------------------------
  */
