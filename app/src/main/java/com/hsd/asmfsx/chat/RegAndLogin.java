@@ -9,7 +9,6 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.hsd.asmfsx.R;
-import com.hsd.asmfsx.global.GetHandler;
 import com.hsd.asmfsx.utils.ShowToast;
 import com.hyphenate.EMCallBack;
 import com.hyphenate.chat.EMClient;
@@ -37,7 +36,7 @@ public class RegAndLogin extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.registerandlogin_layout);
+        setContentView(R.layout.chatregisterandlogin_layout);
         ButterKnife.bind(this);
 
         register.setOnClickListener(new View.OnClickListener() {

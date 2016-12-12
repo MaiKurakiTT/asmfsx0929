@@ -1,5 +1,6 @@
 package com.hsd.asmfsx.model;
 
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.NormalResultBean;
 import com.hsd.asmfsx.bean.UserBean2;
 import com.hsd.asmfsx.contract.LoginContract;
@@ -18,26 +19,26 @@ public class LoginBiz implements LoginContract.ILoginBiz{
 
 
     @Override
-    public void login(String userName, String passWord, final OnRequestListener<UserBean2> requestListener) {
+    public void login(String userName, String passWord, final OnRequestListener<BaseBean2> requestListener) {
         GetRetrofit.
                 getRetrofit2().
                 create(RetrofitService.class).
                 postLogin2(userName, passWord).
-                enqueue(new Callback<NormalResultBean<UserBean2>>() {
+                enqueue(new Callback<BaseBean2>() {
                     @Override
-                    public void onResponse(Call<NormalResultBean<UserBean2>> call, Response<NormalResultBean<UserBean2>> response) {
-                        NormalResultBean<UserBean2> body = response.body();
-                        if (body.getState() == 0){
-                            UserBean2 json = body.getJson();
-                            requestListener.success(json);
-                        }else {
-                            requestListener.failedForResult(body);
+                    public void onResponse(Call<BaseBean2> call, Response<BaseBean2> response) {
+                        BaseBean2 body = response.body();
+                        if (body != null){
+                            if (body.getState() == 0){
+                                requestListener.success(body);
+                            }else {
+                                requestListener.failedForResult(body);
+                            }
                         }
-
                     }
 
                     @Override
-                    public void onFailure(Call<NormalResultBean<UserBean2>> call, Throwable t) {
+                    public void onFailure(Call<BaseBean2> call, Throwable t) {
                         t.printStackTrace();
                         Logger.d(t.toString());
                         requestListener.failedForException(t);

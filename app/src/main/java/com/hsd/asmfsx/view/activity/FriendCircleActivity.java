@@ -42,7 +42,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by apple on 2016/11/10.
  */
 
-public class FriendCircleActivity extends AppCompatActivity implements FriendCircleContract.View, PutGoodContract.View, PutCommentContract.View{
+public class FriendCircleActivity extends AppCompatActivity implements FriendCircleContract.View, PutGoodContract.View, PutCommentContract.View {
     @BindView(R.id.recycle_view)
     RecyclerView recycleView;
     @BindView(R.id.head)
@@ -107,9 +107,9 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
             @Override
             public void onClick(View view) {
                 commentContent = commentText.getText().toString();
-                if (TextUtils.isEmpty(commentContent)){
+                if (TextUtils.isEmpty(commentContent)) {
                     ShowToast.show(FriendCircleActivity.this, "写点什么再发送吧~");
-                }else {
+                } else {
                     putCommentPresenter.start();
                     commentText.setText("");
                     bottomDialog.dismiss();
@@ -144,7 +144,7 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PUTFRIENDCIRCLE_REQUEST && resultCode == PUTFRIENDCIRCLE_RESULT){
+        if (requestCode == PUTFRIENDCIRCLE_REQUEST && resultCode == PUTFRIENDCIRCLE_RESULT) {
             //发布完说说后来到这里
             friendCirclePresenter.start();
         }
@@ -153,6 +153,7 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
 
     /**
      * 给recycleView设置上拉加载
+     *
      * @param adapter
      */
     private void initRecycleLoadMore(final FriendCircleAdapter adapter) {
@@ -209,13 +210,17 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
 
     @Override
     public void showData(List<FriendCircleVO> friendCircleVOs) {
-        friendCircleList = friendCircleVOs;
-        Logger.d("请求到" + friendCircleList.size() + "条数据");
-        if (friendCircleList.size() > 0) {
-            recycleView.setLayoutManager(new LinearLayoutManager(this));
-            friendCircleAdapter = new FriendCircleAdapter(this, friendCircleList);
-            recycleView.setAdapter(friendCircleAdapter);
-            initRecycleLoadMore(friendCircleAdapter);
+        if (friendCircleVOs != null) {
+            friendCircleList = friendCircleVOs;
+            Logger.d("请求到" + friendCircleList.size() + "条数据");
+            if (friendCircleList.size() > 0) {
+                recycleView.setLayoutManager(new LinearLayoutManager(this));
+                friendCircleAdapter = new FriendCircleAdapter(this, friendCircleList);
+                recycleView.setAdapter(friendCircleAdapter);
+                initRecycleLoadMore(friendCircleAdapter);
+            }
+        }else {
+            ShowToast.show(FriendCircleActivity.this, "没有更多了");
         }
     }
 
@@ -302,7 +307,6 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
     }*/
 
 
-
     @Override
     public void showLoading() {
         swipeRefresh.post(new Runnable() {
@@ -378,7 +382,6 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
     public void hideLoadingForGood() {
         progressDialog.dismiss();
     }
-
 
 
     @Override

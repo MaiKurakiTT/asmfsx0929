@@ -48,12 +48,12 @@
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ease_chatting_setmode_keyboard_btn_normal.png"
     },
     {
-        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_record_animate_09.png",
-        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ease_record_animate_09.png"
-    },
-    {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_3.png",
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ee_3.png"
+    },
+    {
+        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_record_animate_09.png",
+        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ease_record_animate_09.png"
     },
     {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_30.png",

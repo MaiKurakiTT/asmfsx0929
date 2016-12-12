@@ -26,10 +26,12 @@ public class PutCommentBiz implements PutCommentContract.IPutCommentBiz {
                     @Override
                     public void onResponse(Call<BaseBean2> call, Response<BaseBean2> response) {
                         BaseBean2 body = response.body();
-                        if (0 == body.getState()){
-                            requestListener.success(body);
-                        }else {
-                            requestListener.failedForResult(body);
+                        if (body != null) {
+                            if (0 == body.getState()) {
+                                requestListener.success(body);
+                            } else {
+                                requestListener.failedForResult(body);
+                            }
                         }
                     }
 

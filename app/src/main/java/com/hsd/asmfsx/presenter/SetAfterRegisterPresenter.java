@@ -25,13 +25,13 @@ public class SetAfterRegisterPresenter implements SetAfterRegisterContract.Prese
     @Override
     public void start(){
         view.showLoading();
-        setAfterRegisterBiz.doSetInfo(view.getImgFile(), view.getUserInformationBean(), new BaseListener.OnRequestListener<NormalResultBean<UserBean2>>() {
+        setAfterRegisterBiz.doSetInfo(view.getImgFile(), view.getUserInformationBean(), new BaseListener.OnRequestListener<BaseBean2>() {
             @Override
-            public void success(final NormalResultBean<UserBean2> userBean2NormalResultBean) {
+            public void success(final BaseBean2 baseBean2) {
                 GetHandler.getHandler().post(new Runnable() {
                     @Override
                     public void run() {
-                        view.showData(userBean2NormalResultBean);
+                        view.showData(baseBean2);
                         view.hideLoading();
                     }
                 });

@@ -1,6 +1,7 @@
 package com.hsd.asmfsx.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -21,6 +22,7 @@ import com.hsd.asmfsx.bean.FriendCircleVO;
 import com.hsd.asmfsx.bean.PictureBean;
 import com.hsd.asmfsx.utils.DateFormatUtils;
 import com.hsd.asmfsx.utils.ShowToast;
+import com.hsd.asmfsx.view.activity.ImgViewPagerActivity;
 import com.jaeger.ninegridimageview.NineGridImageView;
 import com.jaeger.ninegridimageview.NineGridImageViewAdapter;
 import com.orhanobut.logger.Logger;
@@ -63,14 +65,16 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public void setOnGoodClickListener(OnGoodClickListener goodClickListener) {
         this.goodClickListener = goodClickListener;
     }
-    public void setOnCommentClickListener(OnCommentClickListener commentClickListener){
+
+    public void setOnCommentClickListener(OnCommentClickListener commentClickListener) {
         this.commentClickListener = commentClickListener;
     }
 
     public interface OnGoodClickListener {
         void click(View view, int position, Long friendCircleId);
     }
-    public interface OnCommentClickListener{
+
+    public interface OnCommentClickListener {
         void click(View view, int position, Long friendCircleId);
     }
 
@@ -140,9 +144,9 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                     goodClickListener.click(view, position, friendCircleId);
                     myViewHolder.goodImg.setImageResource(R.mipmap.ic_good_press);
                     //点赞后改变text
-                    if (friendCircleBean.getLikeUserVOs().size() == 0){
+                    if (friendCircleBean.getLikeUserVOs().size() == 0) {
                         myViewHolder.goodCounts.setText("1");
-                    }else {
+                    } else {
                         myViewHolder.goodCounts.setText("" + (friendCircleBean.getLikeUserVOs().size() + 1));
                     }
 
@@ -182,10 +186,11 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         } else {
             for (int i = 0; i < comments.size(); i++) {
                 String temp = comments.get(i).getContent();
+                String nickname = comments.get(i).getUserVO().getNickname();
                 if (i == comments.size() - 1) {
-                    display = display + temp;
+                    display = display + nickname + ": " + temp;
                 } else {
-                    display = display + temp + '\n';
+                    display = display + nickname + ": " + temp + '\n';
                 }
             }
             myViewHolder.commentsText.setVisibility(View.VISIBLE);
@@ -196,7 +201,7 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             NineGridImageViewAdapter<String> nineGridImageViewAdapter = new NineGridImageViewAdapter<String>() {
                 @Override
                 protected void onDisplayImage(Context context, ImageView imageView, String s) {
-                    Glide.with(context).load(s).placeholder(R.mipmap.ic_initimg).into(imageView);
+                    Glide.with(context).load(s).placeholder(R.mipmap.ic_loadingimg).into(imageView);
                 }
 
                 @Override
@@ -206,6 +211,12 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
                 @Override
                 protected void onItemImageClick(Context context, int index, List<String> list) {
+                    //点击查看大图
+                    Intent intent = new Intent(context, ImgViewPagerActivity.class);
+                    intent.putStringArrayListExtra("urls", (ArrayList<String>) list);
+                    intent.putExtra("position", index);
+                    context.startActivity(intent);
+//                    ShowToast.show(context, "点击了" + index + ", 图片链接：" + list.get(index));
                     super.onItemImageClick(context, index, list);
                 }
             };

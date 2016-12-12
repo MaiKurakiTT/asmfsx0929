@@ -80,7 +80,7 @@ import retrofit2.Response;
 
 import static com.hyphenate.easeui.utils.EaseUserUtils.getUserInfo;
 
-public class MainActivity extends AppCompatActivity implements RequestHeartBeatContract.View, EMMessageListener {
+public class MainActivity extends AppCompatActivity implements EMMessageListener {
     public String TAG = "MainActivity";
     @BindView(R.id.button)
     Button button;
@@ -118,15 +118,15 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
     ImageButton bottomImgBut;
     @BindView(R.id.bottombutton2)
     Button bottombutton2;
-    private RequestHeartBeatPresenter presenter;
     private EaseUI easeUI;
 
     private RecyclerView rightRecycle;
     private RecyclerView seeRecycleView;
 
-    private String[] seeTitles = {"朋友圈", "消息", "show出来", "日志", "休闲", "旅行"};
+    private String[] seeTitles = {"朋友圈", "消息", "团购", "注册", "登录", "朋友圈", "实名认证", "设置信息", "聊天", "好友", "找朋友"};
     private int[] seeImgs = {R.mipmap.ic_news, R.mipmap.ic_mail, R.mipmap.ic_show,
-            R.mipmap.ic_log, R.mipmap.ic_game, R.mipmap.ic_traffic};
+            R.mipmap.ic_log, R.mipmap.ic_game, R.mipmap.ic_traffic, R.mipmap.ic_traffic, R.mipmap.ic_traffic
+            , R.mipmap.ic_traffic, R.mipmap.ic_traffic, R.mipmap.ic_traffic};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,11 +137,10 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         initView();
         easeUIInit();
 
-        presenter = new RequestHeartBeatPresenter(this);
         button = (Button) findViewById(R.id.button);
 
 
-        button.setOnClickListener(new View.OnClickListener() {
+        /*button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 //                startActivity(new Intent(MainActivity.this, FindFriendsActivity.class));
@@ -199,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         bottombutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                testNewApi();
+//                testNewApi();
             }
         });
         bottombutton2.setOnClickListener(new View.OnClickListener() {
@@ -215,7 +214,7 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
 //                testUpDate();
                 testNew2();
             }
-        });
+        });*/
     }
 
     private void testUpDate() {
@@ -224,36 +223,20 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         GetRetrofit.getRetrofit2()
                 .create(RetrofitService.class)
                 .postSetUserInfo(userInformationBean2)
-                .enqueue(new Callback<NormalResultBean<UserBean2>>() {
+                .enqueue(new Callback<BaseBean2>() {
                     @Override
-                    public void onResponse(Call<NormalResultBean<UserBean2>> call, Response<NormalResultBean<UserBean2>> response) {
-                        NormalResultBean<UserBean2> body = response.body();
+                    public void onResponse(Call<BaseBean2> call, Response<BaseBean2> response) {
+                        BaseBean2 body = response.body();
                     }
 
                     @Override
-                    public void onFailure(Call<NormalResultBean<UserBean2>> call, Throwable t) {
+                    public void onFailure(Call<BaseBean2> call, Throwable t) {
                         t.printStackTrace();
                     }
                 });
     }
 
     private void testNewApi() {
-        new LoginBiz().login("1", "1", new BaseListener.OnRequestListener<UserBean2>() {
-            @Override
-            public void success(UserBean2 userBean2) {
-                Logger.d(userBean2.getPhone());
-            }
-
-            @Override
-            public void failedForResult(BaseBean2 baseBean) {
-                Logger.d(baseBean.getMsg());
-            }
-
-            @Override
-            public void failedForException(Throwable t) {
-                Logger.d("抛异常了");
-            }
-        });
 
     }
 
@@ -338,7 +321,7 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
             public void click(View view, int position) {
                 switch (position) {
                     case 0:
-
+                        startActivity(new Intent(MainActivity.this, FriendCircleActivity.class));
                         break;
                     case 1:
 
@@ -348,13 +331,28 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
                         startActivity(intent);
                         break;
                     case 3:
-
+                        startActivity(new Intent(MainActivity.this, RegisterActivity.class));
                         break;
                     case 4:
-
+                        startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         break;
                     case 5:
-
+                        startActivity(new Intent(MainActivity.this, FriendCircleActivity.class));
+                        break;
+                    case 6:
+                        startActivity(new Intent(MainActivity.this, CertificationActivity.class));
+                        break;
+                    case 7:
+                        startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
+                        break;
+                    case 8:
+                        startActivity(new Intent(MainActivity.this, RegAndLogin.class));
+                        break;
+                    case 9:
+//                        presenter.getData();
+                        break;
+                    case 10:
+                        startActivity(new Intent(MainActivity.this, FindFriendsActivity.class));
                         break;
                 }
             }
@@ -474,32 +472,6 @@ public class MainActivity extends AppCompatActivity implements RequestHeartBeatC
         });
     }
 
-    @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
-    public void showFailedForException(Throwable t) {
-
-    }
-
-
-    @Override
-    public String getUuid() {
-        return "84f4b998-17df-4997-8fc2-828f89aec37d";
-    }
-
-    @Override
-    public void showData(List<UserInformationBean> userInformation) {
-        HeartBeatListAdapter adapter = new HeartBeatListAdapter(this, userInformation);
-        rightRecycle.setAdapter(adapter);
-    }
 
 
     @Override

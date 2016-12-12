@@ -151,7 +151,9 @@ public class PutFriendCircleActivity extends AppCompatActivity implements PutFri
 
     @Override
     public void showData(BaseBean2 baseBean, int failedCounts) {
+        setResult(PUTFRIENDCIRCLE_RESULT);
         ShowToast.show(PutFriendCircleActivity.this, "发布成功");
+        finish();
     }
 
     @Override

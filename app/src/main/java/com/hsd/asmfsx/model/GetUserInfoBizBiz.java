@@ -25,10 +25,12 @@ public class GetUserInfoBizBiz implements GetUserInfoContract.IGetUserInfoBiz {
                     @Override
                     public void onResponse(Call<NormalResultBean<UserInformationBean2>> call, Response<NormalResultBean<UserInformationBean2>> response) {
                         NormalResultBean<UserInformationBean2> body = response.body();
-                        if (0 == body.getState()){
-                            requestListener.success(body.getJson());
-                        }else {
-                            requestListener.failedForResult(body);
+                        if (body != null) {
+                            if (0 == body.getState()) {
+                                requestListener.success(body.getJson());
+                            } else {
+                                requestListener.failedForResult(body);
+                            }
                         }
                     }
 

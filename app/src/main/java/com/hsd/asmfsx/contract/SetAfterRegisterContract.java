@@ -27,6 +27,6 @@ public interface SetAfterRegisterContract {
         void showFailedForResult(BaseBean2 baseBean);
     }
     interface ISetAfterRegisterBiz extends BaseListener{
-        void doSetInfo(File imgFile, UserInformationBean2 userInformationBean, OnRequestListener<NormalResultBean<UserBean2>> requestListener);
+        void doSetInfo(File imgFile, UserInformationBean2 userInformationBean, OnRequestListener<BaseBean2> requestListener);
     }
 }

@@ -36,11 +36,13 @@ public class UploadImgBiz2 {
             @Override
             public void onResponse(Call<NormalResultBean<String[]>> call, Response<NormalResultBean<String[]>> response) {
                 NormalResultBean<String[]> body = response.body();
-                if (body.getState() == 0){
-                    String[] json = body.getJson();
-                    uploadListener.success(json);
-                }else {
-                    uploadListener.failedForResult(body);
+                if (body != null) {
+                    if (body.getState() == 0) {
+                        String[] json = body.getJson();
+                        uploadListener.success(json);
+                    } else {
+                        uploadListener.failedForResult(body);
+                    }
                 }
             }
 

@@ -1,9 +1,7 @@
 package com.hsd.asmfsx.model;
 
-import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.NormalResultBean;
-import com.hsd.asmfsx.bean.UserBean2;
 import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.bean.UserInformationBean2;
 import com.hsd.asmfsx.contract.SetAfterRegisterContract;
@@ -25,33 +23,35 @@ import retrofit2.Response;
 
 public class SetAfterRegisterBiz implements SetAfterRegisterContract.ISetAfterRegisterBiz{
 
-    private void uploadUserInfo(UserInformationBean2 userInformationBean, final OnRequestListener<NormalResultBean<UserBean2>> requestListener) {
+    private void uploadUserInfo(UserInformationBean2 userInformationBean, final OnRequestListener<BaseBean2> requestListener) {
         String s = GetGson.getGson().toJson(userInformationBean, UserInformationBean2.class);
         Logger.d(s);
         GetRetrofit
                 .getRetrofit2()
                 .create(RetrofitService.class)
                 .postSetUserInfo(userInformationBean)
-                .enqueue(new Callback<NormalResultBean<UserBean2>>() {
+                .enqueue(new Callback<BaseBean2>() {
                     @Override
-                    public void onResponse(Call<NormalResultBean<UserBean2>> call, Response<NormalResultBean<UserBean2>> response) {
-                        NormalResultBean<UserBean2> body = response.body();
-                        if (body.getState() == 0){
-                            requestListener.success(body);
-                        }else {
-                            requestListener.failedForResult(body);
+                    public void onResponse(Call<BaseBean2> call, Response<BaseBean2> response) {
+                        BaseBean2 body = response.body();
+                        if (body != null) {
+                            if (body.getState() == 0) {
+                                requestListener.success(body);
+                            } else {
+                                requestListener.failedForResult(body);
+                            }
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<NormalResultBean<UserBean2>> call, Throwable t) {
+                    public void onFailure(Call<BaseBean2> call, Throwable t) {
                         requestListener.failedForException(t);
                     }
                 });
     }
 
     @Override
-    public void doSetInfo(File imgFile, final UserInformationBean2 userInformationBean, final OnRequestListener<NormalResultBean<UserBean2>> requestListener) {
+    public void doSetInfo(File imgFile, final UserInformationBean2 userInformationBean, final OnRequestListener<BaseBean2> requestListener) {
         UploadImgBiz2 uploadImgBiz = new UploadImgBiz2();
         uploadImgBiz.uploadImg(imgFile, new UploadImgBiz2.OnUploadListener() {
             @Override

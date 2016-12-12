@@ -17,18 +17,11 @@ public interface LoginContract {
     interface View extends BaseView{
         String getUserName();
         String getPassWord();
-        void showData(UserBean2 userBean);
+        void showData(BaseBean2 baseBean);
         void showFailedForResult(BaseBean2 baseBean);
         void clearData();
     }
     interface ILoginBiz extends BaseListener {
-        /*interface OnLoginListener{
-            void success(UserBean2 userBean);
-            void failedForResult(BaseBean2 baseBean);
-            void failedForException();
-        }*/
-        /*void login(String userName, String passWord,
-                   ILoginBiz.OnLoginListener loginListener);*/
-        void login(String userName, String passWord, OnRequestListener<UserBean2> requestListener);
+        void login(String userName, String passWord, OnRequestListener<BaseBean2> requestListener);
     }
 }

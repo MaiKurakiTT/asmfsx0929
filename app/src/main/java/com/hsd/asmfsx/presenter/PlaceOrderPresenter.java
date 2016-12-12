@@ -22,7 +22,7 @@ public class PlaceOrderPresenter implements PlaceOrderContract.Presenter{
     @Override
     public void start() {
         view.showLoading();
-        placeOrderBiz.doPlaceOrder(view.getGoodIds(), view.getAmounts(), view.getDetail(), new BaseListener.OnRequestListener<BaseBean2>() {
+        placeOrderBiz.doPlaceOrder(view.getGoodId(), view.getAmount(), view.getPrice(), view.getDetail(), new BaseListener.OnRequestListener<BaseBean2>() {
             @Override
             public void success(final BaseBean2 baseBean2) {
                 GetHandler.getHandler().post(new Runnable() {

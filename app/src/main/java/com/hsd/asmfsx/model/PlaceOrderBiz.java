@@ -17,19 +17,21 @@ import retrofit2.Response;
 
 public class PlaceOrderBiz implements PlaceOrderContract.IPlaceOrderBiz{
     @Override
-    public void doPlaceOrder(List<Long> commodityIDs, List<Integer> amounts, String detail, final OnRequestListener<BaseBean2> requestListener) {
+    public void doPlaceOrder(Long commodityID, int amount, int price, String detail, final OnRequestListener<BaseBean2> requestListener) {
         GetRetrofit
                 .getRetrofit2()
                 .create(RetrofitService.class)
-                .postPlaceOrder(commodityIDs, amounts, detail)
+                .postPlaceOrder(commodityID, amount, price, detail)
                 .enqueue(new Callback<BaseBean2>() {
                     @Override
                     public void onResponse(Call<BaseBean2> call, Response<BaseBean2> response) {
                         BaseBean2 body = response.body();
-                        if (body.getState() == 0){
-                            requestListener.success(body);
-                        }else {
-                            requestListener.failedForResult(body);
+                        if (body != null) {
+                            if (0 == body.getState()) {
+                                requestListener.success(body);
+                            } else {
+                                requestListener.failedForResult(body);
+                            }
                         }
                     }
 

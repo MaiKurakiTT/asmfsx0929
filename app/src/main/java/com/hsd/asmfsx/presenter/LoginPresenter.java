@@ -23,14 +23,14 @@ public class LoginPresenter implements LoginContract.Presenter{
     @Override
     public void start() {
         view.showLoading();
-        loginBiz.login(view.getUserName(), view.getPassWord(), new BaseListener.OnRequestListener<UserBean2>() {
+        loginBiz.login(view.getUserName(), view.getPassWord(), new BaseListener.OnRequestListener<BaseBean2>() {
             @Override
-            public void success(final UserBean2 userBean2) {
+            public void success(final BaseBean2 baseBean2) {
                 GetHandler.getHandler().post(new Runnable() {
                     @Override
                     public void run() {
 //                        view.clearData();
-                        view.showData(userBean2);
+                        view.showData(baseBean2);
                         view.hideLoading();
                     }
                 });

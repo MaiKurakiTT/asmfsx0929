@@ -28,10 +28,12 @@ public class FriendCircleBiz implements FriendCircleContract.IFriendCircleBiz{
                     @Override
                     public void onResponse(Call<NormalResultBean<List<FriendCircleVO>>> call, Response<NormalResultBean<List<FriendCircleVO>>> response) {
                         NormalResultBean<List<FriendCircleVO>> body = response.body();
-                        if (0 == body.getState()){
-                            requestListener.success(body.getJson());
-                        }else {
-                            requestListener.failedForResult(body);
+                        if (body != null) {
+                            if (0 == body.getState()) {
+                                requestListener.success(body.getJson());
+                            } else {
+                                requestListener.failedForResult(body);
+                            }
                         }
                     }
 

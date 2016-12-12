@@ -44,10 +44,12 @@ public class PutFriendCircleBiz implements PutFriendCircleContract.IPutFriendCir
                     @Override
                     public void onResponse(Call<BaseBean2> call, Response<BaseBean2> response) {
                         BaseBean2 body = response.body();
-                        if (0 == body.getState()){
-                            putFriendCircleListener.success(body, failedCounts);
-                        }else {
-                            putFriendCircleListener.failedForResult(body);
+                        if (body != null) {
+                            if (0 == body.getState()) {
+                                putFriendCircleListener.success(body, failedCounts);
+                            } else {
+                                putFriendCircleListener.failedForResult(body);
+                            }
                         }
                     }
 

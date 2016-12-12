@@ -16,13 +16,14 @@ public interface PlaceOrderContract {
 
     }
     interface View extends BaseView {
-        List<Long> getGoodIds();
-        List<Integer> getAmounts();
+        Long getGoodId();
+        int getAmount();
+        int getPrice();
         String getDetail();
         void showData(BaseBean2 baseBean2);
         void showFailedForResult(BaseBean2 baseBean);
     }
     interface IPlaceOrderBiz extends BaseListener{
-        void doPlaceOrder(List<Long> commodityIDs, List<Integer> amounts, String detail, OnRequestListener<BaseBean2> requestListener);
+        void doPlaceOrder(Long commodityID, int amount, int price, String detail, OnRequestListener<BaseBean2> requestListener);
     }
 }

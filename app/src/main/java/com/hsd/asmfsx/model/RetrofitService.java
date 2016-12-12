@@ -3,6 +3,7 @@ package com.hsd.asmfsx.model;
 import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.CertificationBean;
+import com.hsd.asmfsx.bean.CommodityVO;
 import com.hsd.asmfsx.bean.FindFriendsBean;
 import com.hsd.asmfsx.bean.FriendCircleBean;
 import com.hsd.asmfsx.bean.FriendCircleVO;
@@ -10,6 +11,7 @@ import com.hsd.asmfsx.bean.LoginBean;
 import com.hsd.asmfsx.bean.LoginBean2;
 import com.hsd.asmfsx.bean.NormalResultBean;
 import com.hsd.asmfsx.bean.RegisterBean;
+import com.hsd.asmfsx.bean.ShopVO;
 import com.hsd.asmfsx.bean.UserBean2;
 import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.bean.UserInformationBean2;
@@ -47,7 +49,7 @@ public interface RetrofitService {
      */
     @POST(GlobalParameter.project2 + "login.action")
     @FormUrlEncoded
-    Call<NormalResultBean<UserBean2>> postLogin2(@Field("phone") String phone, @Field("password") String password);
+    Call<BaseBean2> postLogin2(@Field("phone") String phone, @Field("password") String password);
 
     /**
      * 注册，需要手机号、密码、学号
@@ -69,7 +71,7 @@ public interface RetrofitService {
      * @return
      */
     @POST(GlobalParameter.project2 + "user/updateUserInformation.action")
-    Call<NormalResultBean<UserBean2>> postSetUserInfo(@Body UserInformationBean2 userInformationBean);
+    Call<BaseBean2> postSetUserInfo(@Body UserInformationBean2 userInformationBean);
 
     /**
      * 获取用户信息，需要一个userid
@@ -139,15 +141,45 @@ public interface RetrofitService {
     Call<NormalResultBean<List<UserInformationBean2>>> postFindFriends(@Field("page") int page, @Field("limit") int limit);
 
     /**
+     * 请求商家列表
+     * @param page
+     * @param limit
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(GlobalParameter.project2 + "user/getShops.action")
+    Call<NormalResultBean<List<ShopVO>>> postGetShopList(@Field("page") int page, @Field("limit") int limit);
+
+    /**
+     * 请求某个商家的商品列表
+     * @param shopID
+     * @param page
+     * @param limit
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(GlobalParameter.project2 + "user/getCommoditys.action")
+    Call<NormalResultBean<List<CommodityVO>>> postGetShopGoodList(@Field("shopID") Long shopID, @Field("page") int page, @Field("limit") int limit);
+
+    /**
+     * 请求某个商品的信息
+     * @param commodityID
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(GlobalParameter.project2 + "user/getCommodity.action")
+    Call<NormalResultBean<CommodityVO>> postGetItemGoodInfo(@Field("commodityID") Long commodityID);
+
+    /**
      * 商品下订单
-     * @param commodityIDs
-     * @param amounts
+     * @param commodityID
+     * @param amount
      * @param detail
      * @return
      */
     @FormUrlEncoded
     @POST(GlobalParameter.project2 + "user/addOrder.action")
-    Call<BaseBean2> postPlaceOrder(@Field("commodityIDs") List<Long> commodityIDs, @Field("amounts") List<Integer> amounts, @Field("detail") String detail);
+    Call<BaseBean2> postPlaceOrder(@Field("commodityID") Long commodityID, @Field("amount") int amount, @Field("price") int price, @Field("detail") String detail);
 
 /**
  * ------------------------------------------------------------------------------------

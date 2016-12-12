@@ -11,6 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.bean.CommodityVO;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -22,11 +25,13 @@ import butterknife.ButterKnife;
 public class GoodsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
+    private List<CommodityVO> commodityVOs;
 
     private OnItemClickListener itemClickListener;
 
-    public GoodsListAdapter(Context context) {
+    public GoodsListAdapter(Context context, List<CommodityVO> commodityVOs) {
         this.context = context;
+        this.commodityVOs = commodityVOs;
     }
 
     @Override
@@ -41,23 +46,25 @@ public class GoodsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public interface OnItemClickListener {
-        void click(View view, int position, Long shopId);
+        void click(View view, int position, Long goodId);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         MyViewHolder viewHolder = (MyViewHolder) holder;
+        final CommodityVO commodityVO = commodityVOs.get(position);
+        viewHolder.goodName.setText(commodityVO.getName());
         viewHolder.shoplistItemParent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                itemClickListener.click(view, position, new Long(0));
+                itemClickListener.click(view, position, new Long(commodityVO.getId()));
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return 20;
+        return commodityVOs.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {

@@ -126,7 +126,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     @Override
-    public void showData(UserBean2 userBean) {
+    public void showData(BaseBean2 baseBean2) {
         spUtils.putString("phone", username);
         spUtils.putString("psw", password);
         ShowToast.show(LoginActivity.this, "登录成功");
@@ -134,7 +134,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void showFailedForResult(BaseBean2 baseBean) {
-
+        ShowToast.show(LoginActivity.this, baseBean.getMsg());
     }
 
     /*@Override
@@ -200,7 +200,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
 
     @Override
     public void showFailedForException(Throwable t) {
-
+        ShowToast.show(LoginActivity.this, "服务器或网络异常，请稍后重试");
     }
 
 
