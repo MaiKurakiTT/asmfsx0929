@@ -74,7 +74,7 @@ public class FindFriendsActivity extends AppCompatActivity implements FindFriend
 
 
     /*@Override
-    public void showData(FindFriendsBean findFriendsBean) {
+    public void showDataForUserInfo(FindFriendsBean findFriendsBean) {
         String body = findFriendsBean.getBody();
         List<UserInformationBean> list = GetGson.getGson().fromJson(body, new TypeToken<List<UserInformationBean>>() {
         }.getType());

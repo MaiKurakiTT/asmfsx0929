@@ -270,7 +270,7 @@ public class FriendCircleActivity extends AppCompatActivity implements FriendCir
     }
 
     /*@Override
-    public void showData(BaseBean baseBean) {
+    public void showDataForUserInfo(BaseBean baseBean) {
         if (baseBean.getResultCode() == 1) {
             String body = baseBean.getBody();
             friendCircleList = GetGson.getGson().fromJson(body, new TypeToken<List<FriendCircleBean>>() {

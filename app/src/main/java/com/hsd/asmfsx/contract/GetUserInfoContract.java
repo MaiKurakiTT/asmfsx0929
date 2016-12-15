@@ -15,11 +15,11 @@ public interface GetUserInfoContract {
 
     }
     interface View extends BaseView{
-        int getUserId();
-        void showData(UserInformationBean2 userInformationBean);
-        void showFailedForResult(BaseBean2 baseBean);
+        Long getUserId();
+        void showDataForUserInfo(UserInformationBean2 userInformationBean);
+        void showFailedForUserInfoResult(BaseBean2 baseBean);
     }
     interface IGetUserInfoBiz extends BaseListener{
-        void getUserInfo(int userId, OnRequestListener<UserInformationBean2> requestListener);
+        void getUserInfo(Long userId, OnRequestListener<UserInformationBean2> requestListener);
     }
 }

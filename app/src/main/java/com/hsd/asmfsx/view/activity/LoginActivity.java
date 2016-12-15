@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.hsd.asmfsx.MainActivity;
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.LoginBean;
@@ -130,6 +131,9 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
         spUtils.putString("phone", username);
         spUtils.putString("psw", password);
         ShowToast.show(LoginActivity.this, "登录成功");
+        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
@@ -138,7 +142,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     /*@Override
-    public void showData(LoginBean loginBean) {
+    public void showDataForUserInfo(LoginBean loginBean) {
         if (loginBean.getResultCode() == 1) {
             Log.d(TAG, loginBean.getUser_uuid());
             driverHelper = DbUtil.getDriverHelper();

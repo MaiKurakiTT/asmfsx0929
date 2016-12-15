@@ -52,23 +52,28 @@ public class SetAfterRegisterBiz implements SetAfterRegisterContract.ISetAfterRe
 
     @Override
     public void doSetInfo(File imgFile, final UserInformationBean2 userInformationBean, final OnRequestListener<BaseBean2> requestListener) {
-        UploadImgBiz2 uploadImgBiz = new UploadImgBiz2();
-        uploadImgBiz.uploadImg(imgFile, new UploadImgBiz2.OnUploadListener() {
-            @Override
-            public void success(String[] urls) {
-                userInformationBean.setIcon(urls[0]);
-                uploadUserInfo(userInformationBean, requestListener);
-            }
+        if (imgFile == null){
+            uploadUserInfo(userInformationBean, requestListener);
+        }else {
+            UploadImgBiz2 uploadImgBiz = new UploadImgBiz2();
+            uploadImgBiz.uploadImg(imgFile, new UploadImgBiz2.OnUploadListener() {
+                @Override
+                public void success(String[] urls) {
+                    userInformationBean.setIcon(urls[0]);
+                    uploadUserInfo(userInformationBean, requestListener);
+                }
 
-            @Override
-            public void failedForResult(BaseBean2 baseBean) {
+                @Override
+                public void failedForResult(BaseBean2 baseBean) {
 
-            }
+                }
 
-            @Override
-            public void failedForException(Throwable t) {
+                @Override
+                public void failedForException(Throwable t) {
 
-            }
-        });
+                }
+            });
+        }
+
     }
 }

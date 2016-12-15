@@ -2,7 +2,6 @@ package com.hsd.asmfsx;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
@@ -12,38 +11,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.hsd.asmfsx.adapter.HeartBeatListAdapter;
+import com.bumptech.glide.Glide;
 import com.hsd.asmfsx.adapter.SeeAdapter;
-import com.hsd.asmfsx.app.MyApplication;
 import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.BaseBean2;
-import com.hsd.asmfsx.bean.LoginBean2;
-import com.hsd.asmfsx.bean.NormalResultBean;
-import com.hsd.asmfsx.bean.UserBean2;
-import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.bean.UserInformationBean2;
 import com.hsd.asmfsx.chat.ChatActivity;
 import com.hsd.asmfsx.chat.RegAndLogin;
-import com.hsd.asmfsx.contract.RequestHeartBeatContract;
-import com.hsd.asmfsx.global.GetGson;
+import com.hsd.asmfsx.contract.GetUserInfoContract;
 import com.hsd.asmfsx.global.GetRetrofit;
-import com.hsd.asmfsx.model.BaseListener;
-import com.hsd.asmfsx.model.LoginBiz;
 import com.hsd.asmfsx.model.RetrofitService;
 import com.hsd.asmfsx.model.UploadImgBiz;
-import com.hsd.asmfsx.model.UploadImgBiz2;
-import com.hsd.asmfsx.presenter.RequestHeartBeatPresenter;
+import com.hsd.asmfsx.presenter.GetUserInfoPresenter;
+import com.hsd.asmfsx.utils.ShowToast;
 import com.hsd.asmfsx.view.activity.CertificationActivity;
 import com.hsd.asmfsx.view.activity.FindFriendsActivity;
 import com.hsd.asmfsx.view.activity.FriendCircleActivity;
 import com.hsd.asmfsx.view.activity.LoginActivity;
+import com.hsd.asmfsx.view.activity.OrderListActivity;
 import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
 import com.hsd.asmfsx.view.activity.ShopHomeActivity;
@@ -58,40 +48,20 @@ import com.hyphenate.easeui.utils.EaseCommonUtils;
 import com.hyphenate.util.EMLog;
 import com.orhanobut.logger.Logger;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import okhttp3.FormBody;
-import okhttp3.Headers;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 import static com.hyphenate.easeui.utils.EaseUserUtils.getUserInfo;
 
-public class MainActivity extends AppCompatActivity implements EMMessageListener {
+public class MainActivity extends AppCompatActivity implements EMMessageListener, GetUserInfoContract.View{
     public String TAG = "MainActivity";
-    @BindView(R.id.button)
-    Button button;
-    @BindView(R.id.log)
-    Button log;
-    @BindView(R.id.cer)
-    Button cer;
-    @BindView(R.id.set)
-    Button set;
-    @BindView(R.id.chat)
-    Button chat;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.toolbar_centertext)
@@ -99,25 +69,15 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
     @BindView(R.id.toolbar_righttext)
     TextView toolbarRighttext;
     @BindView(R.id.head)
-    CircleImageView head;
+    CircleImageView headImg;
     @BindView(R.id.navigation_view_left)
     NavigationView navigationViewLeft;
     @BindView(R.id.drawer_view)
     DrawerLayout drawerView;
-    @BindView(R.id.bottombutton)
-    Button bottombutton;
     @BindView(R.id.navigation_view_right)
     NavigationView navigationViewRight;
-    @BindView(R.id.friendsbut)
-    Button friendsbut;
-    @BindView(R.id.findfriendbut)
-    Button findfriendbut;
-    @BindView(R.id.friendcirclebut)
-    Button friendcirclebut;
     @BindView(R.id.bottom_but)
     ImageButton bottomImgBut;
-    @BindView(R.id.bottombutton2)
-    Button bottombutton2;
     private EaseUI easeUI;
 
     private RecyclerView rightRecycle;
@@ -127,6 +87,11 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
     private int[] seeImgs = {R.mipmap.ic_news, R.mipmap.ic_mail, R.mipmap.ic_show,
             R.mipmap.ic_log, R.mipmap.ic_game, R.mipmap.ic_traffic, R.mipmap.ic_traffic, R.mipmap.ic_traffic
             , R.mipmap.ic_traffic, R.mipmap.ic_traffic, R.mipmap.ic_traffic};
+    private UserInformationBean2 mUserInfo;
+    private View leftNaviHeadView;
+    private CircleImageView naviHeadImg;
+    private TextView naviNickName;
+    private GetUserInfoPresenter getUserInfoPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,131 +99,26 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+        initData();
         initView();
         easeUIInit();
-
-        button = (Button) findViewById(R.id.button);
-
-
-        /*button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                startActivity(new Intent(MainActivity.this, FindFriendsActivity.class));
-//                startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
-                startActivity(new Intent(MainActivity.this, RegisterActivity.class));
-//                startActivity(new Intent(MainActivity.this, FriendCircleActivity.class));
-//                startActivity(new Intent(MainActivity.this, CertificationActivity.class));
-//                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-//                startActivity(new Intent(MainActivity.this, TestRetrofit.class));
-
-            }
-        });
-        log.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            }
-        });
-        cer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, CertificationActivity.class));
-            }
-        });
-        set.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
-            }
-        });
-        chat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, RegAndLogin.class));
-            }
-        });
-        friendsbut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.getData();
-            }
-        });
-        findfriendbut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, FindFriendsActivity.class));
-            }
-        });
-        friendcirclebut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, FriendCircleActivity.class));
-            }
-        });
-        bottombutton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                testNewApi();
-            }
-        });
-        bottombutton2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                testNew2();
-                testNew3();
-            }
-        });
-        findViewById(R.id.bottombutton3).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                testUpDate();
-                testNew2();
-            }
-        });*/
+        requestData();
+        setData2View();
     }
 
-    private void testUpDate() {
-        UserInformationBean2 userInformationBean2 = new UserInformationBean2();
-        userInformationBean2.setNickname("yy");
-        GetRetrofit.getRetrofit2()
-                .create(RetrofitService.class)
-                .postSetUserInfo(userInformationBean2)
-                .enqueue(new Callback<BaseBean2>() {
-                    @Override
-                    public void onResponse(Call<BaseBean2> call, Response<BaseBean2> response) {
-                        BaseBean2 body = response.body();
-                    }
-
-                    @Override
-                    public void onFailure(Call<BaseBean2> call, Throwable t) {
-                        t.printStackTrace();
-                    }
-                });
+    private void requestData() {
+        getUserInfoPresenter = new GetUserInfoPresenter(this);
+        getUserInfoPresenter.start();
     }
 
-    private void testNewApi() {
+    private void setData2View() {
 
     }
 
-    private void testNew2() {
-    }
-    private void testNew3(){
-        RetrofitService service = GetRetrofit.getRetrofit2().create(RetrofitService.class);
-        Call<Object> call = service.postGetMe();
-        call.enqueue(new Callback<Object>() {
-            @Override
-            public void onResponse(Call<Object> call, Response<Object> response) {
-                Object body = response.body();
-                Logger.d(body);
-            }
+    private void initData() {
 
-            @Override
-            public void onFailure(Call<Object> call, Throwable t) {
-                t.printStackTrace();
-                Logger.d(t.toString());
-            }
-        });
     }
+
 
     private void initView() {
         initToolbar();
@@ -276,14 +136,35 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
     }
 
     private void initLeftNavigation() {
-        View leftHeadView = navigationViewLeft.getHeaderView(0);
-        leftHeadView.setOnClickListener(new View.OnClickListener() {
+        leftNaviHeadView = navigationViewLeft.getHeaderView(0);
+        navigationViewLeft.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId()){
+                    case R.id.navi_menu_1:
+                        startActivity(new Intent(MainActivity.this, OrderListActivity.class));
+                        drawerView.closeDrawers();
+                        break;
+                }
+                return true;
+            }
+        });
+        naviHeadImg = (CircleImageView)leftNaviHeadView.findViewById(R.id.navi_head);
+        naviNickName = (TextView) leftNaviHeadView.findViewById(R.id.navi_name);
+        leftNaviHeadView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
                 intent.putExtra("type", 0);
+                intent.putExtra("userInformationBean", mUserInfo);
                 startActivityForResult(intent, 0);
                 drawerView.closeDrawers();
+            }
+        });
+        naviHeadImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ShowToast.show(MainActivity.this, "头像");
             }
         });
     }
@@ -374,7 +255,7 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
     }
 
     private void initListener() {
-        head.setOnClickListener(new View.OnClickListener() {
+        headImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 drawerView.openDrawer(GravityCompat.START);
@@ -396,6 +277,17 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
         toolbarRighttext.setText("好友");
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //从UserInfoActivity回传过来，更新界面信息
+        if (resultCode == 0){
+            UserInformationBean2 userInformationBean = (UserInformationBean2) data.getSerializableExtra("userInformationBean");
+            if (userInformationBean != null){
+                naviNickName.setText("" + userInformationBean.getNickname());
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     /**
      * 进行EaseUI和环信的一些设置
@@ -454,25 +346,6 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
         });
     }
 
-    private void testup() throws IOException {
-        UploadImgBiz.getInstance().uploadImg("androidschoolbus.jpg", new UploadImgBiz.OnUploadListener() {
-            @Override
-            public void success(BaseBean baseBean) {
-                if (baseBean.getResultCode() == 1) {
-                    Logger.d("上传成功，" + baseBean.getBody());
-                } else {
-                    Logger.d("" + baseBean.getDescribe());
-                }
-            }
-
-            @Override
-            public void failed() {
-
-            }
-        });
-    }
-
-
 
     @Override
     protected void onDestroy() {
@@ -515,5 +388,44 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
     @Override
     public void onMessageChanged(EMMessage emMessage, Object o) {
 
+    }
+
+    @Override
+    public Long getUserId() {
+        return null;
+    }
+
+    @Override
+    public void showDataForUserInfo(UserInformationBean2 userInformationBean) {
+        mUserInfo = userInformationBean;
+        Glide.with(this).load(userInformationBean.getIcon()).into(headImg);
+        Glide.with(this).load(userInformationBean.getIcon()).into(naviHeadImg);
+        naviNickName.setText("" + userInformationBean.getNickname());
+    }
+
+    @Override
+    public void showFailedForUserInfoResult(BaseBean2 baseBean) {
+
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showFailedForException(Throwable t) {
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        return super.onOptionsItemSelected(item);
     }
 }

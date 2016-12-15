@@ -1,36 +1,34 @@
 package com.hsd.asmfsx.presenter;
 
-import com.hsd.asmfsx.base.BasePresenter;
 import com.hsd.asmfsx.bean.BaseBean2;
-import com.hsd.asmfsx.bean.UserInformationBean2;
-import com.hsd.asmfsx.contract.GetUserInfoContract;
+import com.hsd.asmfsx.bean.OrderVO;
+import com.hsd.asmfsx.contract.GetOrderInfoContract;
 import com.hsd.asmfsx.global.GetHandler;
 import com.hsd.asmfsx.model.BaseListener;
-import com.hsd.asmfsx.model.GetUserInfoBiz;
+import com.hsd.asmfsx.model.GetOrderInfoBiz;
 
 /**
- * Created by sun on 2016/12/6.
+ * Created by sun on 2016/12/15.
  */
 
-public class GetUserInfoPresenter implements BasePresenter{
-    private GetUserInfoContract.View view;
-    private GetUserInfoContract.IGetUserInfoBiz getUserInfoBiz;
+public class GetOrderInfoPresenter implements GetOrderInfoContract.Presenter{
+    private GetOrderInfoContract.View view;
+    private GetOrderInfoContract.IGetOrderInfoBiz getOrderInfoBiz;
 
-    public GetUserInfoPresenter(GetUserInfoContract.View view) {
+    public GetOrderInfoPresenter(GetOrderInfoContract.View view) {
         this.view = view;
-        this.getUserInfoBiz = new GetUserInfoBiz();
+        this.getOrderInfoBiz = new GetOrderInfoBiz();
     }
-
     @Override
     public void start() {
         view.showLoading();
-        getUserInfoBiz.getUserInfo(view.getUserId(), new BaseListener.OnRequestListener<UserInformationBean2>() {
+        getOrderInfoBiz.getOrder(view.getOrderId(), new BaseListener.OnRequestListener<OrderVO>() {
             @Override
-            public void success(final UserInformationBean2 userInformationBean2) {
+            public void success(final OrderVO orderVO) {
                 GetHandler.getHandler().post(new Runnable() {
                     @Override
                     public void run() {
-                        view.showDataForUserInfo(userInformationBean2);
+                        view.showData(orderVO);
                         view.hideLoading();
                     }
                 });
@@ -41,7 +39,7 @@ public class GetUserInfoPresenter implements BasePresenter{
                 GetHandler.getHandler().post(new Runnable() {
                     @Override
                     public void run() {
-                        view.showFailedForUserInfoResult(baseBean);
+                        view.showFailedForResult(baseBean);
                         view.hideLoading();
                     }
                 });

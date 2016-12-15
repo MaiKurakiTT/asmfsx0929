@@ -13,7 +13,7 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:clickable="true"
-        android:src="@mipmap/androidschoolbus"/>
+        android:src="@mipmap/ic_head2"/>
     <TextView
         android:id="@+id/toolbar_centertext"
         android:layout_width="wrap_content"

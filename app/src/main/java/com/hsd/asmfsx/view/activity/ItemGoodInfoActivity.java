@@ -1,6 +1,8 @@
 package com.hsd.asmfsx.view.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -8,12 +10,16 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.CommodityVO;
+import com.hsd.asmfsx.bean.ShopVO;
+import com.hsd.asmfsx.bean.UserVO;
 import com.hsd.asmfsx.contract.GetItemGoodInfoContract;
 import com.hsd.asmfsx.presenter.GetItemGoodInfoPresenter;
 
@@ -24,9 +30,9 @@ import butterknife.ButterKnife;
  * Created by sun on 2016/12/12.
  */
 
-public class ItemGoodInfoActivity extends AppCompatActivity implements GetItemGoodInfoContract.View{
-    @BindView(R.id.shop_photo)
-    ImageView shopPhoto;
+public class ItemGoodInfoActivity extends AppCompatActivity implements GetItemGoodInfoContract.View {
+    @BindView(R.id.good_photo)
+    ImageView goodPhoto;
     @BindView(R.id.itemshop_toolbar)
     Toolbar itemshopToolbar;
     @BindView(R.id.collapsing)
@@ -49,10 +55,17 @@ public class ItemGoodInfoActivity extends AppCompatActivity implements GetItemGo
     ImageView shopCallphone;
     @BindView(R.id.nest)
     NestedScrollView nest;
+    @BindView(R.id.use_rule)
+    TextView useRule;
 
     private Long goodId = new Long(0);
     private GetItemGoodInfoPresenter getItemGoodInfoPresenter;
     private ProgressDialog progressDialog;
+    private double price;
+    private String goodNameText;
+    private ShopVO shopVO;
+    private String shopPhone;
+    private CommodityVO mCommodity;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,12 +74,36 @@ public class ItemGoodInfoActivity extends AppCompatActivity implements GetItemGo
         ButterKnife.bind(this);
         initData();
         initView();
+        setData2View();
+        getItemGoodInfoPresenter = new GetItemGoodInfoPresenter(this);
+        getItemGoodInfoPresenter.start();
+    }
+
+    private void setData2View() {
+
+        if (shopVO != null) {
+            shopName.setText("" + shopVO.getName());
+            shopPhone = "" + shopVO.getUserVO().getPhone();
+            shopPositionText.setText("" + shopVO.getAddress());
+            //打电话
+            shopCallphone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    UserVO userVO = shopVO.getUserVO();
+                    if (userVO != null) {
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + userVO.getPhone()));
+                        startActivity(intent);
+                    }
+                }
+            });
+        } else {
+
+        }
     }
 
     private void initData() {
         goodId = getIntent().getLongExtra("goodId", new Long(0));
-        getItemGoodInfoPresenter = new GetItemGoodInfoPresenter(this);
-        getItemGoodInfoPresenter.start();
+        shopVO = (ShopVO) getIntent().getSerializableExtra("shopVO");
     }
 
     private void initView() {
@@ -76,6 +113,16 @@ public class ItemGoodInfoActivity extends AppCompatActivity implements GetItemGo
         setSupportActionBar(itemshopToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
+        buyBut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ItemGoodInfoActivity.this, PlaceOrderActivity.class);
+                intent.putExtra("goodId", goodId);
+                intent.putExtra("goodName", goodNameText);
+                intent.putExtra("price", price);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -85,7 +132,17 @@ public class ItemGoodInfoActivity extends AppCompatActivity implements GetItemGo
 
     @Override
     public void showData(CommodityVO commodityVO) {
-        goodName.setText(commodityVO.getName());
+        if (commodityVO != null){
+            mCommodity = commodityVO;
+            if (commodityVO.getPictures() != null)
+                Glide.with(this).load(mCommodity.getPictures().get(0)).placeholder(R.mipmap.ic_loadingimg).into(goodPhoto);
+            price = commodityVO.getPrice();
+            goodNameText = commodityVO.getName();
+            goodName.setText("" + commodityVO.getName());
+            nowPrice.setText("￥" + price);
+            normalPrice.setText("门市价：￥" + commodityVO.getPrice());
+            useRule.setText("· " + commodityVO.getRule());
+        }
     }
 
     @Override

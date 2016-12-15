@@ -62,7 +62,7 @@ public class RegisterPresenter implements RegisterContract.Presenter{
                 GetHandler.getHandler().post(new Runnable() {
                     @Override
                     public void run() {
-                        view.showData(registerBean);
+                        view.showDataForUserInfo(registerBean);
                         view.hideLoading();
                     }
                 });

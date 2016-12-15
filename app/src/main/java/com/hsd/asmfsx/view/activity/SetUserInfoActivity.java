@@ -1,5 +1,6 @@
 package com.hsd.asmfsx.view.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,11 +14,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.bean.BaseBean2;
+import com.hsd.asmfsx.bean.UserInformationBean2;
+import com.hsd.asmfsx.contract.SetAfterRegisterContract;
+import com.hsd.asmfsx.presenter.SetAfterRegisterPresenter;
 import com.hsd.asmfsx.utils.Date2Star;
 import com.hsd.asmfsx.utils.DateFormatUtils;
 import com.hsd.asmfsx.utils.PickViewUtils;
 import com.hsd.asmfsx.utils.ShowToast;
 
+import java.io.File;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -27,7 +33,7 @@ import butterknife.ButterKnife;
  * Created by apple on 2016/11/21.
  */
 
-public class SetUserInfoActivity extends AppCompatActivity {
+public class SetUserInfoActivity extends AppCompatActivity implements SetAfterRegisterContract.View{
     @BindView(R.id.toolbar_centertext)
     TextView toolbarCentertext;
     @BindView(R.id.toolbar_righttext)
@@ -78,16 +84,20 @@ public class SetUserInfoActivity extends AppCompatActivity {
     AppCompatButton okbut;
 
     private String[] schoolItems = {"河南师范大学"};
-    private String[] statusItems = {"单身", "恋爱ing", "分手了"};
+    private String[] statusItems = {"单身", "失恋了", "恋爱ing"};
     private String nickName;
     private String birthdayString;
-    private Date birthday;
+    private Long birthday;
     private String star;
     private String home;
-    private String school;
+    private String schoolString;
     private String statusString;
-    private int status;
+    private Integer status;
+    private Integer schoolInt = new Integer(0);
     private String sign;
+    private UserInformationBean2 userInformationBean;
+    private UserInformationBean2 userInformationBean2;
+    private SetAfterRegisterPresenter setAfterRegisterPresenter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,37 +115,85 @@ public class SetUserInfoActivity extends AppCompatActivity {
         toolbarCentertext.setText("设置信息");
         toolbarRighttext.setVisibility(View.GONE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        okbut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getData();
+                if (TextUtils.isEmpty(nickName) || TextUtils.isEmpty(birthdayString) || TextUtils.isEmpty(star)
+                        || TextUtils.isEmpty(home) || TextUtils.isEmpty(schoolString) || TextUtils.isEmpty(statusString)) {
+                    ShowToast.show(SetUserInfoActivity.this, "请先完善信息");
+                } else {
+                    userInformationBean2 = new UserInformationBean2();
+                    userInformationBean2.setNickname(nickName);
+                    userInformationBean2.setBirthday(birthday);
+                    userInformationBean2.setStar(star);
+                    userInformationBean2.setLocality(home);
+                    userInformationBean2.setSchool(schoolInt);
+                    userInformationBean2.setState(status);
+                    userInformationBean2.setSign(sign);
+                    setAfterRegisterPresenter.start();
+                }
+            }
+        });
     }
 
     private void initData() {
-
+        userInformationBean = (UserInformationBean2) getIntent().getSerializableExtra("userInformationBean");
+        setAfterRegisterPresenter = new SetAfterRegisterPresenter(this);
     }
 
     private void getData() {
         nickName = nametext.getText().toString();
         birthdayString = birthdaytext.getText().toString();
         if (!TextUtils.isEmpty(birthdaytext.getText().toString())) {
-            birthday = DateFormatUtils.formatString2Date(birthdayString);
+            birthday = DateFormatUtils.formatString2Date(birthdayString).getTime();
         }
         star = startext.getText().toString();
         home = hometext.getText().toString();
-        school = schooltext.getText().toString();
-        statusString = startext.getText().toString();
-        switch (statusString) {
-            case "单身":
-                status = 0;
-                break;
-            case "恋爱ing":
-                status = 1;
-                break;
-            case "分手了":
-                status = 2;
-                break;
+        schoolString = schooltext.getText().toString();
+        if (schoolString.equals("河南师范大学")) {
+            schoolInt = 0;
+        }
+        statusString = statustext.getText().toString();
+        if (statusString.equals("单身")){
+            status = 0;
+        }else if (statusString.equals("失恋了")){
+            status = 1;
+        }else if (statusString.equals("恋爱ing")){
+            status = 2;
         }
         sign = signtext.getText().toString();
     }
 
     private void setData2View() {
+        if (userInformationBean != null) {
+            nametext.setText("" + userInformationBean.getNickname());
+            if (userInformationBean.getBirthday() != null) {
+                birthdaytext.setText("" + DateFormatUtils.formatDate2StringSimple(new Date(userInformationBean.getBirthday())));
+            }
+            startext.setText("" + userInformationBean.getStar());
+            hometext.setText("" + userInformationBean.getLocality());
+            schoolInt = userInformationBean.getSchool();
+            if (schoolInt == 0)
+                schooltext.setText("河南师范大学");
+            status = userInformationBean.getState();
+            switch (status) {
+                case 0:
+                    statustext.setText("单身");
+                    break;
+                case 1:
+                    statustext.setText("失恋了");
+                    break;
+                case 2:
+                    statustext.setText("恋爱ing");
+                    break;
+            }
+            if (TextUtils.isEmpty(userInformationBean.getSign())){
+                signtext.setText("");
+            }else {
+                signtext.setText(userInformationBean.getSign());
+            }
+        }
         birthdayparent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -148,10 +206,10 @@ public class SetUserInfoActivity extends AppCompatActivity {
                 String s = birthdaytext.getText().toString();
                 if (!TextUtils.isEmpty(s)) {
                     Date date = DateFormatUtils.formatString2Date(s);
-                    if (date != null){
-                        startext.setText(Date2Star.date2Constellation(date)+"");
+                    if (date != null) {
+                        startext.setText(Date2Star.date2Constellation(date) + "");
                     }
-                }else {
+                } else {
                     ShowToast.show(SetUserInfoActivity.this, "要先设置生日~");
                 }
             }
@@ -184,5 +242,46 @@ public class SetUserInfoActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public UserInformationBean2 getUserInformationBean() {
+        return userInformationBean2;
+    }
+
+    @Override
+    public File getImgFile() {
+        return null;
+    }
+
+    @Override
+    public void showData(BaseBean2 baseBean) {
+        if (baseBean != null){
+            ShowToast.show(SetUserInfoActivity.this, "设置成功");
+            Intent intent = getIntent();
+            intent.putExtra("userInformationBean", userInformationBean2);
+            setResult(0, intent);
+            finish();
+        }
+    }
+
+    @Override
+    public void showFailedForResult(BaseBean2 baseBean) {
+
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showFailedForException(Throwable t) {
+
     }
 }

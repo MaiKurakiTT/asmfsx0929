@@ -9,6 +9,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -73,6 +74,8 @@ public class ItemShopActivity extends AppCompatActivity implements GetShopGoodLi
     }
 
     private void setData2View() {
+        getShopGoodListPresenter = new GetShopGoodListPresenter(this);
+        getShopGoodListPresenter.start();
         //设置商家信息显示
         if (shopVO != null){
             shopName.setText("" + shopVO.getName());
@@ -85,8 +88,6 @@ public class ItemShopActivity extends AppCompatActivity implements GetShopGoodLi
     private void initData() {
         shopVO = (ShopVO) getIntent().getSerializableExtra("shopVO");
 
-        getShopGoodListPresenter = new GetShopGoodListPresenter(this);
-        getShopGoodListPresenter.start();
     }
 
     private void initView() {
@@ -125,6 +126,7 @@ public class ItemShopActivity extends AppCompatActivity implements GetShopGoodLi
             @Override
             public void click(View view, int position, Long goodId) {
                 Intent intent = new Intent(ItemShopActivity.this, ItemGoodInfoActivity.class);
+                intent.putExtra("shopVO", shopVO);
                 intent.putExtra("goodId", goodId);
                 startActivity(intent);
             }
@@ -164,5 +166,14 @@ public class ItemShopActivity extends AppCompatActivity implements GetShopGoodLi
     @Override
     public void showFailedForException(Throwable t) {
         ShowToast.show(ItemShopActivity.this, t.toString());
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

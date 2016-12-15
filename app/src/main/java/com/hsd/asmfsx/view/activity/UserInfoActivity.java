@@ -1,10 +1,14 @@
 package com.hsd.asmfsx.view.activity;
 
 import android.content.Intent;
+import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,9 +18,11 @@ import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.hsd.asmfsx.R;
-import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.bean.UserInformationBean2;
-import com.hsd.asmfsx.utils.ShowToast;
+import com.hsd.asmfsx.utils.DateFormatUtils;
+import com.hsd.asmfsx.utils.GetAgeFromDate;
+
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,10 +48,36 @@ public class UserInfoActivity extends AppCompatActivity {
     Toolbar userinfoToolbar;
     @BindView(R.id.fab_menu)
     FloatingActionMenu fabMenu;
+    @BindView(R.id.collapsing)
+    CollapsingToolbarLayout collapsing;
+    @BindView(R.id.age)
+    TextView ageTV;
+    @BindView(R.id.star)
+    TextView starTV;
+    @BindView(R.id.school)
+    TextView schoolTV;
+    @BindView(R.id.match_info)
+    TextView matchInfo;
+    @BindView(R.id.match_status)
+    TextView matchStatus;
+    @BindView(R.id.status)
+    TextView statusTV;
+    @BindView(R.id.match_home)
+    TextView matchHome;
+    @BindView(R.id.home)
+    TextView homeTV;
+    @BindView(R.id.match_sign)
+    TextView matchSign;
+    @BindView(R.id.sign)
+    TextView signTV;
+    @BindView(R.id.nest)
+    NestedScrollView nest;
     /**
      * 判断是从哪开启此activity的，0是个人中心，1是他人查看的个人信息
      */
     private int type;
+    private UserInformationBean2 userInformationBean;
+    private int ageInt;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,6 +86,52 @@ public class UserInfoActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initData();
         initView();
+        setData2View(userInformationBean);
+    }
+
+    private void setData2View(UserInformationBean2 userInformationBean) {
+        if (userInformationBean == null) {
+
+        } else {
+            String nickname = userInformationBean.getNickname();
+            String icon = userInformationBean.getIcon();
+            name.setText(nickname);
+            Glide.with(this).load(icon).into(userImg);
+            Long birthdayLong = userInformationBean.getBirthday();
+            if (birthdayLong != null){
+                ageInt = GetAgeFromDate.getAge(DateFormatUtils.formatLong2Date(birthdayLong));
+            }
+            ageTV.setText(ageInt + "岁");
+            starTV.setText(userInformationBean.getStar() + "");
+            Integer schoolInt = userInformationBean.getSchool();
+            if (schoolInt != null){
+                switch (schoolInt){
+                    case 0:
+                        schoolTV.setText("河南师范大学");
+                        break;
+                }
+            }
+            Integer stateInt = userInformationBean.getState();
+            if (stateInt != null){
+                switch (stateInt){
+                    case 0:
+                        statusTV.setText("单身");
+                        break;
+                    case 1:
+                        statusTV.setText("失恋了");
+                        break;
+                    case 2:
+                        statusTV.setText("恋爱ing");
+                        break;
+                }
+            }
+            homeTV.setText("" + userInformationBean.getLocality());
+            if (TextUtils.isEmpty(userInformationBean.getSign())){
+                signTV.setText("这家伙很懒，什么都不填。");
+            }else {
+                signTV.setText("" + userInformationBean.getSign());
+            }
+        }
     }
 
     private void initView() {
@@ -82,6 +160,7 @@ public class UserInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(UserInfoActivity.this, SetUserInfoActivity.class);
+                intent.putExtra("userInformationBean", userInformationBean);
                 startActivityForResult(intent, 0);
                 fabMenu.close(true);
             }
@@ -91,16 +170,23 @@ public class UserInfoActivity extends AppCompatActivity {
     private void initData() {
         type = getIntent().getIntExtra("type", 1);
 
-        UserInformationBean2 userInformationBean = (UserInformationBean2) getIntent().getSerializableExtra("userInformationBean");
-        if (userInformationBean == null) {
+        userInformationBean = (UserInformationBean2) getIntent().getSerializableExtra("userInformationBean");
 
-        } else {
-            String user_nickname = userInformationBean.getNickname();
-            String user_icon = userInformationBean.getIcon();
-            name.setText(user_nickname);
-            Glide.with(this).load(user_icon).into(userImg);
-            ShowToast.show(UserInfoActivity.this, user_nickname);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //从SetUserInfoActivity回传过来，更新界面信息
+        if (requestCode == 0){
+            UserInformationBean2 userInformationBean = (UserInformationBean2) data.getSerializableExtra("userInformationBean");
+            if (userInformationBean != null){
+                setData2View(userInformationBean);
+                Intent intent = getIntent();
+                intent.putExtra("userInformationBean", userInformationBean);
+                setResult(0, intent);
+            }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override

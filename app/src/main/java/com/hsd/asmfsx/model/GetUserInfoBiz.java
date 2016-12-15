@@ -14,9 +14,9 @@ import retrofit2.Response;
  * Created by sun on 2016/12/6.
  */
 
-public class GetUserInfoBizBiz implements GetUserInfoContract.IGetUserInfoBiz {
+public class GetUserInfoBiz implements GetUserInfoContract.IGetUserInfoBiz {
     @Override
-    public void getUserInfo(int userId, final OnRequestListener<UserInformationBean2> requestListener) {
+    public void getUserInfo(Long userId, final OnRequestListener<UserInformationBean2> requestListener) {
         GetRetrofit
                 .getRetrofit2()
                 .create(RetrofitService.class)

@@ -4,12 +4,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.adapter.ImgViewPagerAdapter;
+import com.hsd.asmfsx.utils.ShowToast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +43,7 @@ public class ImgViewPagerActivity extends AppCompatActivity {
         imgPagerParent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ShowToast.show(ImgViewPagerActivity.this, "点击了");
                 finish();
             }
         });

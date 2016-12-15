@@ -167,7 +167,7 @@ public class PutFriendCircleActivity extends AppCompatActivity implements PutFri
     }
 
     /*@Override
-    public void showData(BaseBean baseBean, int failedCounts) {
+    public void showDataForUserInfo(BaseBean baseBean, int failedCounts) {
         if (baseBean.getResultCode() == 1) {
             if (failedCounts > 0) {
                 Snackbar.make(toolbar, "发布成功, 但是有 " + failedCounts + "张图片上传失败", Snackbar.LENGTH_LONG).show();

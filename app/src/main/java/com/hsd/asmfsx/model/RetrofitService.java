@@ -10,6 +10,8 @@ import com.hsd.asmfsx.bean.FriendCircleVO;
 import com.hsd.asmfsx.bean.LoginBean;
 import com.hsd.asmfsx.bean.LoginBean2;
 import com.hsd.asmfsx.bean.NormalResultBean;
+import com.hsd.asmfsx.bean.OrderListBean;
+import com.hsd.asmfsx.bean.OrderVO;
 import com.hsd.asmfsx.bean.RegisterBean;
 import com.hsd.asmfsx.bean.ShopVO;
 import com.hsd.asmfsx.bean.UserBean2;
@@ -78,8 +80,9 @@ public interface RetrofitService {
      * @param userInformationID
      * @return
      */
+    @FormUrlEncoded
     @POST(GlobalParameter.project2 + "user/getUserInformation.action")
-    Call<NormalResultBean<UserInformationBean2>> postGetUserInfo(@Field("userInformationID") int userInformationID);
+    Call<NormalResultBean<UserInformationBean2>> postGetUserInfo(@Field("userInformationID") Long userInformationID);
 
     /**
      * 图片上传
@@ -137,7 +140,7 @@ public interface RetrofitService {
      * @return
      */
     @FormUrlEncoded
-    @POST(GlobalParameter.project2 + "user/getUserInformationListWithKeys.action")
+    @POST(GlobalParameter.project2 + "user/getRecommendUsers.action")
     Call<NormalResultBean<List<UserInformationBean2>>> postFindFriends(@Field("page") int page, @Field("limit") int limit);
 
     /**
@@ -179,7 +182,26 @@ public interface RetrofitService {
      */
     @FormUrlEncoded
     @POST(GlobalParameter.project2 + "user/addOrder.action")
-    Call<BaseBean2> postPlaceOrder(@Field("commodityID") Long commodityID, @Field("amount") int amount, @Field("price") int price, @Field("detail") String detail);
+    Call<BaseBean2> postPlaceOrder(@Field("commodityID") Long commodityID, @Field("amount") int amount, @Field("price") double price, @Field("detail") String detail);
+
+
+    /**
+     * 获取订单列表
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(GlobalParameter.project2 + "user/getOrders.action")
+    Call<NormalResultBean<List<OrderListBean>>> postGetOrderList(@Field("page") int page, @Field("limit") int limit);
+
+
+    /**
+     * 获取每个订单信息
+     * @param orderID
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(GlobalParameter.project2 + "user/getOrder.action")
+    Call<NormalResultBean<OrderVO>> postGetOrder(@Field("orderID") Long orderID);
 
 /**
  * ------------------------------------------------------------------------------------

@@ -193,7 +193,7 @@ public class RegisterActivity extends AppCompatActivity implements RegisterContr
     }
 
     /*@Override
-    public void showData(RegisterBean registerBean) {
+    public void showDataForUserInfo(RegisterBean registerBean) {
         if (registerBean.getResultCode() == 1) {
             Logger.d("返回码为" + registerBean.getResultCode() + registerBean.getDescribe());
             ShowToast.show(RegisterActivity.this, "" + registerBean.getDescribe());

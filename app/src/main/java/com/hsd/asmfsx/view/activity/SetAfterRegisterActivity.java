@@ -122,8 +122,8 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
     private Integer height;
     private String home;
     private String school;
-    private Integer schoolInt;
-    private Integer statusInt;
+    private Integer schoolInt = new Integer(0);
+    private Integer statusInt = new Integer(0);
     private String statusString;
     private UserInformationBean2 userInformationBean;
 
@@ -151,9 +151,9 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
         name = nametext.getText().toString();
         sex = sextext.getText().toString();
         if (sex.equals("男")){
-            sexInt = 0;
+            sexInt = Integer.valueOf(0);
         }else {
-            sexInt = 1;
+            sexInt = Integer.valueOf(0);
         }
         birthdayString = birthdaytext.getText().toString();
         if (!TextUtils.isEmpty(birthdayString)) {
@@ -167,18 +167,18 @@ public class SetAfterRegisterActivity extends AppCompatActivity implements SetAf
         home = hometext.getText().toString();
         school = schooltext.getText().toString();
         if (schoolItems[0].equals(school)){
-            schoolInt = 0;
+            schoolInt = Integer.valueOf(0);
         }
         statusString = statustext.getText().toString();
         switch (statusString){
             case "单身":
-                statusInt = 0;
-                break;
-            case "恋爱ing":
-                statusInt = 1;
+                statusInt = Integer.valueOf(0);
                 break;
             case "失恋了":
-                statusInt = 2;
+                statusInt = Integer.valueOf(1);
+                break;
+            case "恋爱ing":
+                statusInt = Integer.valueOf(2);
                 break;
         }
     }

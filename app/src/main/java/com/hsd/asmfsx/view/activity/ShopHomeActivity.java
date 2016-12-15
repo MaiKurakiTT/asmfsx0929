@@ -60,11 +60,12 @@ public class ShopHomeActivity extends AppCompatActivity implements GetShopListCo
         ButterKnife.bind(this);
         initData();
         initView();
+        getShopListPresenter = new GetShopListPresenter(this);
+        getShopListPresenter.start();
     }
 
     private void initData() {
-        getShopListPresenter = new GetShopListPresenter(this);
-        getShopListPresenter.start();
+
     }
 
     private void initView() {
@@ -75,7 +76,14 @@ public class ShopHomeActivity extends AppCompatActivity implements GetShopListCo
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         toolbarCentertext.setText("附近商家");
-        toolbarRighttext.setText("");
+        toolbarRighttext.setText("我的订单");
+        toolbarRighttext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(ShopHomeActivity.this, OrderListActivity.class);
+                startActivity(intent);
+            }
+        });
         shopListRecycle.setLayoutManager(new LinearLayoutManager(this));
     }
 
