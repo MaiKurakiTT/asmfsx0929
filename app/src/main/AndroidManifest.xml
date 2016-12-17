@@ -69,6 +69,11 @@
         <activity android:name=".view.activity.PayActivity"/>
         <activity android:name=".view.activity.OrderListActivity"/>
         <activity android:name=".view.activity.OrderInfoActivity"/>
+        <activity android:name=".view.activity.FindFriendsActivity2"/>
+
+
+
+        <service android:name=".service.MyService"/>
 
 
 
@@ -83,7 +88,7 @@
         </activity>
 
         <!-- 设置环信应用的AppKey -->
-        <meta-data android:name="EASEMOB_APPKEY"  android:value="zacharysun#firsttestim" />
+        <meta-data android:name="EASEMOB_APPKEY"  android:value="1108161116178615#f1" />
         <!-- 声明SDK所需的service SDK核心功能-->
         <service android:name="com.hyphenate.chat.EMChatService" android:exported="true"/>
         <!-- 声明SDK所需的receiver -->

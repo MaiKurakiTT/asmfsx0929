@@ -22,6 +22,8 @@ import com.hsd.asmfsx.MainActivity;
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.LoginBean;
+import com.hsd.asmfsx.bean.LoginBean2;
+import com.hsd.asmfsx.bean.NormalResultBean;
 import com.hsd.asmfsx.bean.UserBean2;
 import com.hsd.asmfsx.contract.LoginContract;
 import com.hsd.asmfsx.db.DbBean;
@@ -69,13 +71,13 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     private void checkLogin() {
-        String phone = spUtils.getString("phone");
+        /*String phone = spUtils.getString("phone");
         String psw = spUtils.getString("psw");
         if (!TextUtils.isEmpty(phone) && !TextUtils.isEmpty(psw)){
             username = phone;
             password = psw;
             loginPresenter.start();
-        }
+        }*/
     }
 
     private void initView() {
@@ -127,7 +129,7 @@ public class LoginActivity extends AppCompatActivity implements LoginContract.Vi
     }
 
     @Override
-    public void showData(BaseBean2 baseBean2) {
+    public void showData(NormalResultBean<LoginBean2> normalResultBean) {
         spUtils.putString("phone", username);
         spUtils.putString("psw", password);
         ShowToast.show(LoginActivity.this, "登录成功");

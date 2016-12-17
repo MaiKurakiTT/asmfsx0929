@@ -9,6 +9,8 @@ import android.text.TextUtils;
 import com.hsd.asmfsx.MainActivity;
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.bean.BaseBean2;
+import com.hsd.asmfsx.bean.LoginBean2;
+import com.hsd.asmfsx.bean.NormalResultBean;
 import com.hsd.asmfsx.contract.LoginContract;
 import com.hsd.asmfsx.presenter.LoginPresenter;
 import com.hsd.asmfsx.utils.SPUtils;
@@ -66,7 +68,7 @@ public class SplashActivity extends AppCompatActivity implements LoginContract.V
     }
 
     @Override
-    public void showData(BaseBean2 baseBean) {
+    public void showData(NormalResultBean<LoginBean2> normalResultBean) {
         ShowToast.show(SplashActivity.this, "欢迎回来");
         jump2Main();
     }

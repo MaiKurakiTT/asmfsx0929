@@ -12,25 +12,28 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.hsd.asmfsx.adapter.HBListAdapter;
 import com.hsd.asmfsx.adapter.SeeAdapter;
-import com.hsd.asmfsx.bean.BaseBean;
+import com.hsd.asmfsx.adapter.SwipeCardViewAdapter;
 import com.hsd.asmfsx.bean.BaseBean2;
+import com.hsd.asmfsx.bean.HBListBean;
 import com.hsd.asmfsx.bean.UserInformationBean2;
 import com.hsd.asmfsx.chat.ChatActivity;
 import com.hsd.asmfsx.chat.RegAndLogin;
 import com.hsd.asmfsx.contract.GetUserInfoContract;
-import com.hsd.asmfsx.global.GetRetrofit;
-import com.hsd.asmfsx.model.RetrofitService;
-import com.hsd.asmfsx.model.UploadImgBiz;
+import com.hsd.asmfsx.contract.HBListContract;
 import com.hsd.asmfsx.presenter.GetUserInfoPresenter;
+import com.hsd.asmfsx.presenter.HBListPresenter;
+import com.hsd.asmfsx.service.MyService;
 import com.hsd.asmfsx.utils.ShowToast;
 import com.hsd.asmfsx.view.activity.CertificationActivity;
-import com.hsd.asmfsx.view.activity.FindFriendsActivity;
+import com.hsd.asmfsx.view.activity.FindFriendsActivity2;
 import com.hsd.asmfsx.view.activity.FriendCircleActivity;
 import com.hsd.asmfsx.view.activity.LoginActivity;
 import com.hsd.asmfsx.view.activity.OrderListActivity;
@@ -38,29 +41,17 @@ import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
 import com.hsd.asmfsx.view.activity.ShopHomeActivity;
 import com.hsd.asmfsx.view.activity.UserInfoActivity;
-import com.hyphenate.EMMessageListener;
+import com.hsd.asmfsx.widget.swipecardview.SwipeFlingAdapterView;
 import com.hyphenate.chat.EMClient;
-import com.hyphenate.chat.EMMessage;
-import com.hyphenate.easeui.controller.EaseUI;
-import com.hyphenate.easeui.domain.EaseUser;
-import com.hyphenate.easeui.model.EaseNotifier;
-import com.hyphenate.easeui.utils.EaseCommonUtils;
-import com.hyphenate.util.EMLog;
-import com.orhanobut.logger.Logger;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-import static com.hyphenate.easeui.utils.EaseUserUtils.getUserInfo;
-
-public class MainActivity extends AppCompatActivity implements EMMessageListener, GetUserInfoContract.View{
+public class MainActivity extends AppCompatActivity implements GetUserInfoContract.View , HBListContract.View{
     public String TAG = "MainActivity";
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -78,7 +69,8 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
     NavigationView navigationViewRight;
     @BindView(R.id.bottom_but)
     ImageButton bottomImgBut;
-    private EaseUI easeUI;
+    @BindView(R.id.swipe_fling_view)
+    SwipeFlingAdapterView swipeFlingView;
 
     private RecyclerView rightRecycle;
     private RecyclerView seeRecycleView;
@@ -93,15 +85,17 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
     private TextView naviNickName;
     private GetUserInfoPresenter getUserInfoPresenter;
 
+
+    private List<UserInformationBean2> mList = new ArrayList<>();
+    private BottomSheetBehavior<View> sheetBehavior;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         ButterKnife.bind(this);
         initData();
         initView();
-        easeUIInit();
         requestData();
         setData2View();
     }
@@ -109,6 +103,8 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
     private void requestData() {
         getUserInfoPresenter = new GetUserInfoPresenter(this);
         getUserInfoPresenter.start();
+        HBListPresenter hbListPresenter = new HBListPresenter(this);
+        hbListPresenter.start();
     }
 
     private void setData2View() {
@@ -116,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
     }
 
     private void initData() {
-
+        startService(new Intent(MainActivity.this, MyService.class));
     }
 
 
@@ -126,7 +122,62 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
         initBottomSheet();
         initLeftNavigation();
         initRightNavigation();
+        initSwipCardView();
+    }
 
+    private void initSwipCardView() {
+        for (int i = 0; i<20; i++){
+            UserInformationBean2 userInformationBean2 = new UserInformationBean2();
+            userInformationBean2.setNickname("i" + i);
+            mList.add(userInformationBean2);
+        }
+
+        //初始化swipecardview
+        final SwipeCardViewAdapter swipeCardViewAdapter = new SwipeCardViewAdapter(this, mList);
+        swipeFlingView.setAdapter(swipeCardViewAdapter);
+        swipeFlingView.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClicked(MotionEvent event, View v, Object dataObject) {
+                UserInformationBean2 data = (UserInformationBean2) dataObject;
+                if (data != null) {
+                    ShowToast.show(MainActivity.this, "点击了" + data.getNickname());
+                    Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
+                    intent.putExtra("type", 1);
+                    startActivity(intent);
+                }
+            }
+        });
+        swipeFlingView.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
+            @Override
+            public void removeFirstObjectInAdapter() {
+                swipeCardViewAdapter.remove(0);
+            }
+
+            @Override
+            public void onLeftCardExit(Object dataObject) {
+
+            }
+
+            @Override
+            public void onRightCardExit(Object dataObject) {
+
+            }
+
+            @Override
+            public void onAdapterAboutToEmpty(int itemsInAdapter) {
+                if (itemsInAdapter == 5){
+
+                }
+            }
+
+            @Override
+            public void onScroll(float progress, float scrollXProgress) {
+                //设置底部关闭
+                if (sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
+            }
+        });
     }
 
     private void initRightNavigation() {
@@ -140,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
         navigationViewLeft.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.navi_menu_1:
                         startActivity(new Intent(MainActivity.this, OrderListActivity.class));
                         drawerView.closeDrawers();
@@ -149,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
                 return true;
             }
         });
-        naviHeadImg = (CircleImageView)leftNaviHeadView.findViewById(R.id.navi_head);
+        naviHeadImg = (CircleImageView) leftNaviHeadView.findViewById(R.id.navi_head);
         naviNickName = (TextView) leftNaviHeadView.findViewById(R.id.navi_name);
         leftNaviHeadView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -172,7 +223,7 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
     private void initBottomSheet() {
         View bottomSheet = findViewById(R.id.design_bottom_sheet);
         seeRecycleView = (RecyclerView) bottomSheet.findViewById(R.id.see_recycle);
-        final BottomSheetBehavior<View> sheetBehavior = BottomSheetBehavior.from(bottomSheet);
+        sheetBehavior = BottomSheetBehavior.from(bottomSheet);
         sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         sheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
@@ -233,7 +284,7 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
 //                        presenter.getData();
                         break;
                     case 10:
-                        startActivity(new Intent(MainActivity.this, FindFriendsActivity.class));
+                        startActivity(new Intent(MainActivity.this, FindFriendsActivity2.class));
                         break;
                 }
             }
@@ -280,115 +331,22 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //从UserInfoActivity回传过来，更新界面信息
-        if (resultCode == 0){
+        if (resultCode == 0 && data != null) {
             UserInformationBean2 userInformationBean = (UserInformationBean2) data.getSerializableExtra("userInformationBean");
-            if (userInformationBean != null){
+            if (userInformationBean != null) {
                 naviNickName.setText("" + userInformationBean.getNickname());
             }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    /**
-     * 进行EaseUI和环信的一些设置
-     */
-    private void easeUIInit() {
-        EMClient.getInstance().chatManager().addMessageListener(this);
-        easeUI = EaseUI.getInstance();
-        easeUI.getNotifier().setNotificationInfoProvider(new EaseNotifier.EaseNotificationInfoProvider() {
-            @Override
-            public String getDisplayedText(EMMessage message) {
-                // 设置状态栏的消息提示，可以根据message的类型做相应提示
-                String ticker = EaseCommonUtils.getMessageDigest(message, MainActivity.this);
-                if (message.getType() == EMMessage.Type.TXT) {
-                    ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
-                }
-                EaseUser user = getUserInfo(message.getFrom());
-                if (user != null) {
-                    return getUserInfo(message.getFrom()).getNick() + ": " + ticker;
-                } else {
-                    return message.getFrom() + ": " + ticker;
-                }
-            }
-
-            @Override
-            public String getLatestText(EMMessage message, int fromUsersNum, int messageNum) {
-                return message.getFrom() + "发来消息";
-            }
-
-            @Override
-            public String getTitle(EMMessage message) {
-                return null;
-            }
-
-            @Override
-            public int getSmallIcon(EMMessage message) {
-                return 0;
-            }
-
-            @Override
-            public Intent getLaunchIntent(EMMessage message) {
-                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-                intent.putExtra("name", message.getFrom());
-                return intent;
-            }
-        });
-        final EaseUser easeUser = new EaseUser("环信");
-        easeUser.setInitialLetter("haha");
-        easeUser.setAvatar("http://pics.sc.chinaz.com/files/pic/pic9/201508/apic14052.jpg");
-//        UserInfoProvider userInfoProvider = new UserInfoProvider("测试", "https://www.google.com/logos/doodles/2016/united-states-elections-2016-reminder-day-1-5669879209263104-hp.jpg");
-        easeUI.setUserProfileProvider(new EaseUI.EaseUserProfileProvider() {
-            @Override
-            public EaseUser getUser(String username) {
-                //通过传来的用户的username在APP服务器查询该用户的信息，通过内容提供着EaseUser传给EaseUI
-                return easeUser;
-            }
-        });
-    }
-
 
     @Override
     protected void onDestroy() {
-        EMClient.getInstance().logout(true);
+//        EMClient.getInstance().logout(true);
         super.onDestroy();
     }
 
-    /**
-     * 实现EMMessageListener接口，保证全局都能收到消息
-     *
-     * @param list
-     */
-    @Override
-    public void onMessageReceived(List<EMMessage> list) {
-        for (EMMessage message : list) {
-            EMLog.d("Helper", "onMessageReceived id : " + message.getMsgId());
-            Logger.d("消息来了: " + message.getBody().toString());
-            //应用在后台，不需要刷新UI,通知栏提示新消息
-            if (!easeUI.hasForegroundActivies()) {
-                easeUI.getNotifier().onNewMsg(message);
-            }
-        }
-    }
-
-    @Override
-    public void onCmdMessageReceived(List<EMMessage> list) {
-
-    }
-
-    @Override
-    public void onMessageReadAckReceived(List<EMMessage> list) {
-
-    }
-
-    @Override
-    public void onMessageDeliveryAckReceived(List<EMMessage> list) {
-
-    }
-
-    @Override
-    public void onMessageChanged(EMMessage emMessage, Object o) {
-
-    }
 
     @Override
     public Long getUserId() {
@@ -397,10 +355,19 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
 
     @Override
     public void showDataForUserInfo(UserInformationBean2 userInformationBean) {
-        mUserInfo = userInformationBean;
-        Glide.with(this).load(userInformationBean.getIcon()).into(headImg);
-        Glide.with(this).load(userInformationBean.getIcon()).into(naviHeadImg);
-        naviNickName.setText("" + userInformationBean.getNickname());
+        if (userInformationBean != null) {
+            mUserInfo = userInformationBean;
+            Glide.with(this).load(userInformationBean.getIcon()).into(headImg);
+            Glide.with(this).load(userInformationBean.getIcon()).into(naviHeadImg);
+            naviNickName.setText("" + userInformationBean.getNickname());
+            if (userInformationBean.getSex() != null) {
+                if (userInformationBean.getSex() == 0) {
+                    toolbarCentertext.setText("爱师妹");
+                } else {
+                    toolbarCentertext.setText("防师兄");
+                }
+            }
+        }
     }
 
     @Override
@@ -427,5 +394,29 @@ public class MainActivity extends AppCompatActivity implements EMMessageListener
     public boolean onOptionsItemSelected(MenuItem item) {
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void showDataForHBList(List<HBListBean> hbList) {
+        if (hbList != null){
+            HBListAdapter hbListAdapter = new HBListAdapter(this, hbList);
+            rightRecycle.setAdapter(hbListAdapter);
+            //聊天
+            hbListAdapter.setOnItemClickListener(new HBListAdapter.OnItemClickListener() {
+                @Override
+                public void click(View view, int position, Long userId) {
+                    if (userId != null) {
+                        Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                        intent.putExtra("name", userId + "");
+                        startActivity(intent);
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public void showFailedForResultHBList(BaseBean2 baseBean2) {
+
     }
 }

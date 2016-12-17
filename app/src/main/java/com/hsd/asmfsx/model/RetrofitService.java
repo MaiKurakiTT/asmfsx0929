@@ -7,6 +7,7 @@ import com.hsd.asmfsx.bean.CommodityVO;
 import com.hsd.asmfsx.bean.FindFriendsBean;
 import com.hsd.asmfsx.bean.FriendCircleBean;
 import com.hsd.asmfsx.bean.FriendCircleVO;
+import com.hsd.asmfsx.bean.HBListBean;
 import com.hsd.asmfsx.bean.LoginBean;
 import com.hsd.asmfsx.bean.LoginBean2;
 import com.hsd.asmfsx.bean.NormalResultBean;
@@ -51,7 +52,7 @@ public interface RetrofitService {
      */
     @POST(GlobalParameter.project2 + "login.action")
     @FormUrlEncoded
-    Call<BaseBean2> postLogin2(@Field("phone") String phone, @Field("password") String password);
+    Call<NormalResultBean<LoginBean2>> postLogin2(@Field("phone") String phone, @Field("password") String password);
 
     /**
      * 注册，需要手机号、密码、学号
@@ -202,6 +203,24 @@ public interface RetrofitService {
     @FormUrlEncoded
     @POST(GlobalParameter.project2 + "user/getOrder.action")
     Call<NormalResultBean<OrderVO>> postGetOrder(@Field("orderID") Long orderID);
+
+
+    /**
+     * 添加心动好友
+     * @param heartBeatUserID
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(GlobalParameter.project2 + "user/addHeartBeat.action")
+    Call<BaseBean2> postAddHB(@Field("heartBeatUserID") Long heartBeatUserID);
+
+    /**
+     * 获取心动列表
+     * @return
+     */
+    @POST(GlobalParameter.project2 + "user/getHeartBeats.action")
+    Call<NormalResultBean<List<HBListBean>>> postGetHBList();
+
 
 /**
  * ------------------------------------------------------------------------------------

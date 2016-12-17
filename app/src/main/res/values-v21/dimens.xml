@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="elevation_card_margin">6dp</dimen>
+
+    <dimen name="swipe_y_offset_step">28dp</dimen>
 </resources>

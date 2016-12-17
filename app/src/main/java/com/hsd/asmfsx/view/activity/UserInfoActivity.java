@@ -5,6 +5,7 @@ import android.database.DatabaseUtils;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,7 +19,13 @@ import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.UserInformationBean2;
+import com.hsd.asmfsx.chat.ChatActivity;
+import com.hsd.asmfsx.contract.AddHBContract;
+import com.hsd.asmfsx.contract.GetUserInfoContract;
+import com.hsd.asmfsx.presenter.AddHBPresenter;
+import com.hsd.asmfsx.presenter.GetUserInfoPresenter;
 import com.hsd.asmfsx.utils.DateFormatUtils;
 import com.hsd.asmfsx.utils.GetAgeFromDate;
 
@@ -33,7 +40,7 @@ import butterknife.ButterKnife;
  * 个人信息界面
  */
 
-public class UserInfoActivity extends AppCompatActivity {
+public class UserInfoActivity extends AppCompatActivity implements GetUserInfoContract.View, AddHBContract.View{
     @BindView(R.id.userimg)
     ImageView userImg;
     @BindView(R.id.name)
@@ -78,6 +85,7 @@ public class UserInfoActivity extends AppCompatActivity {
     private int type;
     private UserInformationBean2 userInformationBean;
     private int ageInt;
+    private Long userID;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,22 +106,22 @@ public class UserInfoActivity extends AppCompatActivity {
             name.setText(nickname);
             Glide.with(this).load(icon).into(userImg);
             Long birthdayLong = userInformationBean.getBirthday();
-            if (birthdayLong != null){
+            if (birthdayLong != null) {
                 ageInt = GetAgeFromDate.getAge(DateFormatUtils.formatLong2Date(birthdayLong));
             }
             ageTV.setText(ageInt + "岁");
             starTV.setText(userInformationBean.getStar() + "");
             Integer schoolInt = userInformationBean.getSchool();
-            if (schoolInt != null){
-                switch (schoolInt){
+            if (schoolInt != null) {
+                switch (schoolInt) {
                     case 0:
                         schoolTV.setText("河南师范大学");
                         break;
                 }
             }
             Integer stateInt = userInformationBean.getState();
-            if (stateInt != null){
-                switch (stateInt){
+            if (stateInt != null) {
+                switch (stateInt) {
                     case 0:
                         statusTV.setText("单身");
                         break;
@@ -126,9 +134,9 @@ public class UserInfoActivity extends AppCompatActivity {
                 }
             }
             homeTV.setText("" + userInformationBean.getLocality());
-            if (TextUtils.isEmpty(userInformationBean.getSign())){
+            if (TextUtils.isEmpty(userInformationBean.getSign())) {
                 signTV.setText("这家伙很懒，什么都不填。");
-            }else {
+            } else {
                 signTV.setText("" + userInformationBean.getSign());
             }
         }
@@ -147,12 +155,23 @@ public class UserInfoActivity extends AppCompatActivity {
         firstFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //心动TA
+                if (userID != null){
+                    AddHBPresenter addHBPresenter = new AddHBPresenter(UserInfoActivity.this);
+//                    addHBPresenter.start();
+                }
                 fabMenu.close(true);
             }
         });
         secondFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //跟TA聊天
+                if (userID != null){
+                    Intent intent = new Intent(UserInfoActivity.this, ChatActivity.class);
+                    intent.putExtra("name", userID + "");
+                    startActivity(intent);
+                }
                 fabMenu.close(true);
             }
         });
@@ -169,17 +188,23 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private void initData() {
         type = getIntent().getIntExtra("type", 1);
-
-        userInformationBean = (UserInformationBean2) getIntent().getSerializableExtra("userInformationBean");
+        if (type == 0) {
+            userInformationBean = (UserInformationBean2) getIntent().getSerializableExtra("userInformationBean");
+        }else {
+            //从其他Activity传过来某人的userID，然后调用GetUserInfo查询并显示其信息
+            userID = getIntent().getLongExtra("userID", 0);
+            GetUserInfoPresenter getUserInfoPresenter = new GetUserInfoPresenter(this);
+//            getUserInfoPresenter.start();
+        }
 
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //从SetUserInfoActivity回传过来，更新界面信息
-        if (requestCode == 0){
+        if (requestCode == 0 && data != null) {
             UserInformationBean2 userInformationBean = (UserInformationBean2) data.getSerializableExtra("userInformationBean");
-            if (userInformationBean != null){
+            if (userInformationBean != null) {
                 setData2View(userInformationBean);
                 Intent intent = getIntent();
                 intent.putExtra("userInformationBean", userInformationBean);
@@ -197,5 +222,50 @@ public class UserInfoActivity extends AppCompatActivity {
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Long getUserId() {
+        return userID;
+    }
+
+    @Override
+    public void showDataForUserInfo(UserInformationBean2 userInformationBean) {
+        setData2View(userInformationBean);
+    }
+
+    @Override
+    public void showFailedForUserInfoResult(BaseBean2 baseBean) {
+
+    }
+
+    @Override
+    public void showLoading() {
+
+    }
+
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showFailedForException(Throwable t) {
+
+    }
+
+    @Override
+    public Long getHBUserID() {
+        return userID;
+    }
+
+    @Override
+    public void showData(BaseBean2 baseBean2) {
+        Snackbar.make(fabMenu, "已添加心动", Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showFailedForResult(BaseBean2 baseBean2) {
+        Snackbar.make(fabMenu, "添加心动失败, " + baseBean2.getMsg(), Snackbar.LENGTH_LONG).show();
     }
 }

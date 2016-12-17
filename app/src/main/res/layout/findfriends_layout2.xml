@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:swipe="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+<com.hsd.asmfsx.widget.swipecardview.SwipeFlingAdapterView
+    android:id="@+id/swipe_fling_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    swipe:min_adapter_stack="4"
+    swipe:max_visible="4"
+    swipe:y_offset_step="28dp"/>
+    <Button
+        android:id="@+id/changebut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="换一批看看"/>
+</LinearLayout>
