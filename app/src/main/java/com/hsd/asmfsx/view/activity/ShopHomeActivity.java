@@ -135,4 +135,14 @@ public class ShopHomeActivity extends AppCompatActivity implements GetShopListCo
     public void showFailedForException(Throwable t) {
         ShowToast.show(ShopHomeActivity.this, t.toString());
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

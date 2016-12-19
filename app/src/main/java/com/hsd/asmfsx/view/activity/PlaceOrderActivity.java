@@ -162,4 +162,14 @@ public class PlaceOrderActivity extends AppCompatActivity implements PlaceOrderC
     public void showFailedForException(Throwable t) {
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }

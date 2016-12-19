@@ -287,6 +287,10 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
                         startActivity(new Intent(MainActivity.this, FindFriendsActivity2.class));
                         break;
                 }
+                //设置底部关闭
+                if (sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
+                    sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                }
             }
         });
         bottomImgBut.setOnClickListener(new View.OnClickListener() {
