@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     }
 
     private void initSwipCardView() {
-        for (int i = 0; i<20; i++){
+        for (int i = 0; i<200; i++){
             UserInformationBean2 userInformationBean2 = new UserInformationBean2();
             userInformationBean2.setNickname("i" + i);
             mList.add(userInformationBean2);

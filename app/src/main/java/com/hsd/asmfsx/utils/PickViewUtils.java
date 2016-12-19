@@ -55,12 +55,18 @@ public class PickViewUtils {
         picker.setRange(130, 210, 1);//数字范围
         picker.setSelectedItem(170);
         picker.setLabel("cm");
-        picker.setOnOptionPickListener(new OptionPicker.OnOptionPickListener() {
+        picker.setOnNumberPickListener(new NumberPicker.OnNumberPickListener() {
+            @Override
+            public void onNumberPicked(int index, Number item) {
+                textView.setText(item + "cm");
+            }
+        });
+        /*picker.setOnOptionPickListener(new OptionPicker.OnOptionPickListener() {
             @Override
             public void onOptionPicked(int position, String option) {
                 textView.setText(option + "cm");
             }
-        });
+        });*/
         picker.show();
     }
 
