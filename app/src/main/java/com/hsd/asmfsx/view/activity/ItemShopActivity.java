@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.adapter.GoodsListAdapter;
+import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.CommodityVO;
 import com.hsd.asmfsx.bean.ShopVO;
@@ -37,7 +38,7 @@ import butterknife.ButterKnife;
  * Created by sun on 2016/12/9.
  */
 
-public class ItemShopActivity extends AppCompatActivity implements GetShopGoodListContract.View{
+public class ItemShopActivity extends BaseActivity implements GetShopGoodListContract.View{
     @BindView(R.id.shop_photo)
     ImageView shopPhoto;
     @BindView(R.id.itemshop_toolbar)

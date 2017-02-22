@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.UserInformationBean2;
 import com.hsd.asmfsx.chat.ChatActivity;
@@ -40,7 +41,7 @@ import butterknife.ButterKnife;
  * 个人信息界面
  */
 
-public class UserInfoActivity extends AppCompatActivity implements GetUserInfoContract.View, AddHBContract.View{
+public class UserInfoActivity extends BaseActivity implements GetUserInfoContract.View, AddHBContract.View{
     @BindView(R.id.userimg)
     ImageView userImg;
     @BindView(R.id.name)

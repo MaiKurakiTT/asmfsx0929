@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.adapter.AddImgAdapter;
+import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.FriendCircleBean;
@@ -40,7 +41,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 发布朋友圈
  */
 
-public class PutFriendCircleActivity extends AppCompatActivity implements PutFriendCircleContract.View {
+public class PutFriendCircleActivity extends BaseActivity implements PutFriendCircleContract.View {
     @BindView(R.id.head)
     CircleImageView head;
     @BindView(R.id.toolbar_centertext)

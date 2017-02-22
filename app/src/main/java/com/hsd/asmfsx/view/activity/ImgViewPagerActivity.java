@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.adapter.ImgViewPagerAdapter;
+import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.utils.ShowToast;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import butterknife.ButterKnife;
  * 朋友圈图片浏览
  */
 
-public class ImgViewPagerActivity extends AppCompatActivity {
+public class ImgViewPagerActivity extends BaseActivity {
     @BindView(R.id.img_pager)
     ViewPager imgPager;
     @BindView(R.id.cur_position)

@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 
 import com.bumptech.glide.Glide;
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.bean.CertificationBean;
 import com.hsd.asmfsx.contract.CertificationContract;
 import com.hsd.asmfsx.contract.CheckSchoolContract;
@@ -34,7 +35,7 @@ import butterknife.ButterKnife;
  * Created by apple on 2016/10/20.
  */
 
-public class CertificationActivity extends AppCompatActivity implements CertificationContract.View, CheckSchoolContract.View {
+public class CertificationActivity extends BaseActivity implements CertificationContract.View, CheckSchoolContract.View {
     @BindView(R.id.school_spinner)
     MaterialSpinner schoolSpinner;
     @BindView(R.id.vercodeimg)

@@ -26,8 +26,12 @@ import com.hsd.asmfsx.bean.HBListBean;
 import com.hsd.asmfsx.bean.UserInformationBean2;
 import com.hsd.asmfsx.chat.ChatActivity;
 import com.hsd.asmfsx.chat.RegAndLogin;
+import com.hsd.asmfsx.contract.FindFriendsContract;
 import com.hsd.asmfsx.contract.GetUserInfoContract;
 import com.hsd.asmfsx.contract.HBListContract;
+import com.hsd.asmfsx.model.BaseListener;
+import com.hsd.asmfsx.model.FindFriendsBiz;
+import com.hsd.asmfsx.presenter.FindFriendsPresenter;
 import com.hsd.asmfsx.presenter.GetUserInfoPresenter;
 import com.hsd.asmfsx.presenter.HBListPresenter;
 import com.hsd.asmfsx.service.MyService;
@@ -51,7 +55,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements GetUserInfoContract.View , HBListContract.View{
+public class MainActivity extends AppCompatActivity implements GetUserInfoContract.View , HBListContract.View, FindFriendsContract.View{
     public String TAG = "MainActivity";
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -88,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
 
     private List<UserInformationBean2> mList = new ArrayList<>();
     private BottomSheetBehavior<View> sheetBehavior;
+    private SwipeCardViewAdapter swipeCardViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
         getUserInfoPresenter.start();
         HBListPresenter hbListPresenter = new HBListPresenter(this);
         hbListPresenter.start();
+        FindFriendsPresenter findFriendsPresenter = new FindFriendsPresenter(this);
+        findFriendsPresenter.start();
     }
 
     private void setData2View() {
@@ -126,15 +133,13 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     }
 
     private void initSwipCardView() {
-        for (int i = 0; i<200; i++){
+        /*for (int i = 0; i<200; i++){
             UserInformationBean2 userInformationBean2 = new UserInformationBean2();
             userInformationBean2.setNickname("i" + i);
             mList.add(userInformationBean2);
-        }
+        }*/
 
-        //初始化swipecardview
-        final SwipeCardViewAdapter swipeCardViewAdapter = new SwipeCardViewAdapter(this, mList);
-        swipeFlingView.setAdapter(swipeCardViewAdapter);
+
         swipeFlingView.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
             @Override
             public void onItemClicked(MotionEvent event, View v, Object dataObject) {
@@ -421,6 +426,36 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
 
     @Override
     public void showFailedForResultHBList(BaseBean2 baseBean2) {
+
+    }
+
+    @Override
+    public void showData(List<UserInformationBean2> userInformationBean2s) {
+        if (userInformationBean2s.size() > 0){
+            mList = userInformationBean2s;
+            //初始化swipecardview
+            swipeCardViewAdapter = new SwipeCardViewAdapter(this, mList);
+            swipeFlingView.setAdapter(swipeCardViewAdapter);
+        }
+    }
+
+    @Override
+    public void showMoreData(List<UserInformationBean2> userInformationBean2s) {
+
+    }
+
+    @Override
+    public void showFailedForResult(BaseBean2 baseBean2) {
+
+    }
+
+    @Override
+    public void showFailedForMoreResult(BaseBean2 baseBean2) {
+
+    }
+
+    @Override
+    public void showFailedForMoreException(Throwable t) {
 
     }
 }

@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.contract.PlaceOrderContract;
 import com.hsd.asmfsx.presenter.PlaceOrderPresenter;
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
  * Created by sun on 2016/12/12.
  */
 
-public class PlaceOrderActivity extends AppCompatActivity implements PlaceOrderContract.View{
+public class PlaceOrderActivity extends BaseActivity implements PlaceOrderContract.View{
 
     @BindView(R.id.toolbar_centertext)
     TextView toolbarCentertext;

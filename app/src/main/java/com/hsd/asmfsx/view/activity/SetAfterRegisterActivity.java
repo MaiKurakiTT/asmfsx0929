@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.UserInformationBean2;
 import com.hsd.asmfsx.contract.SetAfterRegisterContract;
@@ -45,7 +46,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by 紫荆 on 2016/10/22.
  */
 
-public class SetAfterRegisterActivity extends AppCompatActivity implements SetAfterRegisterContract.View {
+public class SetAfterRegisterActivity extends BaseActivity implements SetAfterRegisterContract.View {
 
     @BindView(R.id.headimg)
     CircleImageView headimg;

@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.adapter.FriendCircleAdapter;
+import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.FriendCircleVO;
 import com.hsd.asmfsx.contract.FriendCircleContract;
@@ -42,7 +43,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * Created by apple on 2016/11/10.
  */
 
-public class FriendCircleActivity extends AppCompatActivity implements FriendCircleContract.View, PutGoodContract.View, PutCommentContract.View {
+public class FriendCircleActivity extends BaseActivity implements FriendCircleContract.View, PutGoodContract.View, PutCommentContract.View {
     @BindView(R.id.recycle_view)
     RecyclerView recycleView;
     @BindView(R.id.head)

@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.adapter.ShopHomeListAdapter;
+import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.ShopVO;
 import com.hsd.asmfsx.contract.GetShopListContract;
@@ -31,7 +32,7 @@ import butterknife.ButterKnife;
  * Created by sun on 2016/12/9.
  */
 
-public class ShopHomeActivity extends AppCompatActivity implements GetShopListContract.View {
+public class ShopHomeActivity extends BaseActivity implements GetShopListContract.View {
     @BindView(R.id.first_layout)
     LinearLayout firstLayout;
     @BindView(R.id.second_layout)

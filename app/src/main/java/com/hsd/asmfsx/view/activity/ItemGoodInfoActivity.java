@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.CommodityVO;
 import com.hsd.asmfsx.bean.ShopVO;
@@ -31,7 +32,7 @@ import butterknife.ButterKnife;
  * Created by sun on 2016/12/12.
  */
 
-public class ItemGoodInfoActivity extends AppCompatActivity implements GetItemGoodInfoContract.View {
+public class ItemGoodInfoActivity extends BaseActivity implements GetItemGoodInfoContract.View {
     @BindView(R.id.good_photo)
     ImageView goodPhoto;
     @BindView(R.id.itemshop_toolbar)

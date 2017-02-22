@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.base.BaseActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -17,7 +18,7 @@ import butterknife.ButterKnife;
  * Created by sun on 2016/12/12.
  */
 
-public class PayActivity extends AppCompatActivity {
+public class PayActivity extends BaseActivity {
     @BindView(R.id.toolbar_centertext)
     TextView toolbarCentertext;
     @BindView(R.id.toolbar_righttext)

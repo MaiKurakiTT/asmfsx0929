@@ -8,6 +8,7 @@ import android.text.TextUtils;
 
 import com.hsd.asmfsx.MainActivity;
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.LoginBean2;
 import com.hsd.asmfsx.bean.NormalResultBean;
@@ -20,7 +21,7 @@ import com.hsd.asmfsx.utils.ShowToast;
  * Created by sun on 2016/12/14.
  */
 
-public class SplashActivity extends AppCompatActivity implements LoginContract.View{
+public class SplashActivity extends BaseActivity implements LoginContract.View{
 
     private SPUtils spUtils;
     private String phone;

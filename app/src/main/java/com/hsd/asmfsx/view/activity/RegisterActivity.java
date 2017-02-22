@@ -15,6 +15,7 @@ import android.widget.EditText;
 
 import com.baidu.mapapi.map.Text;
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.RegisterBean;
 import com.hsd.asmfsx.contract.RegisterContract;
@@ -32,7 +33,7 @@ import cn.smssdk.SMSSDK;
  * Created by apple on 2016/10/20.
  */
 
-public class RegisterActivity extends AppCompatActivity implements RegisterContract.View {
+public class RegisterActivity extends BaseActivity implements RegisterContract.View {
 
     @BindView(R.id.register_but)
     Button registerBut;

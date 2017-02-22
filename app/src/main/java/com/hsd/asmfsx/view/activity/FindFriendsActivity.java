@@ -13,6 +13,7 @@ import android.widget.Button;
 
 import com.google.gson.reflect.TypeToken;
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.FindFriendsBean;
 import com.hsd.asmfsx.bean.UserInformationBean;
@@ -35,7 +36,7 @@ import butterknife.ButterKnife;
  * Created by 紫荆 on 2016/10/22.
  */
 
-public class FindFriendsActivity extends AppCompatActivity implements FindFriendsContract.View {
+public class FindFriendsActivity extends BaseActivity implements FindFriendsContract.View {
 
     @BindView(R.id.viewpager)
     ViewPager viewpager;

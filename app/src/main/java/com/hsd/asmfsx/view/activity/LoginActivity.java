@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.hsd.asmfsx.MainActivity;
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.LoginBean;
 import com.hsd.asmfsx.bean.LoginBean2;
@@ -42,7 +43,7 @@ import butterknife.ButterKnife;
  * Created by apple on 2016/10/16.
  */
 
-public class LoginActivity extends AppCompatActivity implements LoginContract.View {
+public class LoginActivity extends BaseActivity implements LoginContract.View {
     @BindView(R.id.login_but)
     Button loginBut;
     @BindView(R.id.register_link)

@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
+import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.UserInformationBean2;
 import com.hsd.asmfsx.contract.SetAfterRegisterContract;
@@ -33,7 +34,7 @@ import butterknife.ButterKnife;
  * Created by apple on 2016/11/21.
  */
 
-public class SetUserInfoActivity extends AppCompatActivity implements SetAfterRegisterContract.View{
+public class SetUserInfoActivity extends BaseActivity implements SetAfterRegisterContract.View{
     @BindView(R.id.toolbar_centertext)
     TextView toolbarCentertext;
     @BindView(R.id.toolbar_righttext)
