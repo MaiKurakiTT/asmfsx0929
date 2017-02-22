@@ -47,6 +47,7 @@ import com.hsd.asmfsx.view.activity.ShopHomeActivity;
 import com.hsd.asmfsx.view.activity.UserInfoActivity;
 import com.hsd.asmfsx.widget.swipecardview.SwipeFlingAdapterView;
 import com.hyphenate.chat.EMClient;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     }
 
     private void initSwipCardView() {
-        /*for (int i = 0; i<200; i++){
+        /*for (int i = 0; i<20; i++){
             UserInformationBean2 userInformationBean2 = new UserInformationBean2();
             userInformationBean2.setNickname("i" + i);
             mList.add(userInformationBean2);
@@ -432,10 +433,11 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     @Override
     public void showData(List<UserInformationBean2> userInformationBean2s) {
         if (userInformationBean2s.size() > 0){
-            mList = userInformationBean2s;
+            mList.addAll(userInformationBean2s);
             //初始化swipecardview
             swipeCardViewAdapter = new SwipeCardViewAdapter(this, mList);
             swipeFlingView.setAdapter(swipeCardViewAdapter);
+            swipeCardViewAdapter.notifyDataSetChanged();
         }
     }
 

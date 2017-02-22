@@ -104,12 +104,12 @@
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ee_2.png"
     },
     {
-        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ee_25.png",
-        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ee_25.png"
-    },
-    {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ee_20.png",
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ee_20.png"
+    },
+    {
+        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ee_25.png",
+        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\ee_25.png"
     },
     {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\ease_location_msg.9.png",
