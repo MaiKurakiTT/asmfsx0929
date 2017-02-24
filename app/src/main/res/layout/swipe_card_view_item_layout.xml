@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="10dp"
-                android:text="Card title" />
+                android:text="" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                     android:textSize="12sp"
                     android:layout_marginLeft="10dp"
                     android:textColor="@color/white"
-                    android:text="20岁"/>
+                    android:text=""/>
                 <TextView
                     android:id="@+id/star"
                     android:layout_width="wrap_content"
@@ -51,7 +51,7 @@
                     android:textSize="12sp"
                     android:layout_marginLeft="10dp"
                     android:textColor="@color/white"
-                    android:text="巨蟹座"/>
+                    android:text=""/>
 
 
             </LinearLayout>
@@ -64,7 +64,7 @@
                 android:textSize="12sp"
                 android:layout_marginLeft="10dp"
                 android:textColor="@color/white"
-                android:text="河南师范大学"/>
+                android:text=""/>
 
         </LinearLayout>
 </LinearLayout>

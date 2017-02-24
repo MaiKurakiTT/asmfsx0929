@@ -11,8 +11,12 @@ import android.widget.TextView;
 
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.bean.UserInformationBean2;
+import com.hsd.asmfsx.utils.Date2Star;
+import com.hsd.asmfsx.utils.DateFormatUtils;
+import com.hsd.asmfsx.utils.GetAgeFromDate;
 import com.orhanobut.logger.Logger;
 
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -74,8 +78,17 @@ public class SwipeCardViewAdapter extends BaseAdapter {
         }
         int s = i;
         UserInformationBean2 userInformationBean2 = userInformationBean2s.get(i);
-        //holder.name.setText("第" + userInformationBean2.getNickname() + "个");
-        holder.name.setText("第" + userInformationBean2.getBirthday() + "个");
+        holder.name.setText("第" + userInformationBean2.getNickname() + "个");
+        if (userInformationBean2.getBirthday() != null){
+            Date date = DateFormatUtils.formatLong2Date(userInformationBean2.getBirthday());
+            holder.age.setText(GetAgeFromDate.getAge(date) + "岁");
+            holder.star.setText(Date2Star.date2Constellation(date) + "");
+        }
+        Integer schoolInt = userInformationBean2.getSchool();
+        if (schoolInt == 0){
+            holder.school.setText("河南师范大学");
+        }
+
         return view;
     }
 

@@ -16,6 +16,9 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="SplashTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_icon</item>
+    </style>
 
     <!-- 低栏RadioButton的样式 -->
     <style name="BottomTabStyle">
