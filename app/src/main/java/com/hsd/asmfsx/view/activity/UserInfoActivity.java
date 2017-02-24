@@ -27,6 +27,7 @@ import com.hsd.asmfsx.contract.AddHBContract;
 import com.hsd.asmfsx.contract.GetUserInfoContract;
 import com.hsd.asmfsx.presenter.AddHBPresenter;
 import com.hsd.asmfsx.presenter.GetUserInfoPresenter;
+import com.hsd.asmfsx.utils.Date2Star;
 import com.hsd.asmfsx.utils.DateFormatUtils;
 import com.hsd.asmfsx.utils.GetAgeFromDate;
 
@@ -102,16 +103,20 @@ public class UserInfoActivity extends BaseActivity implements GetUserInfoContrac
         if (userInformationBean == null) {
 
         } else {
+            userID = userInformationBean.getId();
             String nickname = userInformationBean.getNickname();
             String icon = userInformationBean.getIcon();
             name.setText(nickname);
             Glide.with(this).load(icon).into(userImg);
             Long birthdayLong = userInformationBean.getBirthday();
             if (birthdayLong != null) {
-                ageInt = GetAgeFromDate.getAge(DateFormatUtils.formatLong2Date(birthdayLong));
+                Date date = DateFormatUtils.formatLong2Date(birthdayLong);
+                ageInt = GetAgeFromDate.getAge(date);
+                ageTV.setText(ageInt + "岁");
+                //starTV.setText(Date2Star.date2Constellation(date) + "");
             }
-            ageTV.setText(ageInt + "岁");
             starTV.setText(userInformationBean.getStar() + "");
+
             Integer schoolInt = userInformationBean.getSchool();
             if (schoolInt != null) {
                 switch (schoolInt) {
@@ -159,7 +164,7 @@ public class UserInfoActivity extends BaseActivity implements GetUserInfoContrac
                 //心动TA
                 if (userID != null){
                     AddHBPresenter addHBPresenter = new AddHBPresenter(UserInfoActivity.this);
-//                    addHBPresenter.start();
+                    addHBPresenter.start();
                 }
                 fabMenu.close(true);
             }
@@ -193,9 +198,10 @@ public class UserInfoActivity extends BaseActivity implements GetUserInfoContrac
             userInformationBean = (UserInformationBean2) getIntent().getSerializableExtra("userInformationBean");
         }else {
             //从其他Activity传过来某人的userID，然后调用GetUserInfo查询并显示其信息
-            userID = getIntent().getLongExtra("userID", 0);
+            /*userID = getIntent().getLongExtra("userID", 0);
             GetUserInfoPresenter getUserInfoPresenter = new GetUserInfoPresenter(this);
-//            getUserInfoPresenter.start();
+            getUserInfoPresenter.start();*/
+            userInformationBean = (UserInformationBean2) getIntent().getSerializableExtra("userInformationBean");
         }
 
     }

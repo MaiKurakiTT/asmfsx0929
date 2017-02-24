@@ -147,8 +147,10 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
                 UserInformationBean2 data = (UserInformationBean2) dataObject;
                 if (data != null) {
                     ShowToast.show(MainActivity.this, "点击了" + data.getNickname());
+                    Long id = data.getId();
                     Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
                     intent.putExtra("type", 1);
+                    intent.putExtra("userInformationBean", data);
                     startActivity(intent);
                 }
             }
