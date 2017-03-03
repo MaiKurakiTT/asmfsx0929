@@ -71,6 +71,7 @@
             android:layout_marginRight="15dp"
             android:focusable="false"
             android:clickable="true"
+            android:visibility="gone"
             android:src="@mipmap/ic_chatwithlike" />
 
     </RelativeLayout>

@@ -83,7 +83,7 @@ public interface RetrofitService {
      */
     @FormUrlEncoded
     @POST(GlobalParameter.project2 + "user/getUserInformation.action")
-    Call<NormalResultBean<UserInformationBean2>> postGetUserInfo(@Field("userInformationID") Long userInformationID);
+    Call<NormalResultBean<UserInformationBean2>> postGetUserInfo(@Field("userID") Long userInformationID);
 
     /**
      * 图片上传

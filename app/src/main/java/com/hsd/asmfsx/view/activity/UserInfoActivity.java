@@ -198,10 +198,10 @@ public class UserInfoActivity extends BaseActivity implements GetUserInfoContrac
             userInformationBean = (UserInformationBean2) getIntent().getSerializableExtra("userInformationBean");
         }else {
             //从其他Activity传过来某人的userID，然后调用GetUserInfo查询并显示其信息
-            /*userID = getIntent().getLongExtra("userID", 0);
+            userID = getIntent().getLongExtra("userID", 0);
             GetUserInfoPresenter getUserInfoPresenter = new GetUserInfoPresenter(this);
-            getUserInfoPresenter.start();*/
-            userInformationBean = (UserInformationBean2) getIntent().getSerializableExtra("userInformationBean");
+            getUserInfoPresenter.start();
+            //userInformationBean = (UserInformationBean2) getIntent().getSerializableExtra("userInformationBean");
         }
 
     }

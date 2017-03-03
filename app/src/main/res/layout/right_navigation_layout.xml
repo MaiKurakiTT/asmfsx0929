@@ -3,9 +3,10 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/right_navi_recycle"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="10dp"/>
+        <include layout="@layout/toolbar_normal_layout"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/right_navi_recycle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"/>
 </LinearLayout>

@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -18,7 +19,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.listener.OnItemClickListener;
 import com.hsd.asmfsx.adapter.HBListAdapter;
+import com.hsd.asmfsx.adapter.HBListQuickAdapter;
 import com.hsd.asmfsx.adapter.SeeAdapter;
 import com.hsd.asmfsx.adapter.SwipeCardViewAdapter;
 import com.hsd.asmfsx.bean.BaseBean2;
@@ -94,6 +98,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     private List<UserInformationBean2> mList = new ArrayList<>();
     private BottomSheetBehavior<View> sheetBehavior;
     private SwipeCardViewAdapter swipeCardViewAdapter;
+    private HBListPresenter hbListPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,8 +114,8 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     private void requestData() {
         getUserInfoPresenter = new GetUserInfoPresenter(this);
         getUserInfoPresenter.start();
-        HBListPresenter hbListPresenter = new HBListPresenter(this);
-        hbListPresenter.start();
+        hbListPresenter = new HBListPresenter(this);
+//        hbListPresenter.start();
         FindFriendsPresenter findFriendsPresenter = new FindFriendsPresenter(this);
         findFriendsPresenter.start();
     }
@@ -150,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
                     Long id = data.getId();
                     Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
                     intent.putExtra("type", 1);
+                    intent.putExtra("userID", id);
                     intent.putExtra("userInformationBean", data);
                     startActivity(intent);
                 }
@@ -190,8 +196,33 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
 
     private void initRightNavigation() {
         View headerView = navigationViewRight.getHeaderView(0);
+        TextView centerTitle = (TextView) headerView.findViewById(R.id.toolbar_centertext);
+        TextView rightText = (TextView) headerView.findViewById(R.id.toolbar_righttext);
+        centerTitle.setText("心动好友");
+        rightText.setVisibility(View.GONE);
         rightRecycle = (RecyclerView) headerView.findViewById(R.id.right_navi_recycle);
         rightRecycle.setLayoutManager(new LinearLayoutManager(this));
+        drawerView.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                hbListPresenter.start();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 
     private void initLeftNavigation() {
@@ -409,9 +440,29 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     }
 
     @Override
-    public void showDataForHBList(List<HBListBean> hbList) {
+    public void showDataForHBList(final List<HBListBean> hbList) {
         if (hbList != null){
-            HBListAdapter hbListAdapter = new HBListAdapter(this, hbList);
+            HBListQuickAdapter hbListQuickAdapter = new HBListQuickAdapter(hbList);
+            hbListQuickAdapter.setContext(MainActivity.this);
+            rightRecycle.setAdapter(hbListQuickAdapter);
+            rightRecycle.addOnItemTouchListener(new OnItemClickListener() {
+                @Override
+                public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+                    drawerView.closeDrawers();
+                    HBListBean data = hbList.get(position);
+                    if (data != null) {
+                        ShowToast.show(MainActivity.this, "点击了" + data.getNickname());
+                        Long id = data.getId();
+                        Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
+                        intent.putExtra("type", 1);
+                        intent.putExtra("userID", id);
+                        startActivity(intent);
+                    }
+                }
+            });
+            View emptyView = LayoutInflater.from(this).inflate(R.layout.empty_view, null, false);
+            hbListQuickAdapter.setEmptyView(emptyView);
+            /*HBListAdapter hbListAdapter = new HBListAdapter(this, hbList);
             rightRecycle.setAdapter(hbListAdapter);
             //聊天
             hbListAdapter.setOnItemClickListener(new HBListAdapter.OnItemClickListener() {
@@ -423,7 +474,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
                         startActivity(intent);
                     }
                 }
-            });
+            });*/
         }
     }
 
