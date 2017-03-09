@@ -79,7 +79,7 @@ public class SwipeCardViewAdapter extends BaseAdapter {
         int s = i;
         UserInformationBean2 userInformationBean2 = userInformationBean2s.get(i);
         Glide.with(context).load(userInformationBean2.getIcon()).into(holder.img);
-        holder.name.setText("第" + userInformationBean2.getNickname() + "个");
+        holder.name.setText(userInformationBean2.getNickname() + "");
         if (userInformationBean2.getBirthday() != null){
             Date date = DateFormatUtils.formatLong2Date(userInformationBean2.getBirthday());
             holder.age.setText(GetAgeFromDate.getAge(date) + "岁");

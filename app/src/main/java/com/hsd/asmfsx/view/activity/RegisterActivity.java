@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.baidu.mapapi.map.Text;
+import com.hsd.asmfsx.MainActivity;
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.bean.BaseBean2;
@@ -21,6 +22,7 @@ import com.hsd.asmfsx.bean.RegisterBean;
 import com.hsd.asmfsx.contract.RegisterContract;
 import com.hsd.asmfsx.presenter.RegisterPresenter;
 import com.hsd.asmfsx.utils.NetworkUtils;
+import com.hsd.asmfsx.utils.SPUtils;
 import com.hsd.asmfsx.utils.ShowToast;
 import com.orhanobut.logger.Logger;
 
@@ -52,6 +54,8 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     private String username;
     private String password;
     private String code;
+
+    private SPUtils spUtils;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -106,7 +110,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
             if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
                 ShowToast.show(RegisterActivity.this, "信息填写有误！");
             } else {
-//                registerPresenter.start();
+               registerPresenter.start();
             }
         } else {
             ShowToast.show(RegisterActivity.this, "网络好像出问题了，请检查你的网络状况~");
@@ -114,6 +118,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     }
 
     private void initData() {
+        spUtils = SPUtils.getInstance("asmfsx");
         Intent intent = getIntent();
         stuId = intent.getStringExtra("stuId");
         schoolName = intent.getStringExtra("schoolName");
@@ -175,12 +180,18 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
     @Override
     public String getStuId() {
-        return stuId;
+        return username;
     }
 
     @Override
     public void showData(BaseBean2 baseBean) {
         Logger.d(baseBean.getMsg());
+        spUtils.putString("phone", username);
+        spUtils.putString("psw", password);
+        ShowToast.show(RegisterActivity.this, "注册成功");
+        Intent intent = new Intent(RegisterActivity.this, SplashActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     @Override
