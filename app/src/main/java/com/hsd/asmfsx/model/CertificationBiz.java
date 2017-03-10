@@ -1,5 +1,6 @@
 package com.hsd.asmfsx.model;
 
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.CertificationBean;
 import com.hsd.asmfsx.contract.CertificationContract;
 import com.hsd.asmfsx.global.GetRetrofit;
@@ -16,7 +17,35 @@ import retrofit2.Retrofit;
  */
 
 public class CertificationBiz implements CertificationContract.ICertificationBiz{
+
     @Override
+    public void doCertification(String school, String stuNum, String stuPsw, final OnCertificationListener certificationListener) {
+        Retrofit retrofit = GetRetrofit.getRetrofit();
+        RetrofitService service = retrofit.create(RetrofitService.class);
+        Call<BaseBean2> call = service.postCertification(school, stuNum, stuPsw);
+        call.enqueue(new Callback<BaseBean2>() {
+            @Override
+            public void onResponse(Call<BaseBean2> call, Response<BaseBean2> response) {
+                BaseBean2 body = response.body();
+                if (null != body){
+                    if (0 == body.getState()){
+                        certificationListener.success(body);
+                    }else {
+                        certificationListener.failed(body);
+                    }
+                }else {
+                    certificationListener.failed(body);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseBean2> call, Throwable t) {
+                Logger.d("" + t.toString());
+            }
+        });
+    }
+
+    /*@Override
     public void doCertification(String school, String stuNum, String stuPsw, String code, final OnCertificationListener certificationListener) {
         Retrofit retrofit = GetRetrofit.getRetrofit();
         RetrofitService service = retrofit.create(RetrofitService.class);
@@ -25,8 +54,24 @@ public class CertificationBiz implements CertificationContract.ICertificationBiz
         certificationBean.setStudent_number(stuNum);
         certificationBean.setStudent_password(stuPsw);
         certificationBean.setVerificationCode(code);
-        Call<CertificationBean> call = service.postCertification(certificationBean);
-        call.enqueue(new Callback<CertificationBean>() {
+        Call<BaseBean2> call = service.postCertification(stuNum, stuPsw, school);
+        call.enqueue(new Callback<BaseBean2>() {
+            @Override
+            public void onResponse(Call<BaseBean2> call, Response<BaseBean2> response) {
+                BaseBean2 body = response.body();
+                if (null != body){
+                    if (0 == body.getState()){
+
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseBean2> call, Throwable t) {
+
+            }
+        });*/
+        /*call.enqueue(new Callback<CertificationBean>() {
             @Override
             public void onResponse(Call<CertificationBean> call, Response<CertificationBean> response) {
                 CertificationBean bean = response.body();
@@ -44,6 +89,6 @@ public class CertificationBiz implements CertificationContract.ICertificationBiz
                 t.printStackTrace();
                 certificationListener.failed();
             }
-        });
+        });*/
     }
-}
+

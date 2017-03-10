@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import com.bumptech.glide.Glide;
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.base.BaseActivity;
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.CertificationBean;
 import com.hsd.asmfsx.contract.CertificationContract;
 import com.hsd.asmfsx.contract.CheckSchoolContract;
@@ -51,7 +52,8 @@ public class CertificationActivity extends BaseActivity implements Certification
     @BindView(R.id.certification_but)
     Button certificationBut;
     private CertificationPresenter certificationPresenter;
-    String[] ITEMS = {"河南师范大学", "新乡医学院", "新乡学院", "河南科技学院"};
+//    String[] ITEMS = {"河南师范大学", "新乡医学院", "新乡学院", "河南科技学院"};
+    String[] ITEMS = {"河南师范大学"};
     private int SCHOOL = 0;
     private CheckSchoolPresenter checkSchoolPresente;
     private ProgressDialog progressDialog;
@@ -70,7 +72,7 @@ public class CertificationActivity extends BaseActivity implements Certification
         initView();
         certificationPresenter = new CertificationPresenter(this);
         checkSchoolPresente = new CheckSchoolPresenter(this);
-        checkSchoolPresente.start();
+//        checkSchoolPresente.start();
 
     }
 
@@ -78,7 +80,7 @@ public class CertificationActivity extends BaseActivity implements Certification
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("正在加载...");
         progressDialog.setCanceledOnTouchOutside(false);
-        schoolSpinner.setItems("河南师范大学", "新乡医学院", "新乡学院", "河南科技学院");
+        schoolSpinner.setItems("河南师范大学");
         schoolSpinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener() {
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, Object item) {
@@ -138,7 +140,7 @@ public class CertificationActivity extends BaseActivity implements Certification
 
     @Override
     public String getSchoolName() {
-        return schoolSpinner.getText().toString();
+        return "10476";
     }
 
     @Override
@@ -151,27 +153,25 @@ public class CertificationActivity extends BaseActivity implements Certification
         return pswEdit.getText().toString();
     }
 
+
+
     @Override
-    public String getCode() {
-        return codeEdit.getText().toString();
+    public void showData(BaseBean2 baseBean2) {
+        Logger.d("实名认证成功");
+        ShowToast.show(CertificationActivity.this, "实名认证成功");
+        /**
+         * 认证成功，跳转注册
+         */
+        Intent intent = new Intent(this, RegisterActivity.class);
+        intent.putExtra("stuId", getStuNum());
+        intent.putExtra("schoolName", getSchoolName());
+        startActivity(intent);
+        finish();
     }
 
     @Override
-    public void showData(CertificationBean certificationBean) {
-        if (certificationBean.getResultCode() == 1) {
-            Logger.d("实名认证成功");
-            ShowToast.show(CertificationActivity.this, "" + certificationBean.getDescribe());
-            /**
-             * 认证成功，跳转注册
-             */
-            Intent intent = new Intent(this, RegisterActivity.class);
-            intent.putExtra("stuId", stuId);
-            intent.putExtra("schoolName", schoolName);
-            startActivity(intent);
-            finish();
-        } else {
-            ShowToast.show(CertificationActivity.this, "" + certificationBean.getDescribe());
-        }
+    public void showFailed(BaseBean2 baseBean2) {
+        ShowToast.show(CertificationActivity.this, "实名认证失败");
     }
 
     @Override

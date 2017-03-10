@@ -17,11 +17,11 @@ import retrofit2.Response;
 
 public class RegisterBiz implements RegisterContract.IRegisterBiz{
     @Override
-    public void doRegister(String stuId, String username, String password, final OnRequestListener<BaseBean2> requestListener) {
+    public void doRegister(String schoolNumber, String stuId, String username, String password, final OnRequestListener<BaseBean2> requestListener) {
         GetRetrofit
                 .getRetrofit2()
                 .create(RetrofitService.class)
-                .postRegister2(stuId, username, password)
+                .postRegister2(schoolNumber, stuId, username, password)
                 .enqueue(new Callback<BaseBean2>() {
                     @Override
                     public void onResponse(Call<BaseBean2> call, Response<BaseBean2> response) {

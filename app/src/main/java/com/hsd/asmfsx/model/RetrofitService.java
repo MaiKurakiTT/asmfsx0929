@@ -63,7 +63,7 @@ public interface RetrofitService {
      */
     @POST(GlobalParameter.project2 + "register.action")
     @FormUrlEncoded
-    Call<BaseBean2> postRegister2(@Field("studentID") String studentID, @Field("phone") String phone, @Field("password") String password);
+    Call<BaseBean2> postRegister2(@Field("schoolNumber") String schoolNumber, @Field("studentID") String studentID, @Field("phone") String phone, @Field("password") String password);
 
     @POST(GlobalParameter.project2 + "user/me.action")
     Call<Object> postGetMe();
@@ -221,6 +221,15 @@ public interface RetrofitService {
     @POST(GlobalParameter.project2 + "user/getHeartBeats.action")
     Call<NormalResultBean<List<HBListBean>>> postGetHBList();
 
+    /**
+     * checkSchool
+     * @param certificationBiz  需要学校名存入CertificationBean
+     * @return  返回CertificationBean
+     */
+    @FormUrlEncoded
+    @POST(GlobalParameter.project2 + "verifyStudent.action")
+    Call<BaseBean2> postCertification(@Field("schoolNumber") String schoolNumber, @Field("username") String username, @Field("password") String password);
+
 
 /**
  * ------------------------------------------------------------------------------------
@@ -262,15 +271,15 @@ public interface RetrofitService {
      * @param certificationBiz  需要教务系统学号、密码、学校名存入返回CertificationBean
      * @return  返回CertificationBean
      */
-    @POST("/Server/MainServer?method=check")
-    Call<CertificationBean> postCertification(@Body CertificationBean certificationBean);
+    /*@POST("/Server/MainServer?method=check")
+    Call<CertificationBean> postCertification(@Body CertificationBean certificationBean);*/
 
     /**
      * checkSchool
      * @param certificationBiz  需要学校名存入CertificationBean
      * @return  返回CertificationBean
      */
-    @POST("/Server/MainServer?method=getModel")
+    @POST("/fsxasm/verifyStudent.action")
     Call<CertificationBean> postCheckSchool(@Body CertificationBean certificationBean);
 
     /**

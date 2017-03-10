@@ -18,10 +18,11 @@ public interface RegisterContract {
         String getPhone();
         String getPassword();
         String getStuId();
+        String getschoolNumber();
         void showData(BaseBean2 baseBean);
         void showFailedForResult(BaseBean2 baseBean);
     }
     interface IRegisterBiz extends BaseListener{
-        void doRegister(String stuId, String username, String password, OnRequestListener<BaseBean2> requestListener);
+        void doRegister(String schoolNumber, String stuId, String username, String password, OnRequestListener<BaseBean2> requestListener);
     }
 }

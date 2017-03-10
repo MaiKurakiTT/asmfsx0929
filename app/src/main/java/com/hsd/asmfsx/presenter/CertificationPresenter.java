@@ -1,5 +1,6 @@
 package com.hsd.asmfsx.presenter;
 
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.CertificationBean;
 import com.hsd.asmfsx.contract.CertificationContract;
 import com.hsd.asmfsx.global.GetHandler;
@@ -20,7 +21,31 @@ public class CertificationPresenter implements CertificationContract.Presenter{
     @Override
     public void start() {
         view.showLoading();
-        certificationBiz.doCertification(view.getSchoolName(), view.getStuNum(), view.getStuPsw(), view.getCode(), new CertificationContract.ICertificationBiz.OnCertificationListener() {
+        certificationBiz.doCertification(view.getSchoolName(), view.getStuNum(), view.getStuPsw(), new CertificationContract.ICertificationBiz.OnCertificationListener() {
+            @Override
+            public void success(final BaseBean2 baseBean2) {
+                GetHandler.getHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.showData(baseBean2);
+                        view.hideLoading();
+                    }
+                });
+            }
+
+            @Override
+            public void failed(final BaseBean2 baseBean2) {
+                GetHandler.getHandler().post(new Runnable() {
+                    @Override
+                    public void run() {
+                        view.showFailed(baseBean2);
+                        view.hideLoading();
+                    }
+                });
+            }
+        });
+
+        /*certificationBiz.doCertification(view.getSchoolName(), view.getStuNum(), view.getStuPsw(), view.getCode(), new CertificationContract.ICertificationBiz.OnCertificationListener() {
             @Override
             public void success(final CertificationBean certificationBean) {
                 GetHandler.getHandler().post(new Runnable() {
@@ -42,6 +67,6 @@ public class CertificationPresenter implements CertificationContract.Presenter{
                     }
                 });
             }
-        });
+        });*/
     }
 }

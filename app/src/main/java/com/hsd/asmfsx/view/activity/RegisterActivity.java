@@ -107,7 +107,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
             username = phoneEdit.getText().toString();
             password = pswEdit.getText().toString();
             code = codeEdit.getText().toString();
-            if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
+            if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(stuId) || TextUtils.isEmpty(schoolName)) {
                 ShowToast.show(RegisterActivity.this, "信息填写有误！");
             } else {
                registerPresenter.start();
@@ -180,7 +180,12 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
     @Override
     public String getStuId() {
-        return username;
+        return stuId;
+    }
+
+    @Override
+    public String getschoolNumber() {
+        return schoolName;
     }
 
     @Override
@@ -196,12 +201,13 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
     @Override
     public void showFailedForResult(BaseBean2 baseBean) {
-        Logger.d(baseBean.getMsg());
+        Logger.d(baseBean.getMsg() + "");
+        ShowToast.show(RegisterActivity.this, "" + baseBean.getMsg());
     }
 
     @Override
     public void showFailedForException(Throwable t) {
-        Logger.d(t.toString());
+        Logger.d(t.toString() + "");
     }
 
     /*@Override

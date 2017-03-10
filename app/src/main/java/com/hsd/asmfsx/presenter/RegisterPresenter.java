@@ -22,7 +22,7 @@ public class RegisterPresenter implements RegisterContract.Presenter{
     @Override
     public void start() {
         view.showLoading();
-        registerBiz.doRegister(view.getStuId(), view.getPhone(), view.getPassword(), new BaseListener.OnRequestListener<BaseBean2>() {
+        registerBiz.doRegister(view.getschoolNumber(), view.getStuId(), view.getPhone(), view.getPassword(), new BaseListener.OnRequestListener<BaseBean2>() {
             @Override
             public void success(final BaseBean2 baseBean2) {
                 GetHandler.getHandler().post(new Runnable() {

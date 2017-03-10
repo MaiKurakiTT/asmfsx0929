@@ -2,6 +2,7 @@ package com.hsd.asmfsx.contract;
 
 import com.hsd.asmfsx.base.BasePresenter;
 import com.hsd.asmfsx.base.BaseView;
+import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.CertificationBean;
 
 /**
@@ -16,15 +17,16 @@ public interface CertificationContract {
         String getSchoolName();
         String getStuNum();
         String getStuPsw();
-        String getCode();
-        void showData(CertificationBean certificationBean);
+//        String getCode();
+        void showData(BaseBean2 baseBean2);
+        void showFailed(BaseBean2 baseBean2);
     }
     interface ICertificationBiz{
         interface OnCertificationListener{
-            void success(CertificationBean certificationBean);
-            void failed();
+            void success(BaseBean2 baseBean2);
+            void failed(BaseBean2 baseBean2);
         }
-        void doCertification(String school, String stuNum, String stuPsw, String code,
+        void doCertification(String school, String stuNum, String stuPsw,
                              ICertificationBiz.OnCertificationListener certificationListener);
     }
 }

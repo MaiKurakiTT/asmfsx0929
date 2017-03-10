@@ -441,7 +441,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
 
     @Override
     public void showDataForHBList(final List<HBListBean> hbList) {
-        if (hbList != null){
+        if (hbList.size() > 0){
             HBListQuickAdapter hbListQuickAdapter = new HBListQuickAdapter(hbList);
             hbListQuickAdapter.setContext(MainActivity.this);
             rightRecycle.setAdapter(hbListQuickAdapter);
