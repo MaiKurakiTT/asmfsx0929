@@ -180,7 +180,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
     @Override
     public String getStuId() {
-        return stuId;
+        return username;
     }
 
     @Override

@@ -45,6 +45,7 @@
         <activity android:name=".chat.ChatActivity"
                     android:launchMode="singleTask"/>
 
+        <activity android:name=".view.activity.BigHeadImgActivity"/>
         <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"/>
         <activity android:name="com.hyphenate.easeui.ui.EaseBaiduMapActivity"/>
         <activity android:name=".chat.ChatWithActivity"/>

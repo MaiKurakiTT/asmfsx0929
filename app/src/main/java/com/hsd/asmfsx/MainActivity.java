@@ -40,6 +40,7 @@ import com.hsd.asmfsx.presenter.GetUserInfoPresenter;
 import com.hsd.asmfsx.presenter.HBListPresenter;
 import com.hsd.asmfsx.service.MyService;
 import com.hsd.asmfsx.utils.ShowToast;
+import com.hsd.asmfsx.view.activity.BigHeadImgActivity;
 import com.hsd.asmfsx.view.activity.CertificationActivity;
 import com.hsd.asmfsx.view.activity.FindFriendsActivity2;
 import com.hsd.asmfsx.view.activity.FriendCircleActivity;
@@ -251,10 +252,16 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
                 drawerView.closeDrawers();
             }
         });
+        /**
+         * 点击左侧滑栏的头像
+         */
         naviHeadImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ShowToast.show(MainActivity.this, "头像");
+                Intent intent = new Intent(MainActivity.this, BigHeadImgActivity.class);
+                intent.putExtra("img", mUserInfo.getIcon());
+                startActivityForResult(intent, 1);
+//                ShowToast.show(MainActivity.this, "头像");
             }
         });
     }
@@ -379,6 +386,8 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             if (userInformationBean != null) {
                 naviNickName.setText("" + userInformationBean.getNickname());
             }
+        }else if (requestCode == 1){
+            getUserInfoPresenter.start();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
