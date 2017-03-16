@@ -1,6 +1,5 @@
 package com.hsd.asmfsx.bean;
 
-import org.greenrobot.greendao.annotation.Entity;
 
 import java.io.Serializable;
 

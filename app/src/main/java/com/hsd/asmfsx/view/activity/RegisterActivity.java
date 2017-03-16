@@ -107,7 +107,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
             username = phoneEdit.getText().toString();
             password = pswEdit.getText().toString();
             code = codeEdit.getText().toString();
-            if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(stuId) || TextUtils.isEmpty(schoolName)) {
+            if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password)) {
                 ShowToast.show(RegisterActivity.this, "信息填写有误！");
             } else {
                registerPresenter.start();
@@ -185,7 +185,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
     @Override
     public String getschoolNumber() {
-        return schoolName;
+        return "10476";
     }
 
     @Override
@@ -223,12 +223,12 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
     @Override
     public void showLoading() {
-        progressDialog.show();
+//        progressDialog.show();
     }
 
     @Override
     public void hideLoading() {
-        progressDialog.dismiss();
+//        progressDialog.dismiss();
     }
 
 

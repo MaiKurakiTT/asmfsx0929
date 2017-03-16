@@ -1,5 +1,6 @@
 package com.hsd.asmfsx;
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,18 +28,21 @@ import com.hsd.asmfsx.adapter.SeeAdapter;
 import com.hsd.asmfsx.adapter.SwipeCardViewAdapter;
 import com.hsd.asmfsx.bean.BaseBean2;
 import com.hsd.asmfsx.bean.HBListBean;
+import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.bean.UserInformationBean2;
 import com.hsd.asmfsx.chat.ChatActivity;
 import com.hsd.asmfsx.chat.RegAndLogin;
 import com.hsd.asmfsx.contract.FindFriendsContract;
 import com.hsd.asmfsx.contract.GetUserInfoContract;
 import com.hsd.asmfsx.contract.HBListContract;
+import com.hsd.asmfsx.db.DBUserBean;
 import com.hsd.asmfsx.model.BaseListener;
 import com.hsd.asmfsx.model.FindFriendsBiz;
 import com.hsd.asmfsx.presenter.FindFriendsPresenter;
 import com.hsd.asmfsx.presenter.GetUserInfoPresenter;
 import com.hsd.asmfsx.presenter.HBListPresenter;
 import com.hsd.asmfsx.service.MyService;
+import com.hsd.asmfsx.utils.SPUtils;
 import com.hsd.asmfsx.utils.ShowToast;
 import com.hsd.asmfsx.view.activity.BigHeadImgActivity;
 import com.hsd.asmfsx.view.activity.CertificationActivity;
@@ -53,6 +57,8 @@ import com.hsd.asmfsx.view.activity.UserInfoActivity;
 import com.hsd.asmfsx.widget.swipecardview.SwipeFlingAdapterView;
 import com.hyphenate.chat.EMClient;
 import com.orhanobut.logger.Logger;
+
+import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +106,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     private BottomSheetBehavior<View> sheetBehavior;
     private SwipeCardViewAdapter swipeCardViewAdapter;
     private HBListPresenter hbListPresenter;
+    private FindFriendsPresenter findFriendsPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
         getUserInfoPresenter.start();
         hbListPresenter = new HBListPresenter(this);
 //        hbListPresenter.start();
-        FindFriendsPresenter findFriendsPresenter = new FindFriendsPresenter(this);
+        findFriendsPresenter = new FindFriendsPresenter(this);
         findFriendsPresenter.start();
     }
 
@@ -180,8 +187,9 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
-                if (itemsInAdapter == 5){
-
+                Logger.d("onAdapterAboutToEmpty", "" + itemsInAdapter);
+                if (itemsInAdapter == 3){
+                    findFriendsPresenter.loadMoreData();
                 }
             }
 
@@ -419,8 +427,46 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
                     toolbarCentertext.setText("防师兄");
                 }
             }
+            SPUtils spUtils = SPUtils.getInstance("asmfsx");
+            spUtils.putString("myIcon", userInformationBean.getIcon() + "");
+            spUtils.putString("myNick", userInformationBean.getNickname() + "");
+            spUtils.putString("myId", userInformationBean.getId() + "");
+            //保存数据库
+            DataSupport.deleteAll(DBUserBean.class);
+            DBUserBean dbUserBean = new DBUserBean();
+            setDBUserBean(dbUserBean, userInformationBean);
+            List<DBUserBean> dbUserBeenList = DataSupport.where("userId = ?", userInformationBean.getId() + "").find(DBUserBean.class);
+            if (dbUserBeenList.size() > 0){
+
+            }else {
+                dbUserBean.save();
+            }
         }
     }
+    private ContentValues setContentValues(UserInformationBean2 userInformationBean){
+        ContentValues values = new ContentValues();
+        values.put("", "");
+        return values;
+    }
+
+    private void setDBUserBean(DBUserBean dbUserBean, UserInformationBean2 userInformationBean) {
+        dbUserBean.setUserId(userInformationBean.getId());
+        dbUserBean.setPhone(userInformationBean.getPhone());
+        dbUserBean.setIcon(userInformationBean.getIcon());
+        dbUserBean.setNickname(userInformationBean.getNickname());
+        dbUserBean.setSex(userInformationBean.getSex());
+        dbUserBean.setBirthday(userInformationBean.getBirthday());
+        dbUserBean.setStar(userInformationBean.getStar());
+        dbUserBean.setHeight(userInformationBean.getHeight());
+        dbUserBean.setSign(userInformationBean.getSign());
+        dbUserBean.setYear(userInformationBean.getYear());
+        dbUserBean.setLocality(userInformationBean.getLocality());
+        dbUserBean.setAdore(userInformationBean.getAdore());
+        dbUserBean.setState(userInformationBean.getState());
+        dbUserBean.setRegisterDate(userInformationBean.getRegisterDate());
+
+    }
+
 
     @Override
     public void showFailedForUserInfoResult(BaseBean2 baseBean) {
@@ -471,6 +517,17 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             });
             View emptyView = LayoutInflater.from(this).inflate(R.layout.empty_view, null, false);
             hbListQuickAdapter.setEmptyView(emptyView);
+            for (HBListBean hbListBean : hbList){
+                Long id = hbListBean.getId();
+                List<DBUserBean> dbUserBeanList = DataSupport.where("userId = ?", "" + id).find(DBUserBean.class);
+                if (dbUserBeanList.size() == 0){
+                    DBUserBean dbUserBean = new DBUserBean();
+                    dbUserBean.setUserId(id);
+                    dbUserBean.setNickname(hbListBean.getNickname());
+                    dbUserBean.setIcon(hbListBean.getIcon());
+                    dbUserBean.save();
+                }
+            }
             /*HBListAdapter hbListAdapter = new HBListAdapter(this, hbList);
             rightRecycle.setAdapter(hbListAdapter);
             //聊天
@@ -500,12 +557,27 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             swipeCardViewAdapter = new SwipeCardViewAdapter(this, mList);
             swipeFlingView.setAdapter(swipeCardViewAdapter);
             swipeCardViewAdapter.notifyDataSetChanged();
+            for (UserInformationBean2 userInformationBean2 : userInformationBean2s){
+                DBUserBean dbUserBean = new DBUserBean();
+                setDBUserBean(dbUserBean, userInformationBean2);
+                dbUserBean.save();
+            }
         }
     }
 
     @Override
     public void showMoreData(List<UserInformationBean2> userInformationBean2s) {
-
+        if (userInformationBean2s.size() > 0){
+            mList.addAll(userInformationBean2s);
+            swipeCardViewAdapter.notifyDataSetChanged();
+            for (UserInformationBean2 userInformationBean2 : userInformationBean2s){
+                DBUserBean dbUserBean = new DBUserBean();
+                setDBUserBean(dbUserBean, userInformationBean2);
+                dbUserBean.save();
+            }
+        }else {
+            ShowToast.show(MainActivity.this, "没有更多数据了");
+        }
     }
 
     @Override

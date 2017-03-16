@@ -3,17 +3,12 @@ package com.hsd.asmfsx.service;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.support.annotation.Nullable;
 
-import com.hsd.asmfsx.MainActivity;
-import com.hsd.asmfsx.bean.NormalResultBean;
-import com.hsd.asmfsx.bean.UserInformationBean2;
+import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.chat.ChatActivity;
-import com.hsd.asmfsx.global.GetRetrofit;
-import com.hsd.asmfsx.model.RetrofitService;
+import com.hsd.asmfsx.db.DBUserBean;
 import com.hyphenate.EMMessageListener;
 import com.hyphenate.chat.EMClient;
 import com.hyphenate.chat.EMMessage;
@@ -21,14 +16,13 @@ import com.hyphenate.easeui.controller.EaseUI;
 import com.hyphenate.easeui.domain.EaseUser;
 import com.hyphenate.easeui.model.EaseNotifier;
 import com.hyphenate.easeui.utils.EaseCommonUtils;
+import com.hyphenate.exceptions.HyphenateException;
 import com.hyphenate.util.EMLog;
 import com.orhanobut.logger.Logger;
 
-import java.util.List;
+import org.litepal.crud.DataSupport;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.util.List;
 
 import static com.hyphenate.easeui.utils.EaseUserUtils.getUserInfo;
 
@@ -60,17 +54,30 @@ public class MyService extends Service implements EMMessageListener {
                 if (message.getType() == EMMessage.Type.TXT) {
                     ticker = ticker.replaceAll("\\[.{2,3}\\]", "[表情]");
                 }
+                String sendNick = "";
+                try {
+                    sendNick = message.getStringAttribute("sendNick");
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
                 EaseUser user = getUserInfo(message.getFrom());
                 if (user != null) {
-                    return getUserInfo(message.getFrom()).getNick() + ": " + ticker;
+                    return sendNick + ": " + ticker;
                 } else {
-                    return message.getFrom() + ": " + ticker;
+                    return sendNick + ": " + ticker;
                 }
+
             }
 
             @Override
             public String getLatestText(EMMessage message, int fromUsersNum, int messageNum) {
-                return message.getFrom() + "发来消息";
+                String sendNick = "";
+                try {
+                    sendNick = message.getStringAttribute("sendNick");
+                } catch (HyphenateException e) {
+                    e.printStackTrace();
+                }
+                return sendNick + "发来消息";
             }
 
             @Override
@@ -80,7 +87,7 @@ public class MyService extends Service implements EMMessageListener {
 
             @Override
             public int getSmallIcon(EMMessage message) {
-                return 0;
+                return R.mipmap.icon_icon;
             }
 
             @Override
@@ -99,25 +106,11 @@ public class MyService extends Service implements EMMessageListener {
             public EaseUser getUser(String username) {
                 //通过传来的用户的username在APP服务器查询该用户的信息，通过内容提供着EaseUser传给EaseUI
                 final EaseUser easeUser = new EaseUser(username);
-                Long userId = new Long(username);
-                GetRetrofit
-                        .getRetrofit2()
-                        .create(RetrofitService.class)
-                        .postGetUserInfo(userId)
-                        .enqueue(new Callback<NormalResultBean<UserInformationBean2>>() {
-                            @Override
-                            public void onResponse(Call<NormalResultBean<UserInformationBean2>> call, Response<NormalResultBean<UserInformationBean2>> response) {
-                                NormalResultBean<UserInformationBean2> body = response.body();
-                                UserInformationBean2 json = body.getJson();
-                                easeUser.setInitialLetter(json.getNickname());
-                                easeUser.setAvatar(json.getIcon());
-                            }
-
-                            @Override
-                            public void onFailure(Call<NormalResultBean<UserInformationBean2>> call, Throwable t) {
-
-                            }
-                        });
+                List<DBUserBean> dbUserBeanList = DataSupport.where("userId = ?", username).find(DBUserBean.class);
+                if (dbUserBeanList.size() > 0){
+                    easeUser.setAvatar(dbUserBeanList.get(0).getIcon());
+                    easeUser.setNick(dbUserBeanList.get(0).getNickname());
+                }
                 return easeUser;
             }
         });
@@ -151,6 +144,22 @@ public class MyService extends Service implements EMMessageListener {
             //应用在后台，不需要刷新UI,通知栏提示新消息
             if (!easeUI.hasForegroundActivies()) {
                 easeUI.getNotifier().onNewMsg(message);
+            }
+            String sendNick = "";
+            String sendIcon = "";
+            try {
+                sendNick =   message.getStringAttribute("sendNick");
+                sendIcon = message.getStringAttribute("sendIcon");
+            } catch (HyphenateException e) {
+                e.printStackTrace();
+            }
+            List<DBUserBean> dbUserBeanList = DataSupport.where("userId = ?", message.getFrom()).find(DBUserBean.class);
+            if (dbUserBeanList.size() == 0){
+                DBUserBean dbUserBean = new DBUserBean();
+                dbUserBean.setUserId(Long.valueOf(message.getFrom()));
+                dbUserBean.setNickname(sendNick);
+                dbUserBean.setIcon(sendIcon);
+                dbUserBean.save();
             }
         }
     }

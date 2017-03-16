@@ -1,10 +1,12 @@
 package com.hsd.asmfsx.chat;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hsd.asmfsx.utils.SPUtils;
 import com.hsd.asmfsx.utils.ShowToast;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.ui.EaseChatFragment;
@@ -16,9 +18,21 @@ import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
  */
 
 public class ChatFragment extends EaseChatFragment implements EaseChatFragment.EaseChatFragmentHelper{
+
+    private String myIcon;
+    private String myNick;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        SPUtils spUtils = SPUtils.getInstance("asmfsx");
+        myIcon = spUtils.getString("myIcon");
+        myNick = spUtils.getString("myNick");
     }
 
     @Override
@@ -31,7 +45,8 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
      */
     @Override
     public void onSetMessageAttributes(EMMessage message) {
-
+        message.setAttribute("sendIcon", myIcon);
+        message.setAttribute("sendNick", myNick);
     }
     /**
      * 进入会话详情
