@@ -357,6 +357,8 @@ public class SetAfterRegisterActivity extends BaseActivity implements SetAfterRe
     @Override
     public void showData(BaseBean2 baseBean) {
         Snackbar.make(okbut, "信息设置成功", Snackbar.LENGTH_LONG).show();
+        startActivity(new Intent(SetAfterRegisterActivity.this, SplashActivity.class));
+        finish();
     }
 
     @Override

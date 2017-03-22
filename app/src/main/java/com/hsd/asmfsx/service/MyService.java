@@ -105,7 +105,7 @@ public class MyService extends Service implements EMMessageListener {
             @Override
             public EaseUser getUser(String username) {
                 //通过传来的用户的username在APP服务器查询该用户的信息，通过内容提供着EaseUser传给EaseUI
-                final EaseUser easeUser = new EaseUser(username);
+                EaseUser easeUser = new EaseUser(username);
                 List<DBUserBean> dbUserBeanList = DataSupport.where("userId = ?", username).find(DBUserBean.class);
                 if (dbUserBeanList.size() > 0){
                     easeUser.setAvatar(dbUserBeanList.get(0).getIcon());

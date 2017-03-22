@@ -12,12 +12,12 @@
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable\\ease_chatting_setmode_voice_btn.xml"
     },
     {
-        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable\\ease_chatfrom_bg.xml",
-        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable\\ease_chatfrom_bg.xml"
-    },
-    {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable\\ease_common_tab_bg.xml",
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable\\ease_common_tab_bg.xml"
+    },
+    {
+        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable\\ease_chatfrom_bg.xml",
+        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable\\ease_chatfrom_bg.xml"
     },
     {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable\\ease_search_clear.xml",

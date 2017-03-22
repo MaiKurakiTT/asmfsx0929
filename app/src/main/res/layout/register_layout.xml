@@ -76,6 +76,6 @@
         android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
         android:textColor="@color/white"
-        android:text="登录"/>
+        android:text="注册"/>
 
 </LinearLayout>

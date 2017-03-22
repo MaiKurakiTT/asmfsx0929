@@ -27,7 +27,6 @@ public class ChatActivity extends AppCompatActivity {
         toName = getIntent().getStringExtra("name");
         //new出EaseChatFragment或其子类的实例
         EaseChatFragment chatFragment = new ChatFragment();
-        chatFragment.hideTitleBar();
         //传入参数
         Bundle args = new Bundle();
         args.putInt(EaseConstant.EXTRA_CHAT_TYPE, EaseConstant.CHATTYPE_SINGLE);

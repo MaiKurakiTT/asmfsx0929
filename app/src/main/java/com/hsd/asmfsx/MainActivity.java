@@ -49,6 +49,7 @@ import com.hsd.asmfsx.view.activity.CertificationActivity;
 import com.hsd.asmfsx.view.activity.FindFriendsActivity2;
 import com.hsd.asmfsx.view.activity.FriendCircleActivity;
 import com.hsd.asmfsx.view.activity.LoginActivity;
+import com.hsd.asmfsx.view.activity.MessageActivity;
 import com.hsd.asmfsx.view.activity.OrderListActivity;
 import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
@@ -125,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
         hbListPresenter = new HBListPresenter(this);
 //        hbListPresenter.start();
         findFriendsPresenter = new FindFriendsPresenter(this);
-        findFriendsPresenter.start();
+
     }
 
     private void setData2View() {
@@ -310,7 +311,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
                         startActivity(new Intent(MainActivity.this, FriendCircleActivity.class));
                         break;
                     case 1:
-
+                        startActivity(new Intent(MainActivity.this, MessageActivity.class));
                         break;
                     case 2:
                         Intent intent = new Intent(MainActivity.this, ShopHomeActivity.class);
@@ -417,6 +418,12 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     public void showDataForUserInfo(UserInformationBean2 userInformationBean) {
         if (userInformationBean != null) {
             mUserInfo = userInformationBean;
+            if (mUserInfo.getSex() == null){
+                startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
+                finish();
+            }else {
+                findFriendsPresenter.start();
+            }
             Glide.with(this).load(userInformationBean.getIcon()).into(headImg);
             Glide.with(this).load(userInformationBean.getIcon()).into(naviHeadImg);
             naviNickName.setText("" + userInformationBean.getNickname());

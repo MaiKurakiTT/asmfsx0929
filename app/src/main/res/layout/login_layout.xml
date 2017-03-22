@@ -22,7 +22,6 @@
     android:layout_marginTop="80dp"
     android:inputType="phone"
     android:hint="手机号"
-    android:text="123"
     android:background="@drawable/edittext_radius_white"/>
     <EditText
         android:id="@+id/psw_edit"
@@ -35,7 +34,6 @@
         android:layout_marginTop="20dp"
         android:inputType="textPassword"
         android:hint="密码"
-        android:text="123"
         android:background="@drawable/edittext_radius_white"/>
     <Button
         android:id="@+id/login_but"

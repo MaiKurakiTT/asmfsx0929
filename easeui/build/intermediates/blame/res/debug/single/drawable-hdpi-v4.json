@@ -12,12 +12,12 @@
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ease_video_play_btn_small_nor.png"
     },
     {
-        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_2.png",
-        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ee_2.png"
-    },
-    {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_video_download_btn_nor.png",
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ease_video_download_btn_nor.png"
+    },
+    {
+        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_2.png",
+        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ee_2.png"
     },
     {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_13.png",
@@ -36,24 +36,24 @@
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ee_14.png"
     },
     {
-        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_input_bar_bg_active.9.png",
-        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ease_input_bar_bg_active.9.png"
+        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_chatting_setmode_keyboard_btn_normal.png",
+        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ease_chatting_setmode_keyboard_btn_normal.png"
     },
     {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_record_animate_13.png",
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ease_record_animate_13.png"
     },
     {
-        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_chatting_setmode_keyboard_btn_normal.png",
-        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ease_chatting_setmode_keyboard_btn_normal.png"
-    },
-    {
-        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_record_animate_09.png",
-        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ease_record_animate_09.png"
+        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_input_bar_bg_active.9.png",
+        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ease_input_bar_bg_active.9.png"
     },
     {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_3.png",
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ee_3.png"
+    },
+    {
+        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_record_animate_09.png",
+        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ease_record_animate_09.png"
     },
     {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_30.png",
@@ -92,12 +92,12 @@
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ee_26.png"
     },
     {
-        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_29.png",
-        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ee_29.png"
-    },
-    {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_search_clear_normal.png",
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ease_search_clear_normal.png"
+    },
+    {
+        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ee_29.png",
+        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ee_29.png"
     },
     {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_chat_video_mask_to.9.png",
@@ -116,12 +116,12 @@
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ee_12.png"
     },
     {
-        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_record_animate_12.png",
-        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ease_record_animate_12.png"
-    },
-    {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_to_group_details_normal.png",
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ease_to_group_details_normal.png"
+    },
+    {
+        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_record_animate_12.png",
+        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\drawable-hdpi\\ease_record_animate_12.png"
     },
     {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\drawable-hdpi-v4\\ease_slidetab_bg_press.9.png",

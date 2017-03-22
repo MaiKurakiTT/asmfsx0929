@@ -1,13 +1,16 @@
 package com.hsd.asmfsx.chat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.utils.SPUtils;
 import com.hsd.asmfsx.utils.ShowToast;
+import com.hsd.asmfsx.view.activity.UserInfoActivity;
 import com.hyphenate.chat.EMMessage;
 import com.hyphenate.easeui.ui.EaseChatFragment;
 import com.hyphenate.easeui.widget.chatrow.EaseCustomChatRowProvider;
@@ -39,6 +42,9 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
     protected void setUpView() {
         setChatFragmentListener(this);
         super.setUpView();
+        //在super.setUpView();之后设置界面内容才有效
+        titleBar.setBackgroundColor(getResources().getColor(R.color.primary));
+//        titleBar.setRightImageResource(R.mipmap.ic_user);
     }
     /**
      * 设置消息扩展属性
@@ -61,7 +67,14 @@ public class ChatFragment extends EaseChatFragment implements EaseChatFragment.E
      */
     @Override
     public void onAvatarClick(String username) {
-        ShowToast.show(getActivity(), "点击了头像");
+        SPUtils spUtils = SPUtils.getInstance("asmfsx");
+        String myId = spUtils.getString("myId");
+        if (!myId.equals(username)){
+            Intent intent = new Intent(getActivity(), UserInfoActivity.class);
+            intent.putExtra("type", 1);
+            intent.putExtra("userID", Long.valueOf(username));
+            startActivity(intent);
+        }
     }
 
     @Override

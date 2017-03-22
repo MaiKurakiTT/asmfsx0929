@@ -3,6 +3,7 @@ package com.hsd.asmfsx.view.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
@@ -56,6 +57,8 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
     private String code;
 
     private SPUtils spUtils;
+    private long totalTime;
+    private long flagTime;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +67,6 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
         ButterKnife.bind(this);
         initData();
         initView();
-//        registerPresenter.start();
 
     }
 
@@ -82,13 +84,11 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
                     if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password) || TextUtils.isEmpty(code)) {
                         ShowToast.show(RegisterActivity.this, "信息填写有误！");
                     } else {
-//                registerPresenter.start();
                         SMSSDK.submitVerificationCode("86", username, code);
                     }
                 } else {
                     ShowToast.show(RegisterActivity.this, "网络好像出问题了，请检查你的网络状况~");
                 }
-                doRegister();
             }
         });
         codeBut.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +97,31 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
                 username = phoneEdit.getText().toString();
                 if (!TextUtils.isEmpty(username)){
                     SMSSDK.getVerificationCode("86", username);
+                    codeBut.setEnabled(false);
+                    totalTime = 60000;
+                    flagTime = 1000;
+                    new Thread(){
+                        @Override
+                        public void run() {
+                            while (totalTime > 0){
+                                SystemClock.sleep(flagTime);
+                                RegisterActivity.this.runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        codeBut.setText("" + totalTime / flagTime);
+                                    }
+                                });
+                                totalTime = totalTime - flagTime;
+                            }
+                            RegisterActivity.this.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    codeBut.setEnabled(true);
+                                    codeBut.setText("获取");
+                                }
+                            });
+                        }
+                    }.start();
                 }
             }
         });
@@ -190,7 +215,7 @@ public class RegisterActivity extends BaseActivity implements RegisterContract.V
 
     @Override
     public void showData(BaseBean2 baseBean) {
-        Logger.d(baseBean.getMsg());
+        Logger.d(baseBean.getMsg() + "");
         spUtils.putString("phone", username);
         spUtils.putString("psw", password);
         ShowToast.show(RegisterActivity.this, "注册成功");
