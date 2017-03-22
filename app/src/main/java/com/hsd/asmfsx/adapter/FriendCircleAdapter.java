@@ -75,7 +75,7 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     public interface OnCommentClickListener {
-        void click(View view, int position, Long friendCircleId);
+        void click(View view, int position, Long friendCircleId, List<CommentVO> commentVOs);
     }
 
     @Override
@@ -163,7 +163,7 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             public void onClick(View view) {
                 Long friendCircleId = friendCircleBean.getId();
                 if (friendCircleId != null) {
-                    commentClickListener.click(view, position, friendCircleId);
+                    commentClickListener.click(view, position, friendCircleId, friendCircleBean.getCommentVOs());
                 }
             }
         });
@@ -248,7 +248,7 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         }
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.head_image)
         CircleImageView headImage;
         @BindView(R.id.put_name)
@@ -260,7 +260,7 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @BindView(R.id.comment_img)
         ImageView commentImg;
         @BindView(R.id.comment_counts)
-        TextView commentCounts;
+        public TextView commentCounts;
         @BindView(R.id.good_img)
         ImageView goodImg;
         @BindView(R.id.good_counts)
@@ -268,7 +268,7 @@ public class FriendCircleAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @BindView(R.id.friendcircle_content)
         TextView friendcircleContent;
         @BindView(R.id.comments_text)
-        TextView commentsText;
+        public TextView commentsText;
         @BindView(R.id.friendcircle_item_parent)
         CardView itemParent;
 

@@ -23,6 +23,7 @@ import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.adapter.FriendCircleAdapter;
 import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.bean.BaseBean2;
+import com.hsd.asmfsx.bean.CommentVO;
 import com.hsd.asmfsx.bean.FriendCircleVO;
 import com.hsd.asmfsx.contract.FriendCircleContract;
 import com.hsd.asmfsx.contract.PutCommentContract;
@@ -30,9 +31,11 @@ import com.hsd.asmfsx.contract.PutGoodContract;
 import com.hsd.asmfsx.presenter.FriendCirclePresenter;
 import com.hsd.asmfsx.presenter.PutCommentPresenter;
 import com.hsd.asmfsx.presenter.PutFCGoodPresenter;
+import com.hsd.asmfsx.utils.SPUtils;
 import com.hsd.asmfsx.utils.ShowToast;
 import com.orhanobut.logger.Logger;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -73,6 +76,7 @@ public class FriendCircleActivity extends BaseActivity implements FriendCircleCo
     private String commentContent;
     private PutCommentPresenter putCommentPresenter;
     private PutFCGoodPresenter putFCGoodPresenter;
+    private List<CommentVO> mCommentVOs = new ArrayList<>();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -114,6 +118,7 @@ public class FriendCircleActivity extends BaseActivity implements FriendCircleCo
                     putCommentPresenter.start();
                     commentText.setText("");
                     bottomDialog.dismiss();
+                    updateComment();
                 }
             }
         });
@@ -199,12 +204,35 @@ public class FriendCircleActivity extends BaseActivity implements FriendCircleCo
          */
         adapter.setOnCommentClickListener(new FriendCircleAdapter.OnCommentClickListener() {
             @Override
-            public void click(View view, int position, Long friendCircleId) {
+            public void click(View view, int position, Long friendCircleId, List<CommentVO> commentVOs) {
                 commentPosition = position;
                 putCommentFCId = friendCircleId;
                 bottomDialog.show();
+                mCommentVOs = commentVOs;
             }
         });
+
+    }
+    public void updateComment(){
+        SPUtils spUtils = SPUtils.getInstance("asmfsx");
+        String myNick = spUtils.getString("myNick");
+        FriendCircleAdapter.MyViewHolder viewHolder = (FriendCircleAdapter.MyViewHolder) recycleView.findViewHolderForAdapterPosition(commentPosition);
+        //设置评论数量textView
+        String display = "";
+        //判断评论条数，如果是最后一条就不加换行符了
+            viewHolder.commentCounts.setText((mCommentVOs.size() + 1) + "");
+            for (int i = 0; i < mCommentVOs.size(); i++) {
+                String temp = mCommentVOs.get(i).getContent();
+                String nickname = mCommentVOs.get(i).getUserVO().getNickname();
+                if (i == mCommentVOs.size() - 1) {
+                    display = display + nickname + ": " + temp + '\n';
+                } else {
+                    display = display + nickname + ": " + temp + '\n';
+                }
+            }
+            display = display + myNick + ": " + commentContent;
+            viewHolder.commentsText.setVisibility(View.VISIBLE);
+            viewHolder.commentsText.setText(display);
 
     }
 
