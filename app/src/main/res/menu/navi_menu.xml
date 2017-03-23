@@ -4,13 +4,13 @@
         android:checkableBehavior="none">
         <item
             android:id="@+id/navi_menu_1"
-            android:icon="@mipmap/ic_order"
-            android:title="我的订单"
+            android:icon="@mipmap/ic_menu_msg"
+            android:title="我的消息"
             />
         <item
             android:id="@+id/navi_menu_2"
-            android:icon="@mipmap/ic_menu_msg"
-            android:title="我的消息"
+            android:icon="@mipmap/ic_order"
+            android:title="实名认证"
             />
         <item
             android:id="@+id/navi_menu_3"

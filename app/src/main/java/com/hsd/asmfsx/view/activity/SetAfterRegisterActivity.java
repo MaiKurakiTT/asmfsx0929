@@ -50,12 +50,6 @@ public class SetAfterRegisterActivity extends BaseActivity implements SetAfterRe
 
     @BindView(R.id.headimg)
     CircleImageView headimg;
-    @BindView(R.id.match_phonetext)
-    TextView matchPhonetext;
-    @BindView(R.id.phonetext)
-    TextView phonetext;
-    @BindView(R.id.phoneparent)
-    RelativeLayout phoneparent;
     @BindView(R.id.nametext)
     EditText nametext;
     @BindView(R.id.nameparent)
@@ -148,7 +142,6 @@ public class SetAfterRegisterActivity extends BaseActivity implements SetAfterRe
     }
 
     private void getData() {
-        phone = phonetext.getText().toString();
         name = nametext.getText().toString();
         sex = sextext.getText().toString();
         if (sex.equals("男")){

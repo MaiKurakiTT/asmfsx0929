@@ -1,18 +1,20 @@
 package com.hsd.asmfsx;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,27 +22,16 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.listener.OnItemClickListener;
-import com.hsd.asmfsx.adapter.HBListAdapter;
-import com.hsd.asmfsx.adapter.HBListQuickAdapter;
 import com.hsd.asmfsx.adapter.SeeAdapter;
 import com.hsd.asmfsx.adapter.SwipeCardViewAdapter;
 import com.hsd.asmfsx.bean.BaseBean2;
-import com.hsd.asmfsx.bean.HBListBean;
-import com.hsd.asmfsx.bean.UserInformationBean;
 import com.hsd.asmfsx.bean.UserInformationBean2;
-import com.hsd.asmfsx.chat.ChatActivity;
 import com.hsd.asmfsx.chat.RegAndLogin;
 import com.hsd.asmfsx.contract.FindFriendsContract;
 import com.hsd.asmfsx.contract.GetUserInfoContract;
-import com.hsd.asmfsx.contract.HBListContract;
 import com.hsd.asmfsx.db.DBUserBean;
-import com.hsd.asmfsx.model.BaseListener;
-import com.hsd.asmfsx.model.FindFriendsBiz;
 import com.hsd.asmfsx.presenter.FindFriendsPresenter;
 import com.hsd.asmfsx.presenter.GetUserInfoPresenter;
-import com.hsd.asmfsx.presenter.HBListPresenter;
 import com.hsd.asmfsx.service.MyService;
 import com.hsd.asmfsx.utils.SPUtils;
 import com.hsd.asmfsx.utils.ShowToast;
@@ -50,13 +41,13 @@ import com.hsd.asmfsx.view.activity.FindFriendsActivity2;
 import com.hsd.asmfsx.view.activity.FriendCircleActivity;
 import com.hsd.asmfsx.view.activity.LoginActivity;
 import com.hsd.asmfsx.view.activity.MessageActivity;
-import com.hsd.asmfsx.view.activity.OrderListActivity;
 import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
 import com.hsd.asmfsx.view.activity.ShopHomeActivity;
 import com.hsd.asmfsx.view.activity.UserInfoActivity;
+import com.hsd.asmfsx.view.fragment.MessageListFragment;
+import com.hsd.asmfsx.view.fragment.HBListFragment;
 import com.hsd.asmfsx.widget.swipecardview.SwipeFlingAdapterView;
-import com.hyphenate.chat.EMClient;
 import com.orhanobut.logger.Logger;
 
 import org.litepal.crud.DataSupport;
@@ -68,7 +59,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements GetUserInfoContract.View , HBListContract.View, FindFriendsContract.View{
+public class MainActivity extends AppCompatActivity implements GetUserInfoContract.View , FindFriendsContract.View{
     public String TAG = "MainActivity";
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -106,8 +97,11 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     private List<UserInformationBean2> mList = new ArrayList<>();
     private BottomSheetBehavior<View> sheetBehavior;
     private SwipeCardViewAdapter swipeCardViewAdapter;
-    private HBListPresenter hbListPresenter;
     private FindFriendsPresenter findFriendsPresenter;
+    private ProgressDialog progressDialog;
+    private HBListFragment hbListFragment;
+    private MessageListFragment messageListFragment;
+    private FragmentTransaction beginTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,8 +117,6 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     private void requestData() {
         getUserInfoPresenter = new GetUserInfoPresenter(this);
         getUserInfoPresenter.start();
-        hbListPresenter = new HBListPresenter(this);
-//        hbListPresenter.start();
         findFriendsPresenter = new FindFriendsPresenter(this);
 
     }
@@ -139,6 +131,9 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
 
 
     private void initView() {
+        progressDialog = new ProgressDialog(MainActivity.this);
+        progressDialog.setMessage("正在加载...");
+        progressDialog.setCanceledOnTouchOutside(false);
         initToolbar();
         initListener();
         initBottomSheet();
@@ -160,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             public void onItemClicked(MotionEvent event, View v, Object dataObject) {
                 UserInformationBean2 data = (UserInformationBean2) dataObject;
                 if (data != null) {
-                    ShowToast.show(MainActivity.this, "点击了" + data.getNickname());
+//                    ShowToast.show(MainActivity.this, "点击了" + data.getNickname());
                     Long id = data.getId();
                     Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
                     intent.putExtra("type", 1);
@@ -205,34 +200,12 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     }
 
     private void initRightNavigation() {
-        View headerView = navigationViewRight.getHeaderView(0);
-        TextView centerTitle = (TextView) headerView.findViewById(R.id.toolbar_centertext);
-        TextView rightText = (TextView) headerView.findViewById(R.id.toolbar_righttext);
-        centerTitle.setText("心动好友");
-        rightText.setVisibility(View.GONE);
-        rightRecycle = (RecyclerView) headerView.findViewById(R.id.right_navi_recycle);
-        rightRecycle.setLayoutManager(new LinearLayoutManager(this));
-        drawerView.addDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                hbListPresenter.start();
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-
-            }
-
-            @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
-        });
+        hbListFragment = new HBListFragment();
+        messageListFragment = new MessageListFragment();
+        FragmentManager fm = getSupportFragmentManager();
+        beginTransaction = fm.beginTransaction();
+        beginTransaction.add(R.id.navigation_view_right, hbListFragment);
+        beginTransaction.commit();
     }
 
     private void initLeftNavigation() {
@@ -242,8 +215,14 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navi_menu_1:
-                        startActivity(new Intent(MainActivity.this, OrderListActivity.class));
+                        startActivity(new Intent(MainActivity.this, MessageActivity.class));
                         drawerView.closeDrawers();
+                        break;
+                    case R.id.navi_menu_2:
+
+                        break;
+                    case R.id.navi_menu_3:
+                        ShowToast.show(MainActivity.this, "攻城狮正拼命开发中。。。");
                         break;
                 }
                 return true;
@@ -270,7 +249,6 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
                 Intent intent = new Intent(MainActivity.this, BigHeadImgActivity.class);
                 intent.putExtra("img", mUserInfo.getIcon());
                 startActivityForResult(intent, 1);
-//                ShowToast.show(MainActivity.this, "头像");
             }
         });
     }
@@ -401,6 +379,9 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
         super.onActivityResult(requestCode, resultCode, data);
     }
 
+    public void closeDrawer(){
+        drawerView.closeDrawers();
+    }
 
     @Override
     protected void onDestroy() {
@@ -482,12 +463,12 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
 
     @Override
     public void showLoading() {
-
+        progressDialog.show();
     }
 
     @Override
     public void hideLoading() {
-
+        progressDialog.dismiss();
     }
 
     @Override
@@ -501,65 +482,12 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void showDataForHBList(final List<HBListBean> hbList) {
-        if (hbList.size() > 0){
-            HBListQuickAdapter hbListQuickAdapter = new HBListQuickAdapter(hbList);
-            hbListQuickAdapter.setContext(MainActivity.this);
-            rightRecycle.setAdapter(hbListQuickAdapter);
-            rightRecycle.addOnItemTouchListener(new OnItemClickListener() {
-                @Override
-                public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
-                    drawerView.closeDrawers();
-                    HBListBean data = hbList.get(position);
-                    if (data != null) {
-                        ShowToast.show(MainActivity.this, "点击了" + data.getNickname());
-                        Long id = data.getId();
-                        Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
-                        intent.putExtra("type", 1);
-                        intent.putExtra("userID", id);
-                        startActivity(intent);
-                    }
-                }
-            });
-            View emptyView = LayoutInflater.from(this).inflate(R.layout.empty_view, null, false);
-            hbListQuickAdapter.setEmptyView(emptyView);
-            for (HBListBean hbListBean : hbList){
-                Long id = hbListBean.getId();
-                List<DBUserBean> dbUserBeanList = DataSupport.where("userId = ?", "" + id).find(DBUserBean.class);
-                if (dbUserBeanList.size() == 0){
-                    DBUserBean dbUserBean = new DBUserBean();
-                    dbUserBean.setUserId(id);
-                    dbUserBean.setNickname(hbListBean.getNickname());
-                    dbUserBean.setIcon(hbListBean.getIcon());
-                    dbUserBean.save();
-                }
-            }
-            /*HBListAdapter hbListAdapter = new HBListAdapter(this, hbList);
-            rightRecycle.setAdapter(hbListAdapter);
-            //聊天
-            hbListAdapter.setOnItemClickListener(new HBListAdapter.OnItemClickListener() {
-                @Override
-                public void click(View view, int position, Long userId) {
-                    if (userId != null) {
-                        Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-                        intent.putExtra("name", userId + "");
-                        startActivity(intent);
-                    }
-                }
-            });*/
-        }
-    }
-
-    @Override
-    public void showFailedForResultHBList(BaseBean2 baseBean2) {
-
-    }
 
     @Override
     public void showData(List<UserInformationBean2> userInformationBean2s) {
         if (userInformationBean2s.size() > 0){
             mList.addAll(userInformationBean2s);
+
             //初始化swipecardview
             swipeCardViewAdapter = new SwipeCardViewAdapter(this, mList);
             swipeFlingView.setAdapter(swipeCardViewAdapter);

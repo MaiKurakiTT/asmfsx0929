@@ -25,4 +25,6 @@
     <color name="normal_background">#11000000</color>
     <color name="gray_background">#D2DDD9</color>
 
+
+    <color name="temp_blue">#A5D2F1</color>
 </resources>
