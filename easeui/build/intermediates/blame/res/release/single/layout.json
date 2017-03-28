@@ -152,12 +152,12 @@
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\layout\\ease_widget_emojicon.xml"
     },
     {
-        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\release\\layout\\ease_conversation_item.xml",
-        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\layout\\ease_conversation_item.xml"
-    },
-    {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\release\\layout\\ease_layout_emojicon_menu.xml",
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\layout\\ease_layout_emojicon_menu.xml"
+    },
+    {
+        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\release\\layout\\ease_conversation_item.xml",
+        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\layout\\ease_conversation_item.xml"
     },
     {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\release\\layout\\ease_layout_chat_primary_menu.xml",
@@ -172,16 +172,16 @@
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\layout\\ease_alert_dialog.xml"
     },
     {
-        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\release\\layout\\ease_row_sent_picture.xml",
-        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\layout\\ease_row_sent_picture.xml"
-    },
-    {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\release\\layout\\ease_row_received_voice.xml",
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\layout\\ease_row_received_voice.xml"
     },
     {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\release\\layout\\ease_commom_back_btn.xml",
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\layout\\ease_commom_back_btn.xml"
+    },
+    {
+        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\release\\layout\\ease_row_sent_picture.xml",
+        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\layout\\ease_row_sent_picture.xml"
     },
     {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\release\\layout\\ease_row_received_message.xml",

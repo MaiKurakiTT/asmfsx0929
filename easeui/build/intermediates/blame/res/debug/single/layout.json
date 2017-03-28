@@ -32,12 +32,12 @@
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\layout\\ease_row_received_file.xml"
     },
     {
-        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\layout\\ease_fragment_conversation_list.xml",
-        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\layout\\ease_fragment_conversation_list.xml"
-    },
-    {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\layout\\ease_row_sent_voice_call.xml",
         "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\layout\\ease_row_sent_voice_call.xml"
+    },
+    {
+        "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\layout\\ease_fragment_conversation_list.xml",
+        "source": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\src\\main\\res\\layout\\ease_fragment_conversation_list.xml"
     },
     {
         "merged": "D:\\AndroidFile\\WorkSpace\\asmfsx0929\\easeui\\build\\intermediates\\res\\merged\\debug\\layout\\ease_layout_chat_primary_menu.xml",

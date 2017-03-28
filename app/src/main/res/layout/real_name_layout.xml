@@ -67,64 +67,6 @@
         android:layout_height="0.1dp"
         android:background="@color/view_module" />
 
-    <RelativeLayout
-        android:id="@+id/departmentparent"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/layoutclick_style"
-        android:clickable="true"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/match_departmenttext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="学院"
-            android:textColor="@color/it_matchnormal_textcolor"
-            android:textSize="@dimen/normal_textsize" />
-
-        <TextView
-            android:id="@+id/departmenttext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/setafterregistermarginlift"
-            android:textColor="@color/black"
-            android:textSize="@dimen/normal_textsize" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.1dp"
-        android:background="@color/view_module" />
-
-    <RelativeLayout
-        android:id="@+id/gradeparent"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/layoutclick_style"
-        android:clickable="true"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/match_gradetext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
-            android:text="年级"
-            android:textColor="@color/it_matchnormal_textcolor"
-            android:textSize="@dimen/normal_textsize" />
-
-        <TextView
-            android:id="@+id/gradetext"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/setafterregistermarginlift"
-            android:textColor="@color/black"
-            android:textSize="@dimen/normal_textsize" />
-    </RelativeLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -139,12 +81,13 @@
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:background="@color/view_module" />
+
     <ImageView
         android:id="@+id/addimg_first"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_margin="5dp"
-        android:src="@mipmap/ic_addimg"/>
+        android:src="@mipmap/ic_addimg" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/addimg_recycleview"
