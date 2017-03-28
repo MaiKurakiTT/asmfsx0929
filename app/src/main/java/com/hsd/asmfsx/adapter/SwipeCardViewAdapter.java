@@ -90,6 +90,20 @@ public class SwipeCardViewAdapter extends BaseAdapter {
         if (schoolInt == 0){
             holder.school.setText("河南师范大学");
         }
+        switch (schoolInt){
+            case 0:
+                holder.school.setText("河南师范大学");
+                break;
+            case 1:
+                holder.school.setText("新乡医学院");
+                break;
+            case 2:
+                holder.school.setText("新乡学院");
+                break;
+            case 3:
+                holder.school.setText("河南科技学院");
+                break;
+        }
 
         return view;
     }

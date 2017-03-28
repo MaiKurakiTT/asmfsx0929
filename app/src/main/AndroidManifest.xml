@@ -45,6 +45,7 @@
         <activity android:name=".chat.ChatActivity"
                     android:launchMode="singleTask"/>
 
+        <activity android:name=".view.activity.SettingActivity"/>
         <activity android:name=".view.activity.ShiMingActivity"/>
         <activity android:name=".view.activity.MessageActivity"/>
         <activity android:name=".view.activity.BigHeadImgActivity"/>

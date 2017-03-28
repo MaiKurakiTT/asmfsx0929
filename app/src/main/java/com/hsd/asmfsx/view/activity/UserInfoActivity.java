@@ -119,9 +119,18 @@ public class UserInfoActivity extends BaseActivity implements GetUserInfoContrac
 
             Integer schoolInt = userInformationBean.getSchool();
             if (schoolInt != null) {
-                switch (schoolInt) {
+                switch (schoolInt){
                     case 0:
                         schoolTV.setText("河南师范大学");
+                        break;
+                    case 1:
+                        schoolTV.setText("新乡医学院");
+                        break;
+                    case 2:
+                        schoolTV.setText("新乡学院");
+                        break;
+                    case 3:
+                        schoolTV.setText("河南科技学院");
                         break;
                 }
             }

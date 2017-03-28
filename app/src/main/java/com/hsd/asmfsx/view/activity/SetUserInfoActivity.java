@@ -1,9 +1,9 @@
 package com.hsd.asmfsx.view.activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -34,7 +34,7 @@ import butterknife.ButterKnife;
  * Created by apple on 2016/11/21.
  */
 
-public class SetUserInfoActivity extends BaseActivity implements SetAfterRegisterContract.View{
+public class SetUserInfoActivity extends BaseActivity implements SetAfterRegisterContract.View {
     @BindView(R.id.toolbar_centertext)
     TextView toolbarCentertext;
     @BindView(R.id.toolbar_righttext)
@@ -63,26 +63,22 @@ public class SetUserInfoActivity extends BaseActivity implements SetAfterRegiste
     TextView hometext;
     @BindView(R.id.homeparent)
     RelativeLayout homeparent;
-    @BindView(R.id.match_schooltext)
-    TextView matchSchooltext;
-    @BindView(R.id.schooltext)
-    TextView schooltext;
-    @BindView(R.id.schoolparent)
-    RelativeLayout schoolparent;
     @BindView(R.id.match_statustext)
     TextView matchStatustext;
     @BindView(R.id.statustext)
     TextView statustext;
     @BindView(R.id.statusparent)
     RelativeLayout statusparent;
-    @BindView(R.id.match_signtext)
+    /*@BindView(R.id.match_signtext)
     TextView matchSigntext;
     @BindView(R.id.signtext)
     TextView signtext;
     @BindView(R.id.signparent)
-    RelativeLayout signparent;
+    RelativeLayout signparent;*/
     @BindView(R.id.okbut)
     AppCompatButton okbut;
+    @BindView(R.id.signtext)
+    EditText signtext;
 
     private String[] schoolItems = {"河南师范大学"};
     private String[] statusItems = {"单身", "失恋了", "恋爱ing"};
@@ -91,7 +87,7 @@ public class SetUserInfoActivity extends BaseActivity implements SetAfterRegiste
     private Long birthday;
     private String star;
     private String home;
-    private String schoolString;
+    //    private String schoolString;
     private String statusString;
     private Integer status;
     private Integer schoolInt = new Integer(0);
@@ -99,6 +95,7 @@ public class SetUserInfoActivity extends BaseActivity implements SetAfterRegiste
     private UserInformationBean2 userInformationBean;
     private UserInformationBean2 userInformationBean2;
     private SetAfterRegisterPresenter setAfterRegisterPresenter;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -116,12 +113,15 @@ public class SetUserInfoActivity extends BaseActivity implements SetAfterRegiste
         toolbarCentertext.setText("设置信息");
         toolbarRighttext.setVisibility(View.GONE);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        progressDialog = new ProgressDialog(SetUserInfoActivity.this);
+        progressDialog.setMessage("正在加载...");
+        progressDialog.setCanceledOnTouchOutside(false);
         okbut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getData();
                 if (TextUtils.isEmpty(nickName) || TextUtils.isEmpty(birthdayString) || TextUtils.isEmpty(star)
-                        || TextUtils.isEmpty(home) || TextUtils.isEmpty(schoolString) || TextUtils.isEmpty(statusString)) {
+                        || TextUtils.isEmpty(home) || TextUtils.isEmpty(statusString)) {
                     ShowToast.show(SetUserInfoActivity.this, "请先完善信息");
                 } else {
                     userInformationBean2 = new UserInformationBean2();
@@ -129,7 +129,7 @@ public class SetUserInfoActivity extends BaseActivity implements SetAfterRegiste
                     userInformationBean2.setBirthday(birthday);
                     userInformationBean2.setStar(star);
                     userInformationBean2.setLocality(home);
-                    userInformationBean2.setSchool(schoolInt);
+//                    userInformationBean2.setSchool(schoolInt);
                     userInformationBean2.setState(status);
                     userInformationBean2.setSign(sign);
                     setAfterRegisterPresenter.start();
@@ -144,6 +144,16 @@ public class SetUserInfoActivity extends BaseActivity implements SetAfterRegiste
     }
 
     private void getData() {
+        String s = birthdaytext.getText().toString();
+        if (!TextUtils.isEmpty(s)) {
+            Date date = DateFormatUtils.formatString2Date(s);
+            if (date != null) {
+                startext.setText(Date2Star.date2Constellation(date) + "");
+            }
+        } else {
+            ShowToast.show(SetUserInfoActivity.this, "要先设置生日~");
+        }
+
         nickName = nametext.getText().toString();
         birthdayString = birthdaytext.getText().toString();
         if (!TextUtils.isEmpty(birthdaytext.getText().toString())) {
@@ -151,16 +161,16 @@ public class SetUserInfoActivity extends BaseActivity implements SetAfterRegiste
         }
         star = startext.getText().toString();
         home = hometext.getText().toString();
-        schoolString = schooltext.getText().toString();
+        /*schoolString = schooltext.getText().toString();
         if (schoolString.equals("河南师范大学")) {
             schoolInt = 0;
-        }
+        }*/
         statusString = statustext.getText().toString();
-        if (statusString.equals("单身")){
+        if (statusString.equals("单身")) {
             status = 0;
-        }else if (statusString.equals("失恋了")){
+        } else if (statusString.equals("失恋了")) {
             status = 1;
-        }else if (statusString.equals("恋爱ing")){
+        } else if (statusString.equals("恋爱ing")) {
             status = 2;
         }
         sign = signtext.getText().toString();
@@ -174,9 +184,9 @@ public class SetUserInfoActivity extends BaseActivity implements SetAfterRegiste
             }
             startext.setText("" + userInformationBean.getStar());
             hometext.setText("" + userInformationBean.getLocality());
-            schoolInt = userInformationBean.getSchool();
+            /*schoolInt = userInformationBean.getSchool();
             if (schoolInt == 0)
-                schooltext.setText("河南师范大学");
+                schooltext.setText("河南师范大学");*/
             status = userInformationBean.getState();
             switch (status) {
                 case 0:
@@ -189,9 +199,9 @@ public class SetUserInfoActivity extends BaseActivity implements SetAfterRegiste
                     statustext.setText("恋爱ing");
                     break;
             }
-            if (TextUtils.isEmpty(userInformationBean.getSign())){
+            if (TextUtils.isEmpty(userInformationBean.getSign())) {
                 signtext.setText("");
-            }else {
+            } else {
                 signtext.setText(userInformationBean.getSign());
             }
         }
@@ -221,12 +231,12 @@ public class SetUserInfoActivity extends BaseActivity implements SetAfterRegiste
                 new PickViewUtils(SetUserInfoActivity.this, hometext).pickProvince();
             }
         });
-        schoolparent.setOnClickListener(new View.OnClickListener() {
+        /*schoolparent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new PickViewUtils(SetUserInfoActivity.this, schooltext).pickOther(schoolItems);
             }
-        });
+        });*/
         statusparent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -257,7 +267,7 @@ public class SetUserInfoActivity extends BaseActivity implements SetAfterRegiste
 
     @Override
     public void showData(BaseBean2 baseBean) {
-        if (baseBean != null){
+        if (baseBean != null) {
             ShowToast.show(SetUserInfoActivity.this, "设置成功");
             Intent intent = getIntent();
             intent.putExtra("userInformationBean", userInformationBean2);
@@ -273,12 +283,12 @@ public class SetUserInfoActivity extends BaseActivity implements SetAfterRegiste
 
     @Override
     public void showLoading() {
-
+        progressDialog.show();
     }
 
     @Override
     public void hideLoading() {
-
+        progressDialog.dismiss();
     }
 
     @Override

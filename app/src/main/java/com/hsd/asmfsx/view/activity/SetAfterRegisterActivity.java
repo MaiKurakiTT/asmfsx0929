@@ -66,24 +66,12 @@ public class SetAfterRegisterActivity extends BaseActivity implements SetAfterRe
     TextView birthdaytext;
     @BindView(R.id.birthdayparent)
     RelativeLayout birthdayparent;
-    @BindView(R.id.match_heighttext)
-    TextView matchHeighttext;
-    @BindView(R.id.heighttext)
-    TextView heighttext;
-    @BindView(R.id.heightparent)
-    RelativeLayout heightparent;
     @BindView(R.id.match_hometext)
     TextView matchHometext;
     @BindView(R.id.hometext)
     TextView hometext;
     @BindView(R.id.homeparent)
     RelativeLayout homeparent;
-    @BindView(R.id.match_schooltext)
-    TextView matchSchooltext;
-    @BindView(R.id.schooltext)
-    TextView schooltext;
-    @BindView(R.id.schoolparent)
-    RelativeLayout schoolparent;
     @BindView(R.id.match_statustext)
     TextView matchStatustext;
     @BindView(R.id.statustext)
@@ -111,13 +99,9 @@ public class SetAfterRegisterActivity extends BaseActivity implements SetAfterRe
     private String sex;
     private Integer sexInt;
     private String birthdayString;
-    private String heightString;
     private Date birthday;
     private Long birthdayLong;
-    private Integer height;
     private String home;
-    private String school;
-    private Integer schoolInt = new Integer(0);
     private Integer statusInt = new Integer(0);
     private String statusString;
     private UserInformationBean2 userInformationBean;
@@ -154,15 +138,15 @@ public class SetAfterRegisterActivity extends BaseActivity implements SetAfterRe
             birthday = DateFormatUtils.formatString2Date(birthdayString);
             birthdayLong = birthday.getTime();
         }
-        heightString = heighttext.getText().toString().replace("cm", "");
+       /* heightString = heighttext.getText().toString().replace("cm", "");
         if (!TextUtils.isEmpty(heightString)) {
             height = Integer.valueOf(heightString);
-        }
+        }*/
         home = hometext.getText().toString();
-        school = schooltext.getText().toString();
+        /*school = schooltext.getText().toString();
         if (schoolItems[0].equals(school)){
             schoolInt = Integer.valueOf(0);
-        }
+        }*/
         statusString = statustext.getText().toString();
         switch (statusString){
             case "单身":
@@ -202,7 +186,19 @@ public class SetAfterRegisterActivity extends BaseActivity implements SetAfterRe
         sexparent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new PickViewUtils(SetAfterRegisterActivity.this, sextext).pickOther(sexItems);
+                new AlertDialog.Builder(SetAfterRegisterActivity.this)
+                        .setTitle("提示")
+                        .setMessage("性别被设置后将不能改变！")
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                new PickViewUtils(SetAfterRegisterActivity.this, sextext).pickOther(sexItems);
+                            }
+                        })
+                        .create()
+                        .show();
+
+
             }
         });
         //设置生日
@@ -212,13 +208,13 @@ public class SetAfterRegisterActivity extends BaseActivity implements SetAfterRe
                 new PickViewUtils(SetAfterRegisterActivity.this, birthdaytext).pickDate();
             }
         });
-        //设置身高
+        /*//设置身高
         heightparent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new PickViewUtils(SetAfterRegisterActivity.this, heighttext).pickHeight();
             }
-        });
+        });*/
         //设置地区
         homeparent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,13 +222,13 @@ public class SetAfterRegisterActivity extends BaseActivity implements SetAfterRe
                 new PickViewUtils(SetAfterRegisterActivity.this, hometext).pickProvince();
             }
         });
-        //设置学校
+        /*//设置学校
         schoolparent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 new PickViewUtils(SetAfterRegisterActivity.this, schooltext).pickOther(schoolItems);
             }
-        });
+        });*/
         //设置恋爱状态
         statusparent.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -246,8 +242,8 @@ public class SetAfterRegisterActivity extends BaseActivity implements SetAfterRe
             public void onClick(View v) {
                 getData();
                 if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(name) || TextUtils.isEmpty(sex)
-                        || TextUtils.isEmpty(birthdayString) || TextUtils.isEmpty(heightString) || TextUtils.isEmpty(home) ||
-                        TextUtils.isEmpty(school) || TextUtils.isEmpty(statusString)) {
+                        || TextUtils.isEmpty(birthdayString) || TextUtils.isEmpty(home) ||
+                        TextUtils.isEmpty(statusString)) {
                     ShowToast.show(SetAfterRegisterActivity.this, "请先完善信息");
                 } else if (TextUtils.isEmpty(cropSuccessPath)) {
                     ShowToast.show(SetAfterRegisterActivity.this, "要设置头像哦~");
@@ -327,9 +323,9 @@ public class SetAfterRegisterActivity extends BaseActivity implements SetAfterRe
         userInformationBean.setNickname(name);
         userInformationBean.setSex(sexInt);
         userInformationBean.setBirthday(birthdayLong);
-        userInformationBean.setHeight(height);
+//        userInformationBean.setHeight(height);
         userInformationBean.setLocality(home);
-        userInformationBean.setSchool(schoolInt);
+//        userInformationBean.setSchool(schoolInt);
         userInformationBean.setState(statusInt);
         /*userInformationBean.setUser_phone(phone);
         userInformationBean.setUser_nickname(name);

@@ -14,6 +14,7 @@ import com.hsd.asmfsx.bean.NormalResultBean;
 import com.hsd.asmfsx.bean.OrderListBean;
 import com.hsd.asmfsx.bean.OrderVO;
 import com.hsd.asmfsx.bean.RegisterBean;
+import com.hsd.asmfsx.bean.ShiMingBean;
 import com.hsd.asmfsx.bean.ShopVO;
 import com.hsd.asmfsx.bean.UserBean2;
 import com.hsd.asmfsx.bean.UserInformationBean;
@@ -75,6 +76,24 @@ public interface RetrofitService {
      */
     @POST(GlobalParameter.project2 + "user/updateUserInformation.action")
     Call<BaseBean2> postSetUserInfo(@Body UserInformationBean2 userInformationBean);
+
+    /**
+     * 获取实名认证状态
+     * @return
+     */
+    @POST(GlobalParameter.project2 + "user/getVerifyStudentState.action")
+    Call<NormalResultBean<ShiMingBean>> postGetShiMingState();
+
+    /**
+     * 上传实名认证资料
+     * @param realName
+     * @param schoolNum
+     * @param img
+     * @return
+     */
+    @FormUrlEncoded
+    @POST(GlobalParameter.project2 + "user/verifyStudent2.action")
+    Call<BaseBean2> postWriteShiMing(@Field("realName") String realName, @Field("schoolNum") Long schoolNum, @Field("img") String img);
 
     /**
      * 获取用户信息，需要一个userid

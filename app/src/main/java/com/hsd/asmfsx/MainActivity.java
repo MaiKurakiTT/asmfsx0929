@@ -43,6 +43,7 @@ import com.hsd.asmfsx.view.activity.LoginActivity;
 import com.hsd.asmfsx.view.activity.MessageActivity;
 import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
+import com.hsd.asmfsx.view.activity.ShiMingActivity;
 import com.hsd.asmfsx.view.activity.ShopHomeActivity;
 import com.hsd.asmfsx.view.activity.UserInfoActivity;
 import com.hsd.asmfsx.view.fragment.MessageListFragment;
@@ -216,15 +217,15 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
                 switch (item.getItemId()) {
                     case R.id.navi_menu_1:
                         startActivity(new Intent(MainActivity.this, MessageActivity.class));
-                        drawerView.closeDrawers();
                         break;
                     case R.id.navi_menu_2:
-
+                        startActivity(new Intent(MainActivity.this, ShiMingActivity.class));
                         break;
                     case R.id.navi_menu_3:
                         ShowToast.show(MainActivity.this, "攻城狮正拼命开发中。。。");
                         break;
                 }
+                drawerView.closeDrawers();
                 return true;
             }
         });
@@ -234,10 +235,14 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
-                intent.putExtra("type", 0);
-                intent.putExtra("userInformationBean", mUserInfo);
-                startActivityForResult(intent, 0);
-                drawerView.closeDrawers();
+                if (mUserInfo != null){
+                    intent.putExtra("type", 0);
+                    intent.putExtra("userInformationBean", mUserInfo);
+                    startActivityForResult(intent, 0);
+                    drawerView.closeDrawers();
+                }else {
+                    ShowToast.show(MainActivity.this, "未知的错误");
+                }
             }
         });
         /**
@@ -247,8 +252,12 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, BigHeadImgActivity.class);
-                intent.putExtra("img", mUserInfo.getIcon());
-                startActivityForResult(intent, 1);
+                if (mUserInfo != null){
+                    intent.putExtra("img", mUserInfo.getIcon() + "");
+                    startActivityForResult(intent, 1);
+                }else {
+                    ShowToast.show(MainActivity.this, "未知的错误");
+                }
             }
         });
     }

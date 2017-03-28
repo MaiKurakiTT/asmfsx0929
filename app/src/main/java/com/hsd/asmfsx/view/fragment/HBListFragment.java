@@ -55,6 +55,7 @@ public class HBListFragment extends Fragment implements HBListContract.View {
     LinearLayout rightLayout;
     private HBListPresenter hbListPresenter;
     private MainActivity mActivity;
+    private HBListQuickAdapter hbListQuickAdapter;
 
     @Nullable
     @Override
@@ -112,16 +113,17 @@ public class HBListFragment extends Fragment implements HBListContract.View {
     @Override
     public void showDataForHBList(final List<HBListBean> hbList) {
         if (hbList.size() > 0) {
-            HBListQuickAdapter hbListQuickAdapter = new HBListQuickAdapter(hbList);
-
+            hbListQuickAdapter = new HBListQuickAdapter(hbList);
             hbListQuickAdapter.setContext(mActivity);
             rightNaviRecycle.setAdapter(hbListQuickAdapter);
-            rightNaviRecycle.addOnItemTouchListener(new OnItemClickListener() {
+            View emptyView = LayoutInflater.from(getActivity()).inflate(R.layout.empty_view, null, false);
+            hbListQuickAdapter.setEmptyView(emptyView);
+            hbListQuickAdapter.openLoadAnimation();
+            hbListQuickAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                 @Override
-                public void onSimpleItemClick(BaseQuickAdapter adapter, View view, int position) {
+                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                     HBListBean data = hbList.get(position);
                     if (data != null) {
-//                        ShowToast.show(MainActivity.this, "点击了" + data.getNickname());
                         Long id = data.getId();
                         Intent intent = new Intent(getActivity(), UserInfoActivity.class);
                         intent.putExtra("type", 1);
@@ -132,8 +134,7 @@ public class HBListFragment extends Fragment implements HBListContract.View {
                     }
                 }
             });
-            View emptyView = LayoutInflater.from(getActivity()).inflate(R.layout.empty_view, null, false);
-            hbListQuickAdapter.setEmptyView(emptyView);
+
             for (HBListBean hbListBean : hbList) {
                 Long id = hbListBean.getId();
                 List<DBUserBean> dbUserBeanList = DataSupport.where("userId = ?", "" + id).find(DBUserBean.class);
