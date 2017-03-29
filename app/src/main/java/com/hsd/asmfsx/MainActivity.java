@@ -386,7 +386,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
         } else if (requestCode == 1) {
             getUserInfoPresenter.start();
         }
-        if (requestCode == 99){
+        if (resultCode == 99){
             finish();
         }
         super.onActivityResult(requestCode, resultCode, data);

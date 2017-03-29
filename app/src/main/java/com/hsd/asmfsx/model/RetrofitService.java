@@ -241,6 +241,13 @@ public interface RetrofitService {
     Call<NormalResultBean<List<HBListBean>>> postGetHBList();
 
     /**
+     * 获取最新应用版本名
+     * @return
+     */
+    @GET(GlobalParameter.project2 + "version.txt")
+    Call<String> getVersionName();
+
+    /**
      * checkSchool
      * @param certificationBiz  需要学校名存入CertificationBean
      * @return  返回CertificationBean
