@@ -7,14 +7,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.hsd.asmfsx.adapter.HomePagerAdapter;
 import com.hsd.asmfsx.adapter.SeeAdapter;
 import com.hsd.asmfsx.adapter.SwipeCardViewAdapter;
 import com.hsd.asmfsx.bean.BaseBean2;
@@ -43,12 +47,15 @@ import com.hsd.asmfsx.view.activity.LoginActivity;
 import com.hsd.asmfsx.view.activity.MessageActivity;
 import com.hsd.asmfsx.view.activity.RegisterActivity;
 import com.hsd.asmfsx.view.activity.SetAfterRegisterActivity;
+import com.hsd.asmfsx.view.activity.SettingActivity;
 import com.hsd.asmfsx.view.activity.ShiMingActivity;
 import com.hsd.asmfsx.view.activity.ShopHomeActivity;
 import com.hsd.asmfsx.view.activity.UserInfoActivity;
-import com.hsd.asmfsx.view.fragment.MessageListFragment;
 import com.hsd.asmfsx.view.fragment.HBListFragment;
+import com.hsd.asmfsx.view.fragment.MessageListFragment;
 import com.hsd.asmfsx.widget.swipecardview.SwipeFlingAdapterView;
+import com.hyphenate.chat.EMClient;
+import com.hyphenate.easeui.ui.EaseConversationListFragment;
 import com.orhanobut.logger.Logger;
 
 import org.litepal.crud.DataSupport;
@@ -60,7 +67,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class MainActivity extends AppCompatActivity implements GetUserInfoContract.View , FindFriendsContract.View{
+public class MainActivity extends AppCompatActivity implements GetUserInfoContract.View, FindFriendsContract.View {
     public String TAG = "MainActivity";
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -80,19 +87,24 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     ImageButton bottomImgBut;
     @BindView(R.id.swipe_fling_view)
     SwipeFlingAdapterView swipeFlingView;
+    @BindView(R.id.right_tab)
+    TabLayout rightTab;
+    @BindView(R.id.right_viewpager)
+    ViewPager rightViewpager;
 
     private RecyclerView rightRecycle;
     private RecyclerView seeRecycleView;
 
-    private String[] seeTitles = {"朋友圈", "消息", "团购", "注册", "登录", "朋友圈", "实名认证", "设置信息", "聊天", "好友", "找朋友"};
+    private String[] seeTitles = {"朋友圈", "团购", "注册", "登录", "设置信息"};
     private int[] seeImgs = {R.mipmap.ic_news, R.mipmap.ic_mail, R.mipmap.ic_show,
-            R.mipmap.ic_log, R.mipmap.ic_game, R.mipmap.ic_traffic, R.mipmap.ic_traffic, R.mipmap.ic_traffic
-            , R.mipmap.ic_traffic, R.mipmap.ic_traffic, R.mipmap.ic_traffic};
+            R.mipmap.ic_log, R.mipmap.ic_game};
     private UserInformationBean2 mUserInfo;
     private View leftNaviHeadView;
     private CircleImageView naviHeadImg;
     private TextView naviNickName;
     private GetUserInfoPresenter getUserInfoPresenter;
+
+    private long mExitTime = 0;
 
 
     private List<UserInformationBean2> mList = new ArrayList<>();
@@ -139,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
         initListener();
         initBottomSheet();
         initLeftNavigation();
-        initRightNavigation();
+//        initRightNavigation();
         initSwipCardView();
     }
 
@@ -185,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
                 Logger.d("onAdapterAboutToEmpty", "" + itemsInAdapter);
-                if (itemsInAdapter == 3){
+                if (itemsInAdapter == 3) {
                     findFriendsPresenter.loadMoreData();
                 }
             }
@@ -193,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             @Override
             public void onScroll(float progress, float scrollXProgress) {
                 //设置底部关闭
-                if (sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
+                if (sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                     sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
             }
@@ -204,9 +216,11 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
         hbListFragment = new HBListFragment();
         messageListFragment = new MessageListFragment();
         FragmentManager fm = getSupportFragmentManager();
-        beginTransaction = fm.beginTransaction();
-        beginTransaction.add(R.id.navigation_view_right, hbListFragment);
-        beginTransaction.commit();
+        HomePagerAdapter homePagerAdapter = new HomePagerAdapter(fm);
+        homePagerAdapter.addFragment(hbListFragment, "好友");
+        homePagerAdapter.addFragment(messageListFragment, "消息");
+        rightViewpager.setAdapter(homePagerAdapter);
+        rightTab.setupWithViewPager(rightViewpager);
     }
 
     private void initLeftNavigation() {
@@ -216,13 +230,16 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.navi_menu_1:
-                        startActivity(new Intent(MainActivity.this, MessageActivity.class));
+//                        startActivity(new Intent(MainActivity.this, MessageActivity.class));
                         break;
                     case R.id.navi_menu_2:
                         startActivity(new Intent(MainActivity.this, ShiMingActivity.class));
                         break;
                     case R.id.navi_menu_3:
-                        ShowToast.show(MainActivity.this, "攻城狮正拼命开发中。。。");
+                        ShowToast.show(MainActivity.this, "攻城狮正在拼命开发中...");
+                        break;
+                    case R.id.sub_1:
+                        startActivityForResult(new Intent(MainActivity.this, SettingActivity.class), 99);
                         break;
                 }
                 drawerView.closeDrawers();
@@ -235,12 +252,12 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, UserInfoActivity.class);
-                if (mUserInfo != null){
+                if (mUserInfo != null) {
                     intent.putExtra("type", 0);
                     intent.putExtra("userInformationBean", mUserInfo);
                     startActivityForResult(intent, 0);
                     drawerView.closeDrawers();
-                }else {
+                } else {
                     ShowToast.show(MainActivity.this, "未知的错误");
                 }
             }
@@ -252,10 +269,10 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, BigHeadImgActivity.class);
-                if (mUserInfo != null){
+                if (mUserInfo != null) {
                     intent.putExtra("img", mUserInfo.getIcon() + "");
                     startActivityForResult(intent, 1);
-                }else {
+                } else {
                     ShowToast.show(MainActivity.this, "未知的错误");
                 }
             }
@@ -290,47 +307,31 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         seeRecycleView.setLayoutManager(linearLayoutManager);
         seeRecycleView.setAdapter(seeAdapter);
+        //底部bottomsheet点击事件
         seeAdapter.setOnItemClickListener(new SeeAdapter.OnItemClickListener() {
             @Override
             public void click(View view, int position) {
                 switch (position) {
                     case 0:
+                        //开启朋友圈
                         startActivity(new Intent(MainActivity.this, FriendCircleActivity.class));
                         break;
                     case 1:
-                        startActivity(new Intent(MainActivity.this, MessageActivity.class));
+                        //开启团购
+                        startActivity(new Intent(MainActivity.this, ShopHomeActivity.class));
                         break;
                     case 2:
-                        Intent intent = new Intent(MainActivity.this, ShopHomeActivity.class);
-                        startActivity(intent);
-                        break;
-                    case 3:
                         startActivity(new Intent(MainActivity.this, RegisterActivity.class));
                         break;
-                    case 4:
+                    case 3:
                         startActivity(new Intent(MainActivity.this, LoginActivity.class));
                         break;
-                    case 5:
-                        startActivity(new Intent(MainActivity.this, FriendCircleActivity.class));
-                        break;
-                    case 6:
-                        startActivity(new Intent(MainActivity.this, CertificationActivity.class));
-                        break;
-                    case 7:
+                    case 4:
                         startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
-                        break;
-                    case 8:
-                        startActivity(new Intent(MainActivity.this, RegAndLogin.class));
-                        break;
-                    case 9:
-//                        presenter.getData();
-                        break;
-                    case 10:
-                        startActivity(new Intent(MainActivity.this, FindFriendsActivity2.class));
                         break;
                 }
                 //设置底部关闭
-                if (sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED){
+                if (sheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                     sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 }
             }
@@ -382,22 +383,42 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             if (userInformationBean != null) {
                 naviNickName.setText("" + userInformationBean.getNickname());
             }
-        }else if (requestCode == 1){
+        } else if (requestCode == 1) {
             getUserInfoPresenter.start();
+        }
+        if (requestCode == 99){
+            finish();
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void closeDrawer(){
+
+    public void closeDrawer() {
         drawerView.closeDrawers();
     }
 
     @Override
     protected void onDestroy() {
-//        EMClient.getInstance().logout(true);
+        EMClient.getInstance().logout(true);
         super.onDestroy();
     }
 
+    @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+      if (keyCode == KeyEvent.KEYCODE_BACK) {
+          if ((System.currentTimeMillis() - mExitTime) > 2000) {//
+              // 如果两次按键时间间隔大于2000毫秒，则不退出
+              ShowToast.show(MainActivity.this,"再按一次退出程序");
+              mExitTime = System.currentTimeMillis();// 更新mExitTime
+          } else {
+              // 否则退出程序
+              finish();
+          }
+          return true;
+      }
+      return super.onKeyDown(keyCode, event);
+
+  }
 
     @Override
     public Long getUserId() {
@@ -408,10 +429,11 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     public void showDataForUserInfo(UserInformationBean2 userInformationBean) {
         if (userInformationBean != null) {
             mUserInfo = userInformationBean;
-            if (mUserInfo.getSex() == null){
+            if (mUserInfo.getSex() == null) {
                 startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
                 finish();
-            }else {
+            } else {
+                //加载完个人信息后再请求推荐好友
                 findFriendsPresenter.start();
             }
             Glide.with(this).load(userInformationBean.getIcon()).into(headImg);
@@ -429,18 +451,18 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             spUtils.putString("myNick", userInformationBean.getNickname() + "");
             spUtils.putString("myId", userInformationBean.getId() + "");
             //保存数据库
-            DataSupport.deleteAll(DBUserBean.class);
+//            DataSupport.deleteAll(DBUserBean.class);
             DBUserBean dbUserBean = new DBUserBean();
             setDBUserBean(dbUserBean, userInformationBean);
             List<DBUserBean> dbUserBeenList = DataSupport.where("userId = ?", userInformationBean.getId() + "").find(DBUserBean.class);
-            if (dbUserBeenList.size() > 0){
-
-            }else {
-                dbUserBean.save();
+            if (dbUserBeenList.size() > 0) {
+                DataSupport.delete(DBUserBean.class, dbUserBeenList.get(0).getId());
             }
+            dbUserBean.save();
         }
     }
-    private ContentValues setContentValues(UserInformationBean2 userInformationBean){
+
+    private ContentValues setContentValues(UserInformationBean2 userInformationBean) {
         ContentValues values = new ContentValues();
         values.put("", "");
         return values;
@@ -494,32 +516,39 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
 
     @Override
     public void showData(List<UserInformationBean2> userInformationBean2s) {
-        if (userInformationBean2s.size() > 0){
+        if (userInformationBean2s.size() > 0) {
             mList.addAll(userInformationBean2s);
 
             //初始化swipecardview
             swipeCardViewAdapter = new SwipeCardViewAdapter(this, mList);
             swipeFlingView.setAdapter(swipeCardViewAdapter);
             swipeCardViewAdapter.notifyDataSetChanged();
-            for (UserInformationBean2 userInformationBean2 : userInformationBean2s){
+            for (UserInformationBean2 userInformationBean2 : userInformationBean2s) {
+                List<DBUserBean> dbUserBeenList = DataSupport.where("userId = ?", userInformationBean2.getId() + "").find(DBUserBean.class);
+                if (dbUserBeenList.size() > 0){
+                    DataSupport.delete(DBUserBean.class, dbUserBeenList.get(0).getId());
+                }
                 DBUserBean dbUserBean = new DBUserBean();
                 setDBUserBean(dbUserBean, userInformationBean2);
                 dbUserBean.save();
+
             }
+            //初始化右边侧滑栏要放在请求完推送好友之后，不然读取不到数据库资料，导致头像昵称不显示
+            initRightNavigation();
         }
     }
 
     @Override
     public void showMoreData(List<UserInformationBean2> userInformationBean2s) {
-        if (userInformationBean2s.size() > 0){
+        if (userInformationBean2s.size() > 0) {
             mList.addAll(userInformationBean2s);
             swipeCardViewAdapter.notifyDataSetChanged();
-            for (UserInformationBean2 userInformationBean2 : userInformationBean2s){
+            for (UserInformationBean2 userInformationBean2 : userInformationBean2s) {
                 DBUserBean dbUserBean = new DBUserBean();
                 setDBUserBean(dbUserBean, userInformationBean2);
                 dbUserBean.save();
             }
-        }else {
+        } else {
             ShowToast.show(MainActivity.this, "没有更多数据了");
         }
     }

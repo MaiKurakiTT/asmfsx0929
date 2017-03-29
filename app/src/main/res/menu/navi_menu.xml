@@ -6,6 +6,7 @@
             android:id="@+id/navi_menu_1"
             android:icon="@mipmap/ic_menu_msg"
             android:title="我的消息"
+            android:visible="false"
             />
         <item
             android:id="@+id/navi_menu_2"

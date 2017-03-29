@@ -154,13 +154,14 @@ public class MyService extends Service implements EMMessageListener {
                 e.printStackTrace();
             }
             List<DBUserBean> dbUserBeanList = DataSupport.where("userId = ?", message.getFrom()).find(DBUserBean.class);
-            if (dbUserBeanList.size() == 0){
-                DBUserBean dbUserBean = new DBUserBean();
-                dbUserBean.setUserId(Long.valueOf(message.getFrom()));
-                dbUserBean.setNickname(sendNick);
-                dbUserBean.setIcon(sendIcon);
-                dbUserBean.save();
+            if (dbUserBeanList.size() > 0){
+                DataSupport.delete(DBUserBean.class, dbUserBeanList.get(0).getId());
             }
+            DBUserBean dbUserBean = new DBUserBean();
+            dbUserBean.setUserId(Long.valueOf(message.getFrom()));
+            dbUserBean.setNickname(sendNick);
+            dbUserBean.setIcon(sendIcon);
+            dbUserBean.save();
         }
     }
 

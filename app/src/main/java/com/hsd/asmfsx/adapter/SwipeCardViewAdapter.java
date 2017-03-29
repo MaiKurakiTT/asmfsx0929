@@ -87,9 +87,9 @@ public class SwipeCardViewAdapter extends BaseAdapter {
         }
         holder.star.setText(userInformationBean2.getStar() + "");
         Integer schoolInt = userInformationBean2.getSchool();
-        if (schoolInt == 0){
+        /*if (schoolInt == 0){
             holder.school.setText("河南师范大学");
-        }
+        }*/
         switch (schoolInt){
             case 0:
                 holder.school.setText("河南师范大学");

@@ -31,6 +31,10 @@ public class SPUtils {
         }
         edit = sp.edit();
     }
+    public void clearSP(){
+        edit.clear();
+        edit.commit();
+    }
     public void putString(String key, String value){
         edit.putString(key, value);
         edit.commit();

@@ -131,7 +131,7 @@ public class SetAfterRegisterActivity extends BaseActivity implements SetAfterRe
         if (sex.equals("男")){
             sexInt = Integer.valueOf(0);
         }else {
-            sexInt = Integer.valueOf(0);
+            sexInt = Integer.valueOf(1);
         }
         birthdayString = birthdaytext.getText().toString();
         if (!TextUtils.isEmpty(birthdayString)) {
@@ -241,7 +241,7 @@ public class SetAfterRegisterActivity extends BaseActivity implements SetAfterRe
             @Override
             public void onClick(View v) {
                 getData();
-                if (TextUtils.isEmpty(phone) || TextUtils.isEmpty(name) || TextUtils.isEmpty(sex)
+                if (TextUtils.isEmpty(name) || TextUtils.isEmpty(sex)
                         || TextUtils.isEmpty(birthdayString) || TextUtils.isEmpty(home) ||
                         TextUtils.isEmpty(statusString)) {
                     ShowToast.show(SetAfterRegisterActivity.this, "请先完善信息");

@@ -4,7 +4,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-        <include layout="@layout/toolbar_normal_layout"/>
 
     <FrameLayout
         android:id="@+id/normal_toolbar"

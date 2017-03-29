@@ -216,7 +216,7 @@ public class ShiMingActivity extends BaseActivity implements ShiMingWriteContrac
 
     @Override
     public void showFailedForResultWrite(BaseBean2 baseBean2) {
-
+        ShowToast.show(ShiMingActivity.this, baseBean2.getMsg() + "");
     }
 
     @Override
