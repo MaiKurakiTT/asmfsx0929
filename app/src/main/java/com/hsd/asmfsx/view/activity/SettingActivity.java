@@ -1,6 +1,7 @@
 package com.hsd.asmfsx.view.activity;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -83,7 +84,7 @@ public class SettingActivity extends BaseActivity {
         guanyuLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                startActivity(new Intent(SettingActivity.this, AboutMeActivity.class));
             }
         });
         gengxinLayout.setOnClickListener(new View.OnClickListener() {

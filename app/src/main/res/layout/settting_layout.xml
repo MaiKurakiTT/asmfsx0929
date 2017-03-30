@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:textSize="18sp"
-            android:text="关于"
+            android:text="关于我们"
             />
     </LinearLayout>
     <View

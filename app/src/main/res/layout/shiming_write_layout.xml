@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="gone"
+        android:visibility="visible"
         >
         <RelativeLayout
             android:layout_width="match_parent"
@@ -122,9 +122,11 @@
             android:text="请拍摄你的学生证带有个人信息的页面，如："
             />
         <ImageView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_margin="5dp" />
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginLeft="10dp"
+            android:src="@mipmap/ic_xueshengzheng"
+            />
     </LinearLayout>
 
     <LinearLayout
