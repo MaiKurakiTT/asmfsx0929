@@ -26,6 +26,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <uses-permission android:name="android.permission.CALL_PHONE"/>
+
     <application
         android:name=".app.MyApplication"
         android:allowBackup="true"
@@ -51,8 +52,6 @@
         <activity android:name=".view.activity.BigHeadImgActivity"/>
         <activity android:name="com.hyphenate.easeui.ui.EaseShowBigImageActivity"/>
         <activity android:name="com.hyphenate.easeui.ui.EaseBaiduMapActivity"/>
-        <activity android:name=".chat.ChatWithActivity"/>
-        <activity android:name=".chat.RegAndLogin"/>
         <activity android:name=".view.activity.TestRetrofit"/>
         <activity android:name=".view.activity.LoginActivity"/>
         <activity android:name=".view.activity.CertificationActivity"/>
