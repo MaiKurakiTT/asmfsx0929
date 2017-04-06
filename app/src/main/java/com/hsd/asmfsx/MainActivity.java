@@ -453,6 +453,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             spUtils.putString("myIcon", userInformationBean.getIcon() + "");
             spUtils.putString("myNick", userInformationBean.getNickname() + "");
             spUtils.putString("myId", userInformationBean.getId() + "");
+            spUtils.putBoolean("isStudentVerify", userInformationBean.isStudentVerify());
             //保存数据库
 //            DataSupport.deleteAll(DBUserBean.class);
             DBUserBean dbUserBean = new DBUserBean();

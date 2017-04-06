@@ -30,6 +30,7 @@ import com.hsd.asmfsx.presenter.GetUserInfoPresenter;
 import com.hsd.asmfsx.utils.Date2Star;
 import com.hsd.asmfsx.utils.DateFormatUtils;
 import com.hsd.asmfsx.utils.GetAgeFromDate;
+import com.hsd.asmfsx.utils.SPUtils;
 
 import java.util.Date;
 
@@ -88,6 +89,7 @@ public class UserInfoActivity extends BaseActivity implements GetUserInfoContrac
     private UserInformationBean2 userInformationBean;
     private int ageInt;
     private Long userID;
+    private Boolean isStudentVerify;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -170,10 +172,15 @@ public class UserInfoActivity extends BaseActivity implements GetUserInfoContrac
         firstFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //心动TA
-                if (userID != null){
-                    AddHBPresenter addHBPresenter = new AddHBPresenter(UserInfoActivity.this);
-                    addHBPresenter.start();
+
+                if (isStudentVerify) {
+                    //心动TA
+                    if (userID != null) {
+                        AddHBPresenter addHBPresenter = new AddHBPresenter(UserInfoActivity.this);
+                        addHBPresenter.start();
+                    }
+                }else {
+                    Snackbar.make(fabMenu, "请通过学生认证后再进行此操作", Snackbar.LENGTH_LONG).show();
                 }
                 fabMenu.close(true);
             }
@@ -181,11 +188,15 @@ public class UserInfoActivity extends BaseActivity implements GetUserInfoContrac
         secondFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //跟TA聊天
-                if (userID != null){
-                    Intent intent = new Intent(UserInfoActivity.this, ChatActivity.class);
-                    intent.putExtra("name", userID + "");
-                    startActivity(intent);
+                if (isStudentVerify) {
+                    //跟TA聊天
+                    if (userID != null) {
+                        Intent intent = new Intent(UserInfoActivity.this, ChatActivity.class);
+                        intent.putExtra("name", userID + "");
+                        startActivity(intent);
+                    }
+                }else {
+                    Snackbar.make(fabMenu, "请通过学生认证后再进行此操作", Snackbar.LENGTH_LONG).show();
                 }
                 fabMenu.close(true);
             }
@@ -202,6 +213,8 @@ public class UserInfoActivity extends BaseActivity implements GetUserInfoContrac
     }
 
     private void initData() {
+        SPUtils spUtils = SPUtils.getInstance("asmfsx");
+        isStudentVerify = spUtils.getBoolean("isStudentVerify");
         type = getIntent().getIntExtra("type", 1);
         if (type == 0) {
             userInformationBean = (UserInformationBean2) getIntent().getSerializableExtra("userInformationBean");

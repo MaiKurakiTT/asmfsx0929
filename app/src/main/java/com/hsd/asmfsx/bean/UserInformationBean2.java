@@ -35,6 +35,15 @@ public class UserInformationBean2 implements Serializable {
     private Integer school;
     private Integer state;
     private Date registerDate;
+    private boolean isStudentVerify;
+
+    public boolean isStudentVerify() {
+        return isStudentVerify;
+    }
+
+    public void setStudentVerify(boolean studentVerify) {
+        isStudentVerify = studentVerify;
+    }
 
     public Long getId() {
         return id;
