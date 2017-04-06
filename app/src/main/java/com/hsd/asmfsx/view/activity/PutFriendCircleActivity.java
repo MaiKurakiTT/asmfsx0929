@@ -5,8 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -20,9 +18,7 @@ import android.widget.TextView;
 import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.adapter.AddImgAdapter;
 import com.hsd.asmfsx.base.BaseActivity;
-import com.hsd.asmfsx.bean.BaseBean;
 import com.hsd.asmfsx.bean.BaseBean2;
-import com.hsd.asmfsx.bean.FriendCircleBean;
 import com.hsd.asmfsx.contract.PutFriendCircleContract;
 import com.hsd.asmfsx.presenter.PutFriendCirclePresenter;
 import com.hsd.asmfsx.utils.ShowToast;
@@ -34,7 +30,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by apple on 2016/11/11.
@@ -42,20 +37,18 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class PutFriendCircleActivity extends BaseActivity implements PutFriendCircleContract.View {
-    @BindView(R.id.head)
-    CircleImageView head;
-    @BindView(R.id.toolbar_centertext)
-    TextView toolbarCentertext;
-    @BindView(R.id.toolbar_righttext)
-    TextView toolbarRighttext;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
     @BindView(R.id.content_et)
     EditText contentEt;
     @BindView(R.id.addimg_recycleview)
     RecyclerView addimgRecycle;
     @BindView(R.id.addimg_first)
     ImageView addimgFirst;
+    @BindView(R.id.toolbar_centertext)
+    TextView toolbarCentertext;
+    @BindView(R.id.toolbar_righttext)
+    TextView toolbarRighttext;
+    @BindView(R.id.normal_toolbar)
+    Toolbar normalToolbar;
     private AddImgAdapter addImgAdapter;
     private List<String> photos = new ArrayList<>();
     private PutFriendCirclePresenter putFriendCirclePresenter;
@@ -87,10 +80,9 @@ public class PutFriendCircleActivity extends BaseActivity implements PutFriendCi
     }
 
     private void initToolbar() {
-        setSupportActionBar(toolbar);
+        setSupportActionBar(normalToolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        head.setVisibility(View.GONE);
         toolbarCentertext.setText("发布");
         toolbarRighttext.setText("完成");
         toolbarRighttext.setOnClickListener(new View.OnClickListener() {
@@ -199,7 +191,7 @@ public class PutFriendCircleActivity extends BaseActivity implements PutFriendCi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;

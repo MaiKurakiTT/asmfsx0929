@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/normal_background">
-    <include layout="@layout/toolbar_layout" />
+    <include layout="@layout/toolbar_normal_layout" />
     <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

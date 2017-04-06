@@ -70,7 +70,7 @@ public class SplashActivity extends BaseActivity implements LoginContract.View{
 
     @Override
     public void showData(NormalResultBean<LoginBean2> normalResultBean) {
-        ShowToast.show(SplashActivity.this, "欢迎回来");
+//        ShowToast.show(SplashActivity.this, "欢迎回来");
         jump2Main();
     }
 

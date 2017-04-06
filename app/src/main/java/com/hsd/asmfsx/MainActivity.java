@@ -22,6 +22,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -60,7 +61,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity implements GetUserInfoContract.View, FindFriendsContract.View {
     public String TAG = "MainActivity";
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     @BindView(R.id.toolbar_righttext)
     TextView toolbarRighttext;
     @BindView(R.id.head)
-    CircleImageView headImg;
+    ImageView headImg;
     @BindView(R.id.navigation_view_left)
     NavigationView navigationViewLeft;
     @BindView(R.id.drawer_view)
@@ -86,6 +86,8 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     TabLayout rightTab;
     @BindView(R.id.right_viewpager)
     ViewPager rightViewpager;
+    @BindView(R.id.img_right)
+    ImageView imgRight;
 
     private RecyclerView rightRecycle;
     private RecyclerView seeRecycleView;
@@ -95,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             R.mipmap.ic_log, R.mipmap.ic_game};
     private UserInformationBean2 mUserInfo;
     private View leftNaviHeadView;
-    private CircleImageView naviHeadImg;
+    private ImageView naviHeadImg;
     private TextView naviNickName;
     private GetUserInfoPresenter getUserInfoPresenter;
 
@@ -110,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     private HBListFragment hbListFragment;
     private MessageListFragment messageListFragment;
     private FragmentTransaction beginTransaction;
+    private boolean isFindedFriends = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -241,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
                 return true;
             }
         });
-        naviHeadImg = (CircleImageView) leftNaviHeadView.findViewById(R.id.navi_head);
+        naviHeadImg = (ImageView) leftNaviHeadView.findViewById(R.id.navi_head);
         naviNickName = (TextView) leftNaviHeadView.findViewById(R.id.navi_name);
         leftNaviHeadView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -354,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
                 drawerView.openDrawer(GravityCompat.START);
             }
         });
-        toolbarRighttext.setOnClickListener(new View.OnClickListener() {
+        imgRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 drawerView.openDrawer(GravityCompat.END);
@@ -378,10 +381,11 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             if (userInformationBean != null) {
                 naviNickName.setText("" + userInformationBean.getNickname());
             }
+            getUserInfoPresenter.start();
         } else if (requestCode == 1) {
             getUserInfoPresenter.start();
         }
-        if (resultCode == 99){
+        if (resultCode == 99) {
             finish();
         }
         super.onActivityResult(requestCode, resultCode, data);
@@ -399,21 +403,21 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
     }
 
     @Override
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-      if (keyCode == KeyEvent.KEYCODE_BACK) {
-          if ((System.currentTimeMillis() - mExitTime) > 2000) {//
-              // 如果两次按键时间间隔大于2000毫秒，则不退出
-              ShowToast.show(MainActivity.this,"再按一次退出程序");
-              mExitTime = System.currentTimeMillis();// 更新mExitTime
-          } else {
-              // 否则退出程序
-              finish();
-          }
-          return true;
-      }
-      return super.onKeyDown(keyCode, event);
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if ((System.currentTimeMillis() - mExitTime) > 2000) {//
+                // 如果两次按键时间间隔大于2000毫秒，则不退出
+                ShowToast.show(MainActivity.this, "再按一次退出程序");
+                mExitTime = System.currentTimeMillis();// 更新mExitTime
+            } else {
+                // 否则退出程序
+                finish();
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
 
-  }
+    }
 
     @Override
     public Long getUserId() {
@@ -428,10 +432,14 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
                 startActivity(new Intent(MainActivity.this, SetAfterRegisterActivity.class));
                 finish();
             } else {
-                //加载完个人信息后再请求推荐好友
-                findFriendsPresenter.start();
+                if (!isFindedFriends) {
+                    //加载完个人信息后再请求推荐好友
+                    findFriendsPresenter.start();
+                    //请求过一次找朋友了就不再重新请求了
+                    isFindedFriends = true;
+                }
             }
-            Glide.with(this).load(userInformationBean.getIcon()).into(headImg);
+//            Glide.with(this).load(userInformationBean.getIcon()).into(headImg);
             Glide.with(this).load(userInformationBean.getIcon()).into(naviHeadImg);
             naviNickName.setText("" + userInformationBean.getNickname());
             if (userInformationBean.getSex() != null) {
@@ -520,7 +528,7 @@ public class MainActivity extends AppCompatActivity implements GetUserInfoContra
             swipeCardViewAdapter.notifyDataSetChanged();
             for (UserInformationBean2 userInformationBean2 : userInformationBean2s) {
                 List<DBUserBean> dbUserBeenList = DataSupport.where("userId = ?", userInformationBean2.getId() + "").find(DBUserBean.class);
-                if (dbUserBeenList.size() > 0){
+                if (dbUserBeenList.size() > 0) {
                     DataSupport.delete(DBUserBean.class, dbUserBeenList.get(0).getId());
                 }
                 DBUserBean dbUserBean = new DBUserBean();

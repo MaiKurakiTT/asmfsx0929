@@ -180,9 +180,10 @@ public class SetUserInfoActivity extends BaseActivity implements SetAfterRegiste
         if (userInformationBean != null) {
             nametext.setText("" + userInformationBean.getNickname());
             if (userInformationBean.getBirthday() != null) {
-                birthdaytext.setText("" + DateFormatUtils.formatDate2StringSimple(new Date(userInformationBean.getBirthday())));
+                Date date = new Date(userInformationBean.getBirthday());
+                birthdaytext.setText("" + DateFormatUtils.formatDate2StringSimple(date));
+                startext.setText("" + Date2Star.date2Constellation(date));
             }
-            startext.setText("" + userInformationBean.getStar());
             hometext.setText("" + userInformationBean.getLocality());
             /*schoolInt = userInformationBean.getSchool();
             if (schoolInt == 0)

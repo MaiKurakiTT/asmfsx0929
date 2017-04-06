@@ -113,9 +113,9 @@ public class UserInfoActivity extends BaseActivity implements GetUserInfoContrac
                 Date date = DateFormatUtils.formatLong2Date(birthdayLong);
                 ageInt = GetAgeFromDate.getAge(date);
                 ageTV.setText(ageInt + "岁");
-                //starTV.setText(Date2Star.date2Constellation(date) + "");
+                starTV.setText(Date2Star.date2Constellation(date) + "");
             }
-            starTV.setText(userInformationBean.getStar() + "");
+//            starTV.setText(userInformationBean.getStar() + "");
 
             Integer schoolInt = userInformationBean.getSchool();
             if (schoolInt != null) {

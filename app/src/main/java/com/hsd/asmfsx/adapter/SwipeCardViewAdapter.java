@@ -83,9 +83,9 @@ public class SwipeCardViewAdapter extends BaseAdapter {
         if (userInformationBean2.getBirthday() != null){
             Date date = DateFormatUtils.formatLong2Date(userInformationBean2.getBirthday());
             holder.age.setText(GetAgeFromDate.getAge(date) + "岁");
-            //holder.star.setText(Date2Star.date2Constellation(date) + "");
+            holder.star.setText(Date2Star.date2Constellation(date) + "");
         }
-        holder.star.setText(userInformationBean2.getStar() + "");
+//        holder.star.setText(userInformationBean2.getStar() + "");
         Integer schoolInt = userInformationBean2.getSchool();
         /*if (schoolInt == 0){
             holder.school.setText("河南师范大学");

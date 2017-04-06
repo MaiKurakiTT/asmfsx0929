@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -40,7 +39,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by apple on 2016/11/10.
@@ -49,16 +47,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class FriendCircleActivity extends BaseActivity implements FriendCircleContract.View, PutGoodContract.View, PutCommentContract.View {
     @BindView(R.id.recycle_view)
     RecyclerView recycleView;
-    @BindView(R.id.head)
-    CircleImageView head;
+    @BindView(R.id.swipe_refresh)
+    SwipeRefreshLayout swipeRefresh;
     @BindView(R.id.toolbar_centertext)
     TextView toolbarCentertext;
     @BindView(R.id.toolbar_righttext)
     TextView toolbarRighttext;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.swipe_refresh)
-    SwipeRefreshLayout swipeRefresh;
+    @BindView(R.id.normal_toolbar)
+    Toolbar normalToolbar;
     private FriendCirclePresenter friendCirclePresenter;
     private List<FriendCircleVO> friendCircleList;
     private FriendCircleAdapter friendCircleAdapter;
@@ -134,10 +130,9 @@ public class FriendCircleActivity extends BaseActivity implements FriendCircleCo
     }
 
     private void initToolbar() {
-        setSupportActionBar(toolbar);
+        setSupportActionBar(normalToolbar);
         getSupportActionBar().setTitle("");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        head.setVisibility(View.GONE);
         toolbarCentertext.setText("微圈");
         toolbarRighttext.setText("发布");
         toolbarRighttext.setOnClickListener(new View.OnClickListener() {
@@ -213,26 +208,27 @@ public class FriendCircleActivity extends BaseActivity implements FriendCircleCo
         });
 
     }
-    public void updateComment(){
+
+    public void updateComment() {
         SPUtils spUtils = SPUtils.getInstance("asmfsx");
         String myNick = spUtils.getString("myNick");
         FriendCircleAdapter.MyViewHolder viewHolder = (FriendCircleAdapter.MyViewHolder) recycleView.findViewHolderForAdapterPosition(commentPosition);
         //设置评论数量textView
         String display = "";
         //判断评论条数，如果是最后一条就不加换行符了
-            viewHolder.commentCounts.setText((mCommentVOs.size() + 1) + "");
-            for (int i = 0; i < mCommentVOs.size(); i++) {
-                String temp = mCommentVOs.get(i).getContent();
-                String nickname = mCommentVOs.get(i).getUserVO().getNickname();
-                if (i == mCommentVOs.size() - 1) {
-                    display = display + nickname + ": " + temp + '\n';
-                } else {
-                    display = display + nickname + ": " + temp + '\n';
-                }
+        viewHolder.commentCounts.setText((mCommentVOs.size() + 1) + "");
+        for (int i = 0; i < mCommentVOs.size(); i++) {
+            String temp = mCommentVOs.get(i).getContent();
+            String nickname = mCommentVOs.get(i).getUserVO().getNickname();
+            if (i == mCommentVOs.size() - 1) {
+                display = display + nickname + ": " + temp + '\n';
+            } else {
+                display = display + nickname + ": " + temp + '\n';
             }
-            display = display + myNick + ": " + commentContent;
-            viewHolder.commentsText.setVisibility(View.VISIBLE);
-            viewHolder.commentsText.setText(display);
+        }
+        display = display + myNick + ": " + commentContent;
+        viewHolder.commentsText.setVisibility(View.VISIBLE);
+        viewHolder.commentsText.setText(display);
 
     }
 
@@ -248,7 +244,7 @@ public class FriendCircleActivity extends BaseActivity implements FriendCircleCo
                 recycleView.setAdapter(friendCircleAdapter);
                 initRecycleLoadMore(friendCircleAdapter);
             }
-        }else {
+        } else {
             ShowToast.show(FriendCircleActivity.this, "没有更多了");
         }
     }
@@ -270,7 +266,7 @@ public class FriendCircleActivity extends BaseActivity implements FriendCircleCo
 
     @Override
     public void showFailedForResult(BaseBean2 baseBean2) {
-        Snackbar.make(toolbar, "加载失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
+        Snackbar.make(normalToolbar, "加载失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 friendCirclePresenter.start();
@@ -280,7 +276,7 @@ public class FriendCircleActivity extends BaseActivity implements FriendCircleCo
 
     @Override
     public void showFailedForLoadMoreResult(BaseBean2 baseBean2) {
-        Snackbar.make(toolbar, "加载失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
+        Snackbar.make(normalToolbar, "加载失败", Snackbar.LENGTH_LONG).setAction("重试", new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 friendCirclePresenter.loadMore();
@@ -430,17 +426,17 @@ public class FriendCircleActivity extends BaseActivity implements FriendCircleCo
 
     @Override
     public void showDataForComment(BaseBean2 baseBean) {
-        Snackbar.make(toolbar, "发表成功", Snackbar.LENGTH_LONG).show();
+        Snackbar.make(normalToolbar, "发表成功", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void showFailedForPutCommentResult(BaseBean2 baseBean) {
-        Snackbar.make(toolbar, "发表失败", Snackbar.LENGTH_LONG).show();
+        Snackbar.make(normalToolbar, "发表失败", Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void showExceptionForPutCommentResult(Throwable t) {
-        Snackbar.make(toolbar, "发表异常", Snackbar.LENGTH_LONG).show();
+        Snackbar.make(normalToolbar, "发表异常", Snackbar.LENGTH_LONG).show();
     }
 
     @Override

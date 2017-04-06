@@ -18,6 +18,8 @@ import com.hsd.asmfsx.R;
 import com.hsd.asmfsx.base.BaseActivity;
 import com.hsd.asmfsx.global.GetRetrofit;
 import com.hsd.asmfsx.model.RetrofitService;
+import com.hsd.asmfsx.model.cookie.CookieManger;
+import com.hsd.asmfsx.model.cookie.PersistentCookieStore;
 import com.hsd.asmfsx.utils.SPUtils;
 import com.hsd.asmfsx.utils.ShowToast;
 import com.orhanobut.logger.Logger;
